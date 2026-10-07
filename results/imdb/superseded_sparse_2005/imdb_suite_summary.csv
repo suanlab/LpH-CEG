@@ -1,0 +1,5 @@
+n_vars,n,n_checked,n_invalid,median_improvement_maxdeg_over_bs1,median_bs1_over_entropic,max_bs1_over_entropic,median_bs2_over_entropic,n_bs2_beats_entropic,n_flow_bs1_eq_entropic,median_cover_bs2_over_flow_bs2,n_flow_eq_poly,max_flow_over_poly,median_entropic_over_sizes,median_sizes_over_flow_bs2,n_flow_bs2_below_sizes,median_free_over_full,median_free_l2_over_full,median_free_linf_over_full,n_free_l2_eq_full,median_cover_bs1_s,median_entropic_s,median_cover_bs2_s,median_flow_bs2_s
+all,120,120,0,1,6.00875,14.4474,9.5e-06,120,120,1.3395,118,1.0908,97.6049,1255.44,120,3.1613,2.09125,1,37,0.444,0.493,2.1055,0.7935
+6,40,40,0,1,5.4742,9.0945,0.0003475,40,40,1.41265,40,1.0000,57.669,97.4693,40,1.1925,1.17295,1,17,0.3295,0.279,1.404,0.3345
+8,40,40,0,1,6.06605,10.6922,9.5e-06,40,40,1.4519,40,1.0000,104.116,1330.37,40,3.1699,2.05365,1,12,0.4465,0.4865,1.862,0.7935
+10,40,40,0,1,6.4838,14.4474,0,40,40,1.0776,38,1.0908,212.34,15957,40,3.85795,2.7744,1,8,0.567,2.2545,2.6305,1.5935

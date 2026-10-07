@@ -1,0 +1,3146 @@
+{
+ "data_sha256": {
+  "ci_actor": "66d9e26fb83b6165bb772f52ad20909746fd2e411303f33b3e636d1074a83b38",
+  "ci_actress": "68d8c6e76c6a7a4e7c4a030c45cf1f08ac50d0ff14209db051552afb84e504dd",
+  "ci_cinematog": "eb0e3ae2ca2073ea1ecb1275fd4e7c5b4a2c7c57373d95a742889c9cc996601a",
+  "ci_composer": "ba810526f4f5b21b4930beab0c8e194f162b2c6102cb45cc3ef92edf903c3a73",
+  "ci_director": "51983e533356b04b4c54892a5973beea5741714997e72b7f6eb87b0d321ed48a",
+  "ci_editor": "cab8b03085037a1bcce5af0108b3cad5602da555cc7b96e4faea629472b1c133",
+  "ci_misccrew": "12fdb2e6bd83fd261a05d8f2a3a0dee44b6a041fecd938d7ee8f583baae2aa46",
+  "ci_producer": "f029d76fe99a62e289c66b08b005bcf1fa7fc1a838851809e66d2d7c762966ca",
+  "ci_writer": "9706c6ecd2a36ce855048f7f85f8f61b97cb959e26ac9d2d6abf0af112f9c509",
+  "mc_distrib": "a28749d9decd4a9d1e309c9d661195e142528c36f5591b33bf072d6a75863783",
+  "mc_produc": "a7969ec4b07fb17c2063e3a498be18ea72789df74fddfde9aeb0b5ec69f558ca",
+  "mk": "7ef69f3713697847abb9645410517e0c860e01daa0190f345c3dfb19f18e86d3"
+ },
+ "enumerated_per_length": {
+  "cycle10": 25752,
+  "cycle6": 364,
+  "cycle8": 3081
+ },
+ "n_queries": 120,
+ "queries": [
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-000",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "director",
+    "M",
+    "director"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-001",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_actress",
+    "ci_actress",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "actress",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-002",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "misccrew",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-003",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_produc",
+    "mc_produc",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "produc",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-004",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "mc_produc",
+    "mc_produc",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "produc",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-005",
+   "relations": [
+    "ci_producer",
+    "ci_producer",
+    "mc_produc",
+    "mc_produc",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "producer",
+    "M",
+    "produc",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-006",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-007",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_writer",
+    "ci_writer",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "writer",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-008",
+   "relations": [
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "misccrew",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-009",
+   "relations": [
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_distrib",
+    "mc_distrib",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "misccrew",
+    "M",
+    "distrib",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-010",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "director",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-011",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "composer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-012",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-013",
+   "relations": [
+    "mc_distrib",
+    "mc_distrib",
+    "mc_distrib",
+    "mc_distrib",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "distrib",
+    "M",
+    "distrib",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-014",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_editor",
+    "ci_editor",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "editor",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-015",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_actress",
+    "ci_actress",
+    "ci_composer",
+    "ci_composer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "actress",
+    "M",
+    "composer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-016",
+   "relations": [
+    "ci_producer",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "producer",
+    "M",
+    "producer",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-017",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actress",
+    "ci_actress"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "actress"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-018",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_editor",
+    "ci_editor",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "editor",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-019",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_producer",
+    "ci_producer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "producer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-020",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_director",
+    "ci_director",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "director",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-021",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "misccrew",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-022",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "misccrew",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-023",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "producer",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-024",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_writer",
+    "ci_writer",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "writer",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-025",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-026",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "composer",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-027",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_producer",
+    "ci_producer",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "producer",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-028",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "mc_distrib",
+    "mc_distrib",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "distrib",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-029",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_director",
+    "ci_director",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "director",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-030",
+   "relations": [
+    "ci_producer",
+    "ci_producer",
+    "mk",
+    "mk",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "producer",
+    "M",
+    "keyword",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-031",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "mk",
+    "mk",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "keyword",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-032",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_writer",
+    "ci_writer",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "writer",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-033",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "cinematog",
+    "M",
+    "composer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-034",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-035",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_composer",
+    "ci_composer",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "composer",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-036",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-037",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "cinematog",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-038",
+   "relations": [
+    "ci_writer",
+    "ci_writer",
+    "mc_distrib",
+    "mc_distrib",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "writer",
+    "M",
+    "distrib",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 6,
+   "query_id": "IMDB-039",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "mk",
+    "mk",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle6",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "keyword",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-040",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_editor",
+    "ci_editor",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "misccrew",
+    "M",
+    "editor",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-041",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_director",
+    "ci_director",
+    "ci_actress",
+    "ci_actress",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "director",
+    "M",
+    "actress",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-042",
+   "relations": [
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_producer",
+    "ci_producer",
+    "ci_writer",
+    "ci_writer",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "misccrew",
+    "M",
+    "producer",
+    "M",
+    "writer",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-043",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "editor",
+    "M",
+    "distrib",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-044",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "misccrew",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-045",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "director",
+    "M",
+    "director",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-046",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "distrib",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-047",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "cinematog",
+    "M",
+    "distrib",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-048",
+   "relations": [
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "misccrew",
+    "M",
+    "misccrew",
+    "M",
+    "produc",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-049",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_produc",
+    "mc_produc",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "cinematog",
+    "M",
+    "produc",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-050",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actress",
+    "ci_actress",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_cinematog",
+    "ci_cinematog"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actress",
+    "M",
+    "misccrew",
+    "M",
+    "cinematog"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-051",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer",
+    "ci_editor",
+    "ci_editor",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "composer",
+    "M",
+    "editor",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-052",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "distrib",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-053",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "cinematog",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-054",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "ci_producer",
+    "ci_producer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "producer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-055",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "ci_director",
+    "ci_director",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "director",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-056",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_director",
+    "ci_director"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "cinematog",
+    "M",
+    "distrib",
+    "M",
+    "director"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-057",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "mc_produc",
+    "mc_produc",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "produc",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-058",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_composer",
+    "ci_composer",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_composer",
+    "ci_composer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "composer",
+    "M",
+    "misccrew",
+    "M",
+    "composer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-059",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_editor",
+    "ci_editor",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "editor",
+    "M",
+    "misccrew",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-060",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib",
+    "mk",
+    "mk",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "distrib",
+    "M",
+    "keyword",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-061",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actress",
+    "ci_actress",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "actress",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-062",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "editor",
+    "M",
+    "editor",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-063",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_editor",
+    "ci_editor",
+    "mk",
+    "mk",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "editor",
+    "M",
+    "keyword",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-064",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "ci_actor",
+    "ci_actor",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "actor",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-065",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "misccrew",
+    "M",
+    "misccrew",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-066",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "cinematog",
+    "M",
+    "cinematog",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-067",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_cinematog",
+    "ci_cinematog"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "cinematog"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-068",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "produc",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-069",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "mc_produc",
+    "mc_produc",
+    "mc_distrib",
+    "mc_distrib",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "produc",
+    "M",
+    "distrib",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-070",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "mc_distrib",
+    "mc_distrib",
+    "mk",
+    "mk",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "distrib",
+    "M",
+    "keyword",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-071",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_composer",
+    "ci_composer",
+    "ci_actress",
+    "ci_actress",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "composer",
+    "M",
+    "actress",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-072",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-073",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "ci_writer",
+    "ci_writer",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "writer",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-074",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-075",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_writer",
+    "ci_writer",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "writer",
+    "M",
+    "cinematog",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-076",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "ci_actress",
+    "ci_actress",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "actress",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-077",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_director",
+    "ci_director",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "director",
+    "M",
+    "editor",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-078",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_director",
+    "ci_director",
+    "mc_produc",
+    "mc_produc",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "director",
+    "M",
+    "produc",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 8,
+   "query_id": "IMDB-079",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_editor",
+    "ci_editor",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle8",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "editor",
+    "M",
+    "cinematog",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-080",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "misccrew",
+    "M",
+    "misccrew",
+    "M",
+    "cinematog",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-081",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_writer",
+    "ci_writer",
+    "ci_producer",
+    "ci_producer",
+    "ci_director",
+    "ci_director",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "writer",
+    "M",
+    "producer",
+    "M",
+    "director",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-082",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_producer",
+    "ci_producer",
+    "ci_writer",
+    "ci_writer",
+    "ci_producer",
+    "ci_producer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "producer",
+    "M",
+    "writer",
+    "M",
+    "producer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-083",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_composer",
+    "ci_composer",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "composer",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-084",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_editor",
+    "ci_editor",
+    "ci_producer",
+    "ci_producer",
+    "ci_composer",
+    "ci_composer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "editor",
+    "M",
+    "producer",
+    "M",
+    "composer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-085",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_producer",
+    "ci_producer",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "editor",
+    "M",
+    "editor",
+    "M",
+    "producer",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-086",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_composer",
+    "ci_composer",
+    "mc_produc",
+    "mc_produc",
+    "ci_editor",
+    "ci_editor",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "composer",
+    "M",
+    "produc",
+    "M",
+    "editor",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-087",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "misccrew",
+    "M",
+    "keyword",
+    "M",
+    "cinematog",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-088",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer",
+    "mk",
+    "mk",
+    "ci_composer",
+    "ci_composer",
+    "ci_editor",
+    "ci_editor"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "composer",
+    "M",
+    "keyword",
+    "M",
+    "composer",
+    "M",
+    "editor"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-089",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "mk",
+    "mk",
+    "mc_produc",
+    "mc_produc",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "keyword",
+    "M",
+    "produc",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-090",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_writer",
+    "ci_writer",
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "writer",
+    "M",
+    "editor",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-091",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actress",
+    "ci_actress",
+    "ci_writer",
+    "ci_writer",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actress",
+    "M",
+    "writer",
+    "M",
+    "misccrew",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-092",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "editor",
+    "M",
+    "editor",
+    "M",
+    "editor",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-093",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_editor",
+    "ci_writer",
+    "ci_writer",
+    "mc_distrib",
+    "mc_distrib",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "editor",
+    "M",
+    "writer",
+    "M",
+    "distrib",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-094",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_writer",
+    "ci_writer",
+    "ci_writer",
+    "ci_writer",
+    "ci_writer",
+    "ci_writer",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "writer",
+    "M",
+    "writer",
+    "M",
+    "writer",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-095",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_actor",
+    "ci_producer",
+    "ci_producer",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "actor",
+    "M",
+    "producer",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-096",
+   "relations": [
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_distrib",
+    "mc_distrib",
+    "mk",
+    "mk",
+    "ci_writer",
+    "ci_writer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "misccrew",
+    "M",
+    "distrib",
+    "M",
+    "keyword",
+    "M",
+    "writer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-097",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "mc_produc",
+    "mc_produc",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "produc",
+    "M",
+    "misccrew",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-098",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_cinematog",
+    "ci_cinematog",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "misccrew",
+    "M",
+    "cinematog",
+    "M",
+    "distrib",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-099",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_writer",
+    "ci_writer",
+    "mc_produc",
+    "mc_produc",
+    "mk",
+    "mk",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "writer",
+    "M",
+    "produc",
+    "M",
+    "keyword",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-100",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_editor",
+    "ci_editor",
+    "mk",
+    "mk",
+    "ci_producer",
+    "ci_producer",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "editor",
+    "M",
+    "keyword",
+    "M",
+    "producer",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-101",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_composer",
+    "ci_composer"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "misccrew",
+    "M",
+    "distrib",
+    "M",
+    "composer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-102",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_writer",
+    "ci_writer",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "writer",
+    "M",
+    "distrib",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-103",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_director",
+    "ci_director",
+    "ci_composer",
+    "ci_composer",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "director",
+    "M",
+    "composer",
+    "M",
+    "distrib",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-104",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_director",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "director",
+    "M",
+    "producer",
+    "M",
+    "producer",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-105",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_writer",
+    "ci_writer",
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "writer",
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-106",
+   "relations": [
+    "ci_editor",
+    "ci_editor",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "editor",
+    "M",
+    "misccrew",
+    "M",
+    "misccrew",
+    "M",
+    "produc",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-107",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer",
+    "mk",
+    "mk",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "cinematog",
+    "M",
+    "composer",
+    "M",
+    "keyword",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-108",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_producer",
+    "ci_producer",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "editor",
+    "M",
+    "distrib",
+    "M",
+    "producer",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-109",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_composer",
+    "ci_composer",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "cinematog",
+    "M",
+    "composer",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-110",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "misccrew",
+    "M",
+    "produc",
+    "M",
+    "misccrew",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-111",
+   "relations": [
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_writer",
+    "ci_writer",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer",
+    "ci_producer"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "writer",
+    "M",
+    "producer",
+    "M",
+    "producer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-112",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_producer",
+    "ci_producer",
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "producer",
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-113",
+   "relations": [
+    "ci_composer",
+    "ci_composer",
+    "ci_producer",
+    "ci_producer",
+    "ci_misccrew",
+    "ci_misccrew",
+    "ci_editor",
+    "ci_editor",
+    "mc_distrib",
+    "mc_distrib"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "composer",
+    "M",
+    "producer",
+    "M",
+    "misccrew",
+    "M",
+    "editor",
+    "M",
+    "distrib"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-114",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "mc_produc",
+    "mc_produc",
+    "ci_composer",
+    "ci_composer",
+    "ci_misccrew",
+    "ci_misccrew"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "produc",
+    "M",
+    "composer",
+    "M",
+    "misccrew"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-115",
+   "relations": [
+    "ci_actress",
+    "ci_actress",
+    "ci_director",
+    "ci_director",
+    "ci_producer",
+    "ci_producer",
+    "mc_produc",
+    "mc_produc",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actress",
+    "M",
+    "director",
+    "M",
+    "producer",
+    "M",
+    "produc",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-116",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_actress",
+    "ci_actress",
+    "ci_director",
+    "ci_director",
+    "ci_misccrew",
+    "ci_misccrew",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "actress",
+    "M",
+    "director",
+    "M",
+    "misccrew",
+    "M",
+    "keyword"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-117",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_composer",
+    "ci_composer",
+    "mc_produc",
+    "mc_produc",
+    "mc_distrib",
+    "mc_distrib",
+    "ci_writer",
+    "ci_writer"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "composer",
+    "M",
+    "produc",
+    "M",
+    "distrib",
+    "M",
+    "writer"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-118",
+   "relations": [
+    "ci_actor",
+    "ci_actor",
+    "ci_director",
+    "ci_director",
+    "ci_actress",
+    "ci_actress",
+    "ci_editor",
+    "ci_editor",
+    "mc_produc",
+    "mc_produc"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "actor",
+    "M",
+    "director",
+    "M",
+    "actress",
+    "M",
+    "editor",
+    "M",
+    "produc"
+   ]
+  },
+  {
+   "dataset": "imdb",
+   "n_vars": 10,
+   "query_id": "IMDB-119",
+   "relations": [
+    "ci_cinematog",
+    "ci_cinematog",
+    "ci_writer",
+    "ci_writer",
+    "ci_editor",
+    "ci_editor",
+    "mc_produc",
+    "mc_produc",
+    "mk",
+    "mk"
+   ],
+   "shape": "cycle10",
+   "var_types": [
+    "M",
+    "cinematog",
+    "M",
+    "writer",
+    "M",
+    "editor",
+    "M",
+    "produc",
+    "M",
+    "keyword"
+   ]
+  }
+ ],
+ "rule": "IMDb (JOB snapshot) typed relations of prepare_imdb_cycles.py; cycles of length k in [6, 8, 10] alternating movies with entity variables, each reached through its one relation on both sides; per k, the first 40 in SHA-256 order of the canonical relation sequence. No bound computed here.",
+ "version": "v3-imdb"
+}

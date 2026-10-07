@@ -1,0 +1,4 @@
+scope,n_registered,n_with_gap,n_distinct_gaps,n_censored,gap_median,gap_p90,gap_p95,gap_max,improvement_median,improvement_max,frac_improved
+hetionet,370,370,215,0,1.9853,3.5468,4.0910,6.2931,1.4657,13.0572,0.6973
+epinions,7,7,1,0,3.2799,3.2799,3.2799,3.2799,2.0572,4.2322,1.0000
+ALL,377,377,216,0,2.0088,3.5468,4.0910,6.2931,1.4657,13.0572,0.7029

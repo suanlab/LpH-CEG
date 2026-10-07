@@ -1,0 +1,7277 @@
+{
+  "n_queries": 377,
+  "queries": [
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-000",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "A",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-001",
+      "relations": [
+        "AdG",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-002",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DuG"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "A",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-003",
+      "relations": [
+        "AdG",
+        "DlA",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "A",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-004",
+      "relations": [
+        "AuG",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-005",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DuG"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "A",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-006",
+      "relations": [
+        "AuG",
+        "DlA",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "A",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-007",
+      "relations": [
+        "CdG",
+        "CuG",
+        "crc"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-008",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-009",
+      "relations": [
+        "CdG",
+        "DdG",
+        "ctd"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-010",
+      "relations": [
+        "CdG",
+        "DuG",
+        "ctd"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-011",
+      "relations": [
+        "CdG",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-012",
+      "relations": [
+        "CdG",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-013",
+      "relations": [
+        "CdG",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-014",
+      "relations": [
+        "CuG",
+        "DdG",
+        "ctd"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-015",
+      "relations": [
+        "CuG",
+        "DuG",
+        "ctd"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-016",
+      "relations": [
+        "CuG",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "C",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-017",
+      "relations": [
+        "CuG",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-018",
+      "relations": [
+        "CuG",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-019",
+      "relations": [
+        "DdG",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-020",
+      "relations": [
+        "DdG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-021",
+      "relations": [
+        "DdG",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-022",
+      "relations": [
+        "DdG",
+        "cbg",
+        "ctd"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-023",
+      "relations": [
+        "DdG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-024",
+      "relations": [
+        "DrD",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-025",
+      "relations": [
+        "DuG",
+        "cbg",
+        "ctd"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-026",
+      "relations": [
+        "DuG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 3,
+      "query_id": "HET-027",
+      "relations": [
+        "cbg",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-028",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "CuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-029",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-030",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "CdG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-031",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-032",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "DuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-033",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-034",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "DdG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-035",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-036",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "CdG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-037",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "CuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-038",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "DdG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-039",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "DuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-040",
+      "relations": [
+        "AdG",
+        "CdG",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-041",
+      "relations": [
+        "AdG",
+        "CuG",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-042",
+      "relations": [
+        "AdG",
+        "DdG",
+        "DrD",
+        "DlA"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-043",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-044",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-045",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-046",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-047",
+      "relations": [
+        "AdG",
+        "DlA",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-048",
+      "relations": [
+        "AdG",
+        "DlA",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-049",
+      "relations": [
+        "AuG",
+        "CdG",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-050",
+      "relations": [
+        "AuG",
+        "CuG",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-051",
+      "relations": [
+        "AuG",
+        "DdG",
+        "DrD",
+        "DlA"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-052",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-053",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-054",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-055",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-056",
+      "relations": [
+        "AuG",
+        "DlA",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-057",
+      "relations": [
+        "AuG",
+        "DlA",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-058",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "DuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-059",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-060",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "DdG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-061",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-062",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "DdG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-063",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "DuG"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-064",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DrD",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-065",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DuG",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-066",
+      "relations": [
+        "CdG",
+        "DdG",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-067",
+      "relations": [
+        "CdG",
+        "DdG",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-068",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DdG",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-069",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DrD",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-070",
+      "relations": [
+        "CdG",
+        "DuG",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-071",
+      "relations": [
+        "CdG",
+        "DuG",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-072",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-073",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-074",
+      "relations": [
+        "CdG",
+        "crc",
+        "CuG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-075",
+      "relations": [
+        "CdG",
+        "crc",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-076",
+      "relations": [
+        "CdG",
+        "crc",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-077",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-078",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-079",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-080",
+      "relations": [
+        "CdG",
+        "ctd",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-081",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DrD",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-082",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DuG",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-083",
+      "relations": [
+        "CuG",
+        "DdG",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-084",
+      "relations": [
+        "CuG",
+        "DdG",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-085",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DdG",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-086",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DrD",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-087",
+      "relations": [
+        "CuG",
+        "DuG",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-088",
+      "relations": [
+        "CuG",
+        "DuG",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-089",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-090",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-091",
+      "relations": [
+        "CuG",
+        "crc",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-092",
+      "relations": [
+        "CuG",
+        "crc",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-093",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-094",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-095",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-096",
+      "relations": [
+        "CuG",
+        "ctd",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-097",
+      "relations": [
+        "DdG",
+        "DrD",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-098",
+      "relations": [
+        "DdG",
+        "DrD",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-099",
+      "relations": [
+        "DdG",
+        "DrD",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-100",
+      "relations": [
+        "DdG",
+        "cbg",
+        "crc",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "D",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-101",
+      "relations": [
+        "DdG",
+        "ctd",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-102",
+      "relations": [
+        "DrD",
+        "DuG",
+        "cbg",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "D",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-103",
+      "relations": [
+        "DrD",
+        "DuG",
+        "gig",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "D",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-104",
+      "relations": [
+        "DrD",
+        "ctd",
+        "cbg",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "D",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-105",
+      "relations": [
+        "DuG",
+        "cbg",
+        "crc",
+        "ctd"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "D",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-106",
+      "relations": [
+        "DuG",
+        "ctd",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-107",
+      "relations": [
+        "cbg",
+        "crc",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 4,
+      "query_id": "HET-108",
+      "relations": [
+        "cbg",
+        "ctd",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-109",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "CuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-110",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-111",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "crc",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-112",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "crc",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-113",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "ctd",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-114",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "ctd",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-115",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CdG",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-116",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "CdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-117",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-118",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "crc",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-119",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "crc",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-120",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "ctd",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-121",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "ctd",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-122",
+      "relations": [
+        "AdG",
+        "AuG",
+        "CuG",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-123",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-124",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-125",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-126",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "ctd",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-127",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "ctd",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-128",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-129",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DdG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-130",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-131",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "DrD",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-132",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-133",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "ctd",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-134",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "ctd",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-135",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-136",
+      "relations": [
+        "AdG",
+        "AuG",
+        "DuG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-137",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "CdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-138",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "CuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-139",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "crc",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-140",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "crc",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-141",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "ctd",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-142",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "ctd",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-143",
+      "relations": [
+        "AdG",
+        "AuG",
+        "cbg",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-144",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-145",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "DrD",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-146",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-147",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-148",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "ctd",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-149",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "ctd",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-150",
+      "relations": [
+        "AdG",
+        "AuG",
+        "dag",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-151",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "CdG",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-152",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-153",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "CuG",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-154",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-155",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "DdG",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-156",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-157",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "DuG",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-158",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-159",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "cbg",
+        "CdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-160",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "cbg",
+        "CuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-161",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "dag",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-162",
+      "relations": [
+        "AdG",
+        "AuG",
+        "gig",
+        "dag",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-163",
+      "relations": [
+        "AdG",
+        "CdG",
+        "CuG",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-164",
+      "relations": [
+        "AdG",
+        "CdG",
+        "CuG",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-165",
+      "relations": [
+        "AdG",
+        "CdG",
+        "CuG",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-166",
+      "relations": [
+        "AdG",
+        "CdG",
+        "cbg",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-167",
+      "relations": [
+        "AdG",
+        "CdG",
+        "cbg",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-168",
+      "relations": [
+        "AdG",
+        "CdG",
+        "cbg",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-169",
+      "relations": [
+        "AdG",
+        "CdG",
+        "crc",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-170",
+      "relations": [
+        "AdG",
+        "CdG",
+        "ctd",
+        "DrD",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-171",
+      "relations": [
+        "AdG",
+        "CuG",
+        "CdG",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-172",
+      "relations": [
+        "AdG",
+        "CuG",
+        "CdG",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-173",
+      "relations": [
+        "AdG",
+        "CuG",
+        "CdG",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-174",
+      "relations": [
+        "AdG",
+        "CuG",
+        "cbg",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-175",
+      "relations": [
+        "AdG",
+        "CuG",
+        "cbg",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-176",
+      "relations": [
+        "AdG",
+        "CuG",
+        "cbg",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-177",
+      "relations": [
+        "AdG",
+        "CuG",
+        "crc",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-178",
+      "relations": [
+        "AdG",
+        "CuG",
+        "ctd",
+        "DrD",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-179",
+      "relations": [
+        "AdG",
+        "DdG",
+        "DuG",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-180",
+      "relations": [
+        "AdG",
+        "DdG",
+        "dag",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-181",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DdG",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-182",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DdG",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-183",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DdG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-184",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DdG",
+        "dag",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-185",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DrD",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-186",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DrD",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-187",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DrD",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-188",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DrD",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-189",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DuG",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-190",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DuG",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-191",
+      "relations": [
+        "AdG",
+        "DlA",
+        "DuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-192",
+      "relations": [
+        "AdG",
+        "DlA",
+        "ctd",
+        "CdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-193",
+      "relations": [
+        "AdG",
+        "DlA",
+        "ctd",
+        "CuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-194",
+      "relations": [
+        "AdG",
+        "DlA",
+        "ctd",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-195",
+      "relations": [
+        "AdG",
+        "DlA",
+        "ctd",
+        "crc",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-196",
+      "relations": [
+        "AdG",
+        "DlA",
+        "dag",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-197",
+      "relations": [
+        "AdG",
+        "DlA",
+        "dag",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-198",
+      "relations": [
+        "AdG",
+        "DlA",
+        "dag",
+        "DdG",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-199",
+      "relations": [
+        "AuG",
+        "CdG",
+        "CuG",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-200",
+      "relations": [
+        "AuG",
+        "CdG",
+        "CuG",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-201",
+      "relations": [
+        "AuG",
+        "CdG",
+        "CuG",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-202",
+      "relations": [
+        "AuG",
+        "CdG",
+        "cbg",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-203",
+      "relations": [
+        "AuG",
+        "CdG",
+        "cbg",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-204",
+      "relations": [
+        "AuG",
+        "CdG",
+        "cbg",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-205",
+      "relations": [
+        "AuG",
+        "CdG",
+        "crc",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-206",
+      "relations": [
+        "AuG",
+        "CdG",
+        "ctd",
+        "DrD",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-207",
+      "relations": [
+        "AuG",
+        "CuG",
+        "CdG",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-208",
+      "relations": [
+        "AuG",
+        "CuG",
+        "CdG",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-209",
+      "relations": [
+        "AuG",
+        "CuG",
+        "CdG",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-210",
+      "relations": [
+        "AuG",
+        "CuG",
+        "cbg",
+        "DdG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-211",
+      "relations": [
+        "AuG",
+        "CuG",
+        "cbg",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-212",
+      "relations": [
+        "AuG",
+        "CuG",
+        "cbg",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-213",
+      "relations": [
+        "AuG",
+        "CuG",
+        "crc",
+        "ctd",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-214",
+      "relations": [
+        "AuG",
+        "CuG",
+        "ctd",
+        "DrD",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-215",
+      "relations": [
+        "AuG",
+        "DdG",
+        "DuG",
+        "dag",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-216",
+      "relations": [
+        "AuG",
+        "DdG",
+        "dag",
+        "DuG",
+        "DlA"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "A",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-217",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DdG",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-218",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DdG",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-219",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DdG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-220",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DdG",
+        "dag",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-221",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DrD",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-222",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DrD",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-223",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DrD",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-224",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DrD",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-225",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DuG",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-226",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DuG",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-227",
+      "relations": [
+        "AuG",
+        "DlA",
+        "DuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-228",
+      "relations": [
+        "AuG",
+        "DlA",
+        "ctd",
+        "CdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-229",
+      "relations": [
+        "AuG",
+        "DlA",
+        "ctd",
+        "CuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-230",
+      "relations": [
+        "AuG",
+        "DlA",
+        "ctd",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-231",
+      "relations": [
+        "AuG",
+        "DlA",
+        "ctd",
+        "crc",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-232",
+      "relations": [
+        "AuG",
+        "DlA",
+        "dag",
+        "CdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-233",
+      "relations": [
+        "AuG",
+        "DlA",
+        "dag",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-234",
+      "relations": [
+        "AuG",
+        "DlA",
+        "dag",
+        "DdG",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "A",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-235",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-236",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-237",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-238",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-239",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DdG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-240",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-241",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "DrD",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-242",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-243",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-244",
+      "relations": [
+        "CdG",
+        "CuG",
+        "DuG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-245",
+      "relations": [
+        "CdG",
+        "CuG",
+        "cbg",
+        "DdG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-246",
+      "relations": [
+        "CdG",
+        "CuG",
+        "cbg",
+        "DuG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-247",
+      "relations": [
+        "CdG",
+        "CuG",
+        "cbg",
+        "ctd",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-248",
+      "relations": [
+        "CdG",
+        "CuG",
+        "cbg",
+        "ctd",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-249",
+      "relations": [
+        "CdG",
+        "CuG",
+        "cbg",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-250",
+      "relations": [
+        "CdG",
+        "CuG",
+        "cbg",
+        "dag",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-251",
+      "relations": [
+        "CdG",
+        "CuG",
+        "ctd",
+        "DdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-252",
+      "relations": [
+        "CdG",
+        "CuG",
+        "ctd",
+        "DuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-253",
+      "relations": [
+        "CdG",
+        "CuG",
+        "ctd",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-254",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-255",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "DrD",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-256",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "DrD",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-257",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-258",
+      "relations": [
+        "CdG",
+        "CuG",
+        "dag",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-259",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig",
+        "DdG",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-260",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-261",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig",
+        "DuG",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-262",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-263",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig",
+        "dag",
+        "DdG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-264",
+      "relations": [
+        "CdG",
+        "CuG",
+        "gig",
+        "dag",
+        "DuG"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-265",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DrD",
+        "DuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-266",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DrD",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-267",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DrD",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-268",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DuG",
+        "CuG",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-269",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DuG",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-270",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DuG",
+        "dag",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-271",
+      "relations": [
+        "CdG",
+        "DdG",
+        "DuG",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-272",
+      "relations": [
+        "CdG",
+        "DdG",
+        "ctd",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-273",
+      "relations": [
+        "CdG",
+        "DdG",
+        "dag",
+        "CuG",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-274",
+      "relations": [
+        "CdG",
+        "DdG",
+        "dag",
+        "DuG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-275",
+      "relations": [
+        "CdG",
+        "DdG",
+        "dag",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-276",
+      "relations": [
+        "CdG",
+        "DdG",
+        "dag",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-277",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DdG",
+        "CuG",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-278",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DdG",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-279",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DdG",
+        "dag",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-280",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DdG",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-281",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DrD",
+        "DdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-282",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DrD",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-283",
+      "relations": [
+        "CdG",
+        "DuG",
+        "DrD",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-284",
+      "relations": [
+        "CdG",
+        "DuG",
+        "ctd",
+        "CuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-285",
+      "relations": [
+        "CdG",
+        "DuG",
+        "dag",
+        "CuG",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-286",
+      "relations": [
+        "CdG",
+        "DuG",
+        "dag",
+        "DdG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-287",
+      "relations": [
+        "CdG",
+        "DuG",
+        "dag",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-288",
+      "relations": [
+        "CdG",
+        "DuG",
+        "dag",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-289",
+      "relations": [
+        "CdG",
+        "cbg",
+        "CuG",
+        "DdG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-290",
+      "relations": [
+        "CdG",
+        "cbg",
+        "CuG",
+        "DuG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-291",
+      "relations": [
+        "CdG",
+        "cbg",
+        "CuG",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-292",
+      "relations": [
+        "CdG",
+        "cbg",
+        "CuG",
+        "dag",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-293",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DdG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-294",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DdG",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-295",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DdG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-296",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DuG",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-297",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DuG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-298",
+      "relations": [
+        "CdG",
+        "cbg",
+        "DuG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-299",
+      "relations": [
+        "CdG",
+        "cbg",
+        "dag",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-300",
+      "relations": [
+        "CdG",
+        "cbg",
+        "dag",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-301",
+      "relations": [
+        "CdG",
+        "cbg",
+        "gig",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-302",
+      "relations": [
+        "CdG",
+        "cbg",
+        "gig",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-303",
+      "relations": [
+        "CdG",
+        "crc",
+        "CuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-304",
+      "relations": [
+        "CdG",
+        "crc",
+        "CuG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-305",
+      "relations": [
+        "CdG",
+        "crc",
+        "cbg",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-306",
+      "relations": [
+        "CdG",
+        "crc",
+        "cbg",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-307",
+      "relations": [
+        "CdG",
+        "crc",
+        "ctd",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-308",
+      "relations": [
+        "CdG",
+        "crc",
+        "ctd",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-309",
+      "relations": [
+        "CdG",
+        "crc",
+        "ctd",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-310",
+      "relations": [
+        "CdG",
+        "crc",
+        "ctd",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-311",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DdG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-312",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DrD",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-313",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DrD",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-314",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DrD",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-315",
+      "relations": [
+        "CdG",
+        "ctd",
+        "DuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-316",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DrD",
+        "DuG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-317",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DrD",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-318",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DrD",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-319",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DuG",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-320",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DuG",
+        "dag",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-321",
+      "relations": [
+        "CuG",
+        "DdG",
+        "DuG",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-322",
+      "relations": [
+        "CuG",
+        "DdG",
+        "dag",
+        "DuG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-323",
+      "relations": [
+        "CuG",
+        "DdG",
+        "dag",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-324",
+      "relations": [
+        "CuG",
+        "DdG",
+        "dag",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-325",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DdG",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-326",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DdG",
+        "dag",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-327",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DdG",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-328",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DrD",
+        "DdG",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-329",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DrD",
+        "ctd",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-330",
+      "relations": [
+        "CuG",
+        "DuG",
+        "DrD",
+        "dag",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-331",
+      "relations": [
+        "CuG",
+        "DuG",
+        "dag",
+        "DdG",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-332",
+      "relations": [
+        "CuG",
+        "DuG",
+        "dag",
+        "cbg",
+        "crc"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-333",
+      "relations": [
+        "CuG",
+        "DuG",
+        "dag",
+        "gig",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "C",
+        "G",
+        "D",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-334",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DdG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-335",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DdG",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-336",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DdG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-337",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DuG",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-338",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DuG",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-339",
+      "relations": [
+        "CuG",
+        "cbg",
+        "DuG",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-340",
+      "relations": [
+        "CuG",
+        "cbg",
+        "dag",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-341",
+      "relations": [
+        "CuG",
+        "cbg",
+        "dag",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-342",
+      "relations": [
+        "CuG",
+        "cbg",
+        "gig",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-343",
+      "relations": [
+        "CuG",
+        "cbg",
+        "gig",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "G",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-344",
+      "relations": [
+        "CuG",
+        "crc",
+        "cbg",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-345",
+      "relations": [
+        "CuG",
+        "crc",
+        "cbg",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-346",
+      "relations": [
+        "CuG",
+        "crc",
+        "ctd",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-347",
+      "relations": [
+        "CuG",
+        "crc",
+        "ctd",
+        "DrD",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-348",
+      "relations": [
+        "CuG",
+        "crc",
+        "ctd",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-349",
+      "relations": [
+        "CuG",
+        "crc",
+        "ctd",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-350",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DdG",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-351",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DrD",
+        "DdG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-352",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DrD",
+        "DuG",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-353",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DrD",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-354",
+      "relations": [
+        "CuG",
+        "ctd",
+        "DuG",
+        "DdG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "D",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-355",
+      "relations": [
+        "DdG",
+        "DrD",
+        "ctd",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-356",
+      "relations": [
+        "DdG",
+        "DrD",
+        "ctd",
+        "crc",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "D",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-357",
+      "relations": [
+        "DdG",
+        "DuG",
+        "cbg",
+        "ctd",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "G",
+        "C",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-358",
+      "relations": [
+        "DdG",
+        "DuG",
+        "ctd",
+        "cbg",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "G",
+        "D",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-359",
+      "relations": [
+        "DdG",
+        "DuG",
+        "dag",
+        "cbg",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "G",
+        "D",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-360",
+      "relations": [
+        "DdG",
+        "DuG",
+        "dag",
+        "ctd",
+        "cbg"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "G",
+        "D",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-361",
+      "relations": [
+        "DdG",
+        "cbg",
+        "ctd",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "G",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-362",
+      "relations": [
+        "DdG",
+        "ctd",
+        "cbg",
+        "DuG",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "C",
+        "G",
+        "D"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-363",
+      "relations": [
+        "DdG",
+        "ctd",
+        "crc",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "C",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-364",
+      "relations": [
+        "DrD",
+        "DuG",
+        "cbg",
+        "crc",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "D",
+        "G",
+        "C",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-365",
+      "relations": [
+        "DrD",
+        "DuG",
+        "gig",
+        "cbg",
+        "ctd"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "D",
+        "G",
+        "G",
+        "C"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-366",
+      "relations": [
+        "DrD",
+        "ctd",
+        "cbg",
+        "gig",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "D",
+        "C",
+        "G",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-367",
+      "relations": [
+        "DrD",
+        "ctd",
+        "crc",
+        "cbg",
+        "dag"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "D",
+        "D",
+        "C",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-368",
+      "relations": [
+        "DuG",
+        "ctd",
+        "crc",
+        "cbg",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "D",
+        "C",
+        "C",
+        "G"
+      ]
+    },
+    {
+      "dataset": "hetionet",
+      "n_vars": 5,
+      "query_id": "HET-369",
+      "relations": [
+        "cbg",
+        "crc",
+        "ctd",
+        "dag",
+        "gig"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "G",
+        "C",
+        "C",
+        "D",
+        "G"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 5,
+      "query_id": "EPI-000",
+      "relations": [
+        "edges[0,1]",
+        "edges[1,2]",
+        "edges[2,3]",
+        "edges[3,4]",
+        "edges[4,0]",
+        "edges[0,2]"
+      ],
+      "shape": "chordal5",
+      "var_types": [
+        "node",
+        "node",
+        "node",
+        "node",
+        "node"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 3,
+      "query_id": "EPI-001",
+      "relations": [
+        "edges[0,1]",
+        "edges[1,2]",
+        "edges[2,0]"
+      ],
+      "shape": "cycle3",
+      "var_types": [
+        "node",
+        "node",
+        "node"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 4,
+      "query_id": "EPI-002",
+      "relations": [
+        "edges[0,1]",
+        "edges[1,2]",
+        "edges[2,3]",
+        "edges[3,0]"
+      ],
+      "shape": "cycle4",
+      "var_types": [
+        "node",
+        "node",
+        "node",
+        "node"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 5,
+      "query_id": "EPI-003",
+      "relations": [
+        "edges[0,1]",
+        "edges[1,2]",
+        "edges[2,3]",
+        "edges[3,4]",
+        "edges[4,0]"
+      ],
+      "shape": "cycle5",
+      "var_types": [
+        "node",
+        "node",
+        "node",
+        "node",
+        "node"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 6,
+      "query_id": "EPI-004",
+      "relations": [
+        "edges[0,1]",
+        "edges[1,2]",
+        "edges[2,3]",
+        "edges[3,4]",
+        "edges[4,5]",
+        "edges[5,0]"
+      ],
+      "shape": "cycle6",
+      "var_types": [
+        "node",
+        "node",
+        "node",
+        "node",
+        "node",
+        "node"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 4,
+      "query_id": "EPI-005",
+      "relations": [
+        "edges[0,1]",
+        "edges[1,2]",
+        "edges[2,3]",
+        "edges[3,0]",
+        "edges[0,2]"
+      ],
+      "shape": "diamond",
+      "var_types": [
+        "node",
+        "node",
+        "node",
+        "node"
+      ]
+    },
+    {
+      "dataset": "epinions",
+      "n_vars": 4,
+      "query_id": "EPI-006",
+      "relations": [
+        "edges[0,1]",
+        "edges[0,2]",
+        "edges[0,3]",
+        "edges[1,2]",
+        "edges[1,3]",
+        "edges[2,3]"
+      ],
+      "shape": "k4",
+      "var_types": [
+        "node",
+        "node",
+        "node",
+        "node"
+      ]
+    }
+  ],
+  "registered_before_measurement": true,
+  "rules": {
+    "epinions": "fixed shape set cycle3..6, k4, diamond, chordal5 on the single homogeneous edge relation",
+    "hetionet": "all type-consistent simple metagraph cycles of length 3,4,5 over distinct relations, canonicalised under rotation and reflection, sorted by (length, relation names); all admitted"
+  },
+  "suite": "query_suite_v1",
+  "workloads": [
+    "hetionet",
+    "epinions"
+  ]
+}

@@ -1,0 +1,12 @@
+name,ceg,lpbound,lp_ratio,t_ceg_ms,t_lpbound_ms
+Co-actor+Co-director cycle-4 (5000 rows),100000,100000,1.0000,325.5,485.2
+Co-actor+Co-director cycle-4 (20000 rows),720000,720000,1.0000,1913.7,1783.5
+Co-actor+Co-director cycle-4 (50000 rows),4200000,4200000,1.0000,3850.1,4306.2
+Co-actor+Co-director cycle-4 (100000 rows),18800000,18800000,1.0000,8691.8,9689.0
+JOB Co-actor+Co-keyword (full JOB-medium),1090944,560986,1.9447,95.8,134.7
+JOB Co-actor+Co-company (full JOB-medium),909120,324480,2.8018,73.7,126.5
+JOB Star-3 control (no cycle),5454720,5454720,1.0000,52.7,57.0
+IMDb replicated cycle-4 (50K MA rows),5000000,5000000,1.0000,4041.2,3900.3
+IMDb replicated cycle-4 (200K MA rows),20000000,20000000,1.0000,16788.3,12788.8
+IMDb replicated cycle-4 (500K MA rows),50000000,50000000,1.0000,44706.2,56141.5
+IMDb replicated cycle-4 (1000K MA rows),100000000,100000000,1.0000,95964.7,64113.5

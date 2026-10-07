@@ -1,0 +1,26 @@
+query,strategy,iterations,time_ms,result_size
+"Cycle-4 (power-law, 100V, 400E)",lexicographic,260076,953.6105,8832
+"Cycle-4 (power-law, 100V, 400E)",min_degree,260076,927.5300,8832
+"Cycle-4 (power-law, 100V, 400E)",max_degree,260076,898.6701,8832
+"Cycle-4 (power-law, 100V, 400E)",hceg,258068,1063.1178,8832
+"Cycle-4 (power-law, 100V, 400E)",lph_ceg,260463,1058.8445,8832
+"Cycle-5 (power-law, 100V, 400E)",lexicographic,2752642,9294.5994,77135
+"Cycle-5 (power-law, 100V, 400E)",min_degree,2752642,9291.8182,77135
+"Cycle-5 (power-law, 100V, 400E)",max_degree,2752642,9278.5222,77135
+"Cycle-5 (power-law, 100V, 400E)",hceg,2640919,8086.6234,77135
+"Cycle-5 (power-law, 100V, 400E)",lph_ceg,2849235,9010.3683,77135
+"Cycle-4 (power-law, 200V, 1000E)",lexicographic,1610186,9592.3261,46102
+"Cycle-4 (power-law, 200V, 1000E)",min_degree,1610186,9499.3456,46102
+"Cycle-4 (power-law, 200V, 1000E)",max_degree,1610186,9606.2078,46102
+"Cycle-4 (power-law, 200V, 1000E)",hceg,1622883,10013.7824,46102
+"Cycle-4 (power-law, 200V, 1000E)",lph_ceg,1620687,9375.1248,46102
+Hetionet Cycle-4 (heterogeneous),lexicographic,2834913,12096.9477,10
+Hetionet Cycle-4 (heterogeneous),min_degree,2834913,12296.9748,10
+Hetionet Cycle-4 (heterogeneous),max_degree,2834913,12243.3220,10
+Hetionet Cycle-4 (heterogeneous),hceg,2765886,1454.5485,10
+Hetionet Cycle-4 (heterogeneous),lph_ceg,1209687,559.5070,10
+"Triangle (power-law, 100V, 400E, control)",lexicographic,39492,68.9621,823
+"Triangle (power-law, 100V, 400E, control)",min_degree,39492,69.9173,823
+"Triangle (power-law, 100V, 400E, control)",max_degree,39492,70.2298,823
+"Triangle (power-law, 100V, 400E, control)",hceg,38757,72.2000,823
+"Triangle (power-law, 100V, 400E, control)",lph_ceg,38757,72.6260,823

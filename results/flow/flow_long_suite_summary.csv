@@ -1,0 +1,5 @@
+n_vars,n_queries,n_flow_bs1_eq_entropic,n_checked,n_valid_flow_bs2,median_cover_bs2_over_flow_bs2,min_cover_bs2_over_flow_bs2,max_cover_bs2_over_flow_bs2,median_flow_bs2_over_poly_bs2,max_flow_bs2_over_poly_bs2,n_flow_bs2_eq_poly_bs2,median_flow_bs2_walk_over_flow_bs2,median_entropic_bs1_over_flow_bs2,median_flow_bs2_over_true,median_cover_bs2_over_true,median_flow_bs2_s_total,median_flow_bs2_s_per_order,median_poly_bs2_s,median_entropic_s
+all,120,120,115,115,4.333,1.468,20.860,1.0000,1.7282,104,2.0374,2693.2,369.0,1621.2,0.586,0.0178,0.061,0.795
+6,40,40,40,40,3.231,1.468,14.396,1.0000,1.3744,39,1.7462,284.5,81.4,265.3,0.271,0.0109,0.010,0.526
+8,40,40,40,40,4.213,1.610,13.707,1.0000,1.0704,35,2.0040,2693.2,405.5,1631.1,0.586,0.0178,0.061,0.762
+10,40,40,35,35,5.139,2.535,20.860,1.0000,1.7282,30,2.1305,15829.8,5611.5,25592.8,1.117,0.0272,0.749,2.234

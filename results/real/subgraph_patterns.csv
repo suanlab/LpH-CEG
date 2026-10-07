@@ -1,0 +1,5 @@
+pattern,shape,n_vars,n_rels,ceg_m,cover_lp,improvement_vs_cegm,gap_cover_over_entropic
+Triangle C-G-G,triangle,3,3,2.785464e+06,1.431571e+06,1.9457,2.2852
+Diamond (2 triangles),diamond,4,5,6.189480e+08,3.308495e+08,1.8708,3.5240
+K4 4-clique,clique,4,6,4.712400e+08,1.131338e+08,4.1653,3.4356
+Chordal 4-cycle,chordal,4,5,4.712400e+08,1.317901e+08,3.5757,4.0021

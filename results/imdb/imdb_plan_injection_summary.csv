@@ -1,0 +1,6 @@
+strategy,n,median_slowdown,p95_slowdown,max_slowdown,n_within_1_5x,n_over_2x,n_timeouts,n_queries,n_complete,n_forced_mostly_timed_out,n_eq_oracle_order
+cover_bs1,33,1.4093,2.6966,3.6274,19,7,5,40,33,7,
+lpbound,33,1.2348,2.2320,2.8203,24,5,6,40,33,7,
+flow_bs2,33,1.1861,2.2737,3.6274,26,4,6,40,33,7,24
+oracle,33,1.2107,2.1874,3.6274,27,4,5,40,33,7,
+duckdb,33,0.4340,1.3405,1.9812,32,0,0,40,33,7,

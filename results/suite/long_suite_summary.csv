@@ -1,0 +1,4 @@
+n_vars,n,bs1_over_entropic_median,bs1_over_entropic_max,bs2_over_entropic_median,bs2_beats_entropic,improvement_median,n_validity_checked,n_invalid,cover_bs1_s_median,entropic_s_median,cover_bs2_s_median,n_censored
+6,40,2.5303,8.9061,0.012319,40,1.8485,40,0,0.560,0.526,25.358,11
+8,40,3.2372,16.4228,0.001599,40,5.0556,40,0,0.752,0.762,56.624,10
+10,40,3.6089,16.2354,0.000392,40,8.8915,35,0,0.798,2.234,32.901,12

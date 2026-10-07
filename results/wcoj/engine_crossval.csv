@@ -1,0 +1,5 @@
+n_vertices,n_edges,seed,simulator_count,kuzu_count,match
+40,120,1,135,135,True
+50,200,2,375,375,True
+60,300,3,783,783,True
+80,400,7,939,939,True

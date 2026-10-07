@@ -1,0 +1,4 @@
+n_vars,n_queries,median_bs2_over_agm_pairjoins,max_bs2_over_agm_pairjoins,n_bs2_below_agm_pairjoins,median_agm_pairjoins_over_entropic,n_agm_pairjoins_below_entropic
+6,40,0.219207,0.503317,40,0.067136,40
+8,40,0.013039,0.104044,40,0.133394,39
+10,40,0.004652,0.020229,40,0.084632,39

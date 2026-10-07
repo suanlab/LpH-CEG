@@ -1,0 +1,6 @@
+metric,value
+n_configs,198
+r2_in_sample,0.8662
+r2_heldout,0.8738
+spearman_maxskew_gap,-0.7350
+success_bar_met,1

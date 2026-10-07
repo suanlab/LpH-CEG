@@ -1,0 +1,2 @@
+n_instances,n_order_pairs,n_random_cost_pairs,worst_flow_below_relaxed,worst_prefix_below_relaxed,worst_random_cost_below_relaxed,worst_relaxed_below_all,max_flow_above_relaxed,n_valid_vs_exact,n_flow_simple_eq_poly_simple,n_flow1_eq_entropic1,n_flow_reaches_poly_all,n_prefix_improves,max_gap_bits,seconds
+40,2046,240,8.882e-15,8.882e-15,1.776e-15,3.553e-15,0.3823,40,40,40,34,0,0.3535475,399.3

@@ -1,0 +1,6 @@
+family,n_attrs,cover_bound,refined_bound,entropic_bound,gap_closed_frac,iterations,monotone
+triangle,3,3.056713e+03,3.056713e+03,2.135000e+03,0.0000,4,True
+cycle4,4,4.134166e+04,4.134166e+04,2.969019e+04,0.0000,5,True
+cycle5,5,5.564154e+05,5.564154e+05,3.900417e+05,0.0000,6,True
+k4,4,3.721086e+04,3.721086e+04,2.799138e+04,0.0000,5,True
+cycle6,6,7.102647e+06,7.102647e+06,5.043909e+06,0.0000,7,True

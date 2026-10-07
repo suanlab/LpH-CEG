@@ -1,0 +1,5 @@
+family,n_orders,n_bound_calls,tau_cover_vs_true,tau_entropic_vs_true,tau_cover_vs_entropic,cover_total_ms,entropic_total_ms,search_cost_ratio
+cycle4,16,64,0.3571,0.6429,0.2857,182.94,216.50,1.18
+cycle5,24,120,0.2687,0.3284,0.8806,371.48,521.89,1.40
+k4,24,144,0.7382,0.7673,0.7826,534.61,580.74,1.09
+diamond,24,120,0.8657,0.9407,0.8209,376.23,439.13,1.17

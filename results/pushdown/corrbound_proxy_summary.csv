@@ -1,0 +1,5 @@
+n_vars,n_queries,median_bs1_over_sizes,min_bs1_over_sizes,max_bs1_over_sizes,median_sizes_over_full,min_sizes_over_full,max_sizes_over_full,n_full_below_sizes,n_checked,n_sizes_below_true
+all,120,31.4001,4.6571,381.0808,62.5543,3.9621,5649.0581,120,115,0
+6,40,14.8968,4.6571,83.1246,18.6061,3.9621,231.4689,40,40,0
+8,40,26.9578,7.5485,144.1992,80.1243,17.2811,457.4146,40,40,0
+10,40,98.5453,19.6948,381.0808,153.7258,21.1292,5649.0581,40,35,0

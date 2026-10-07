@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10.12"
+      - name: Install pinned dependencies
+        run: pip install -r requirements.lock
+      - name: Import smoke check
+        run: PYTHONPATH=. python -c "import src.estimators.lph_ceg, src.estimators.lpbound_entropic, src.estimators.agm_bound, src.core.ceg_m, src.core.ceg_o"
+      - name: Unit tests
+        run: PYTHONPATH=. pytest tests/ -q
+      - name: Lint and type check (contribution modules)
+        run: bash scripts/reproduce_all.sh lint
+      - name: Figures regenerate (provenance check)
+        run: PYTHONPATH=. python scripts/generate_plots.py
+      - name: Paper claims match source CSVs
+        run: PYTHONPATH=. python scripts/claim_audit.py
+      - name: Source manifest integrity
+        run: sha256sum -c MANIFEST.sha256

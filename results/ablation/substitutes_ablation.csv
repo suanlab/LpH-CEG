@@ -1,0 +1,6 @@
+family,cegm,lp_bs1,block_bs2,lp_bs2,block2_over_lp1,block2_over_lp2,a_lp1_matches_block2,b_lp_adds_little_at_bs2
+cycle4,6.473333e+05,1.007527e+05,8.946667e+04,8.946667e+04,0.8880,1.0000,False,True
+cycle5,2.532093e+07,1.856948e+06,1.038485e+06,1.038485e+06,0.5592,1.0000,False,True
+cycle6,9.861600e+08,3.021865e+07,1.994240e+07,1.271780e+07,0.6599,1.5681,False,False
+k4,5.586667e+05,1.050004e+05,8.506667e+04,7.091390e+04,0.8102,1.1996,False,False
+chordal5,2.208267e+07,1.928492e+06,9.969050e+05,9.969050e+05,0.5169,1.0000,False,True

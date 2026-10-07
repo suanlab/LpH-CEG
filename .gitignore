@@ -1,0 +1,44 @@
+.venv/
+__pycache__/
+*.pyc
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# OMC / agent state
+.omc/
+
+# Raw benchmark data (download via instructions in data/README.md)
+data/*
+!data/.gitkeep
+!data/README.md
+!data/CHECKSUMS.txt
+
+# Experiment outputs: keep the canonical CSVs that back the paper
+# tables/figures (provenance), ignore regenerable plots/logs.
+results/**
+!results/**/
+!results/**/*.csv
+!results/.gitkeep
+
+# Generated figures (paper figures kept under docs/paper/figures/)
+figures/*
+!figures/.gitkeep
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
+docs/paper/main.bak*
+
+# Misc
+.env
+.coverage

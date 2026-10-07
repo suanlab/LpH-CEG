@@ -1,0 +1,220 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
+
+\newcommand{\query}{\mathcal{Q}}
+\newcommand{\block}{F}
+\newcommand{\interface}{I}
+\newcommand{\joinstate}{S}
+\newcommand{\muLp}[3]{\mu_{#1}(#2 \mid #3)}
+\newcommand{\attr}[1]{\mathrm{attr}(#1)}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+
+\title{Statistics Before Programs: Block $\ell_p$-Norms for Cyclic Join Bounds\\[4pt]
+\large Extended version: full proofs}
+\author{Suan Lee\\ Semyung University\\ \texttt{suanlee@semyung.ac.kr}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent This note accompanies the ICDE 2027 submission and gives the
+proofs that the paper states in condensed form: the $\ell_p$ Composition
+Inequality (the validity of every LpH-CEG bound) and the Cyclic
+Improvement theorem. Notation follows the paper.
+
+\section{The $\ell_p$ Composition Inequality}
+
+\paragraph{Setup.} A hyperpath $P=(\joinstate_0{=}\emptyset,\block_1,
+\joinstate_1,\dots,\block_m,\joinstate_m)$ adds a block of relations
+$\block_j$ at step $j$, $\joinstate_j=\joinstate_{j-1}\cup\block_j$, and
+$\joinstate_m$ is the set of all relations. Write $A_j=\attr{\block_j}$,
+$V_j=\attr{\joinstate_j}$ ($V_0=\emptyset$, $V_m=V$), the interface
+$\interface_j=A_j\cap V_{j-1}$ and $E_j=A_j\setminus\interface_j$. Then
+\begin{itemize}
+\item[(F1)] $E_j=V_j\setminus V_{j-1}$, so $\{E_j\}_{j}$ partitions $V$;
+\item[(F2)] $\interface_j\subseteq V_{j-1}$.
+\end{itemize}
+Weights $w_{j,p}\ge0$ ($p\in\mathcal{P}\subseteq[1,\infty]$) satisfy the
+attribute-wise cover constraint of the paper: for every attribute $a\in V$,
+bound at step $j(a)$ (i.e.\ $a\in E_{j(a)}$),
+\begin{equation}\tag{C}
+w_{j(a)}+\sum_{j':\,a\in\interface_{j'}}s_{j'}\;\ge\;1,
+\qquad w_j:=\sum_p w_{j,p},\quad s_j:=\sum_p w_{j,p}/p\ \ (1/\infty=0).
+\end{equation}
+A \emph{polymatroid} is $h:2^V\to\mathbb{R}$ with $h(\emptyset)=0$,
+monotone and submodular; $h(X\mid Y):=h(X\cup Y)-h(Y)$.
+
+\begin{lemma}[Conditioning]\label{lem:cond}
+For a polymatroid $h$ and $Y\subseteq Z$: $h(X\mid Y)\ge h(X\mid Z)$.
+\end{lemma}
+\begin{proof}
+Submodularity on $X\cup Y$ and $Z$ gives $h(X\cup Y)+h(Z)\ge
+h(X\cup Y\cup Z)+h((X\cup Y)\cap Z)$, and $h((X\cup Y)\cap Z)\ge h(Y)$ by
+monotonicity since $Y\subseteq(X\cup Y)\cap Z$. Rearrange.
+\end{proof}
+
+\begin{lemma}[Fractional subadditivity]\label{lem:frac}
+Let $f$ be monotone submodular on subsets of a finite set with
+$f(\emptyset)=0$, and let $\lambda_i\ge0$ satisfy
+$\sum_{i:\,a\in T_i}\lambda_i\ge1$ for every $a\in S$. Then
+$\sum_i\lambda_if(T_i)\ge f(S)$.
+\end{lemma}
+\begin{proof}
+Order $S=(a_1,\dots,a_k)$ and let $S_{<t}=\{a_1,\dots,a_{t-1}\}$. By
+monotonicity, the chain rule and Lemma~\ref{lem:cond},
+$f(T_i)\ge f(T_i\cap S)=\sum_{a_t\in T_i}f(a_t\mid T_i\cap S_{<t})
+\ge\sum_{a_t\in T_i}f(a_t\mid S_{<t})$. Weighting by $\lambda_i$ and
+exchanging sums, $\sum_i\lambda_if(T_i)\ge\sum_t f(a_t\mid S_{<t})
+\sum_{i:\,a_t\in T_i}\lambda_i\ge\sum_t f(a_t\mid S_{<t})=f(S)$, using
+$f(a_t\mid S_{<t})\ge0$.
+\end{proof}
+
+\begin{lemma}[The obligation]\label{lem:obl}
+For every polymatroid $h$ and every $w$ satisfying (C),
+\[
+\sum_j\Bigl[s_j\,h(\interface_j)+w_j\,h(E_j\mid\interface_j)\Bigr]\;\ge\;h(V).
+\]
+\end{lemma}
+\begin{proof}
+Let $g_j=h(E_j\mid V_{j-1})$, $\delta_j=\max(0,1-w_j)\in[0,1]$ and
+$f_j(S)=h(S\mid V_{j-1})$ for $S\subseteq E_j$; $f_j$ is monotone,
+submodular and $f_j(\emptyset)=0$.
+
+(i) For each $j'$, the chain rule along the partition (F1) and
+Lemma~\ref{lem:cond} give
+$h(\interface_{j'})=\sum_j h(\interface_{j'}\cap E_j\mid
+\interface_{j'}\cap V_{j-1})\ge\sum_j f_j(\interface_{j'}\cap E_j)$.
+Hence $\sum_{j'}s_{j'}h(\interface_{j'})\ge\sum_j\sum_{j'}s_{j'}
+f_j(\interface_{j'}\cap E_j)$.
+
+(ii) Fix $j$. If $\delta_j>0$ then by (C) every $a\in E_j$ has
+$\sum_{j':a\in\interface_{j'}}s_{j'}\ge1-w_j=\delta_j$, so the sets
+$\interface_{j'}\cap E_j$ with weights $s_{j'}/\delta_j$ fractionally
+cover $E_j$, and Lemma~\ref{lem:frac} gives
+$\sum_{j'}s_{j'}f_j(\interface_{j'}\cap E_j)\ge\delta_j\,g_j$. If
+$\delta_j=0$ the same inequality holds because the left side is
+non-negative.
+
+(iii) By (F2) and Lemma~\ref{lem:cond}, $h(E_j\mid\interface_j)\ge g_j\ge0$,
+and $w_j\ge1-\delta_j$, so $w_jh(E_j\mid\interface_j)\ge(1-\delta_j)g_j$.
+
+Adding (i)--(iii): the left side is at least
+$\sum_j[\delta_j+(1-\delta_j)]g_j=\sum_jh(E_j\mid V_{j-1})=h(V)$ by the
+chain rule and (F1).
+\end{proof}
+
+\begin{theorem}[$\ell_p$ Composition Inequality]
+Let $D$ be a database, $\query(D)\ne\emptyset$, and let
+$\muLp{p}{\block_j}{\interface_j}$ be the $\ell_p$-norm of the degree
+sequence of $E_j$-values per $\interface_j$-value in a relation
+$R_j\supseteq\pi_{A_j}\query(D)$---for instance the block join
+$\bowtie_{R\in\block_j}R$ computed exactly on $D$. If $w$ satisfies (C), then
+\[
+|\query(D)|\;\le\;\prod_{j=1}^m\prod_{p\in\mathcal P}
+\muLp{p}{\block_j}{\interface_j}^{\,w_{j,p}}.
+\]
+\end{theorem}
+\begin{proof}
+Let $h$ be the entropy of the uniform distribution on $\query(D)$; it is a
+polymatroid and $h(V)=\log_2|\query(D)|$. The marginal on $A_j$ is
+supported on $\pi_{A_j}\query(D)\subseteq R_j$, so the $\ell_p$ degree
+inequality of Abo Khamis et al.\ (PODS 2024) gives, for $p\in[1,\infty]$,
+$\frac1p h(\interface_j)+h(E_j\mid\interface_j)\le
+\log_2\muLp{p}{\block_j}{\interface_j}$. Multiply by $w_{j,p}\ge0$, sum, and
+apply Lemma~\ref{lem:obl}.
+\end{proof}
+
+\paragraph{Scope.} The proof uses only monotonicity and submodularity, so
+it holds over the whole polymatroid cone and for every hyperpath, block
+size and $p\ge1$. It requires (C) exactly: an LP solver may return weights
+violating (C) by about $10^{-7}$, which is removed by scaling $w$ by
+$1/\min_a(\text{coverage of }a)$. It requires exact statistics of the
+database being bounded (or deterministic upper bounds on them, since the
+bound is monotone in each $\mu$); a sampled or sketched statistic, such as
+the Hutchinson estimate of the common-neighbour $\ell_2$ in the paper, is
+outside the guarantee. When some block join is empty the query is empty
+and the bound is $0$.
+
+\paragraph{Why the elementary argument does not suffice.} If $w_j\ge1$ for
+every step, Lemma~\ref{lem:obl} follows from (iii) alone. The LP's optima
+on cyclic queries have $w_j<1$ (e.g.\ $1/3$ on the closing step of a
+cycle); the deficit $\delta_j$ is paid for by later interfaces, which is
+exactly step (ii). The cyclic improvement and the need for
+Lemma~\ref{lem:frac} have the same source.
+
+\paragraph{Independent checks.} An LP over the polymatroid cone decides
+Lemma~\ref{lem:obl} at fixed weights; enumerating every vertex of the
+feasible weight region decides it for all weights. Over 6{,}197 hyperpath
+structures on eleven shapes with $|V|\le6$ and block sizes $1$--$3$ the
+minimum slack is exactly $0$; an adversarial search over random abstract
+hyperpath schemes with $|V|\le5$ found no violation; and over $207{,}000$
+databases the bound never fell below the exact count
+(\texttt{scripts/shannon\_check\_wide.py},
+\texttt{scripts/validity\_search.py}, \texttt{docs/step5\_lemma.md}).
+
+\section{The Cyclic Improvement theorem}
+
+Order the cycle $C_k$ as $R_1(a_1,a_2),\dots,R_k(a_k,a_1)$ and extend in
+this order with single-relation blocks. Let $N_j=|R_j|$, $M_j$ the maximum
+degree and $\mu_p(R_j)$ the $\ell_p$-norm of the degree sequence of $R_j$
+from $a_j$ to $a_{j+1}$.
+
+\paragraph{Structure.} Step 1 has interface $\emptyset$ and extension
+$\{a_1,a_2\}$: its degree sequence is the single value $N_1$. A middle step
+$2\le j\le k-1$ has interface $\{a_j\}$, extension $\{a_{j+1}\}$ and
+$\mu_\infty=M_j$. The closing step $k$ has interface $\{a_k,a_1\}$ and
+empty extension; its conditional degrees are all $1$, so $\mu_\infty=1$
+and $\mu_1=N_k$. With $p=\infty$ and unit weights this gives
+$B_{\max}=N_1\prod_{j=2}^{k-1}M_j$.
+
+\paragraph{A feasible point for every common $p\ge1$.} Put weight
+$\frac{p}{p+1}$ with exponent $p$ on every middle step, $\frac{p}{p+1}$ on
+step 1 and $\frac1{p+1}$ on the closing step with exponent $1$. The cover
+constraints read: $a_1$: $\frac p{p+1}+\frac1{p+1}=1$; $a_2$:
+$\frac p{p+1}+\frac{p/(p+1)}{p}=1$; $a_i$ for $3\le i\le k-1$:
+$\frac p{p+1}+\frac1{p+1}=1$; $a_k$: $\frac p{p+1}+\frac1{p+1}=1$. All are
+tight, so the LP optimum satisfies
+\[
+B_{\mathrm{LP}}\le N_1^{\frac p{p+1}}N_k^{\frac1{p+1}}
+\prod_{j=2}^{k-1}\mu_p(R_j)^{\frac p{p+1}}
+\quad\text{and}\quad
+\frac{B_{\max}}{B_{\mathrm{LP}}}\ge\Bigl(\frac{N_1}{N_k}\Bigr)^{\frac1{p+1}}
+\prod_{j=2}^{k-1}\frac{M_j}{\mu_p(R_j)^{p/(p+1)}}.
+\]
+\paragraph{The exponent must be common (or non-increasing).} The
+constraint of the attribute between middle edges $j$ and $j{+}1$ is
+$\frac{p_j}{p_j+1}+\frac1{p_{j+1}+1}\ge1$, i.e.\ $p_{j+1}\le p_j$. Choosing
+each edge's best exponent independently is therefore not feasible in
+general (e.g.\ $p_j=1$, $p_{j+1}=\infty$ covers that attribute only to
+$\frac12$); the LP may still mix exponents within a step.
+
+\paragraph{Growth.} At $p=2$ a middle factor $M_j/\mu_2(R_j)^{2/3}$ exceeds
+$1$ exactly when $\mu_2(R_j)<M_j^{3/2}$, i.e.\ for skewed relations, so
+under fixed skew the ratio grows geometrically in the number $k-2$ of
+middle edges. As $p\to\infty$ every factor tends to $1$, and LpH-CEG
+returns $\min(B_{\max},B_{\mathrm{LP}})$, so the realized ratio is always
+at least $1$. The boundary factor $(N_1/N_k)^{1/(p+1)}$ does not depend on
+$k$; it is $1$ for a uniform cycle.
+
+\paragraph{Acyclic queries.} On a star the cover constraints force unit
+weight on every step and the LP returns the max-degree bound. On a path the
+LP can use an interface at $p=1$ in place of an extension (on a 4-path it
+returns weights $(1,0,1)$), so acyclicity alone does not force unit
+weights; what redundant coverage on cycles adds is the slack exploited
+above.
+
+\section{Complexity}
+Collecting $\muLp{p}{\block}{\interface}$ for a single relation is one
+scan, $O(N)$; for a two-relation block it materializes the pair join,
+except for the interfaces computable from single-relation degree tables
+(all but the common-neighbour interface of a binary block; Section VI-C of
+the paper). The cover LP has $m|\mathcal P|$ variables and $|V|$
+constraints; it solves in milliseconds for the queries in the paper. The
+flow LP over a $bs\le2$ catalog is polynomial in the number of constraints
+and solves in $0.03$--$4.4$\,s at $k=3$--$16$ over $4k$ orders.
+
+\end{document}
