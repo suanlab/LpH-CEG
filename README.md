@@ -6,7 +6,8 @@ hyperpath. Compared with the entropic LpBound formulation, whose LP has
 2^|V| variables, ours has O(m·|P|) and decomposes per join step — trading
 some tightness for tractability at large query patterns.
 
-**Status: research artifact under submission (ICDE 2027).** The validity
+**Status: research artifact under submission (ICDE 2027); public copy at
+<https://github.com/suanlab/LpH-CEG>.** The validity
 theorem (the lp Composition Inequality) is proved in
 [`docs/paper/extended_version.pdf`](docs/paper/extended_version.pdf); the
 proof was checked by independent model reviews and by an exhaustive LP
