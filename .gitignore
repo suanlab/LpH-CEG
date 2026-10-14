@@ -16,6 +16,7 @@ data/*
 !data/.gitkeep
 !data/README.md
 !data/CHECKSUMS.txt
+!data/hetionet_cc0/
 
 # Experiment outputs: keep the canonical CSVs that back the paper
 # tables/figures (provenance), ignore regenerable plots/logs.

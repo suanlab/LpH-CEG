@@ -16,7 +16,7 @@ import numpy as np
 OUTPUT_DIR = Path("docs/paper/figures")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# VLDB/ACM publication style
+# IEEE publication style
 plt.rcParams.update(
     {
         "font.family": "serif",
@@ -32,6 +32,9 @@ plt.rcParams.update(
         "savefig.pad_inches": 0.05,
         "lines.linewidth": 2,
         "lines.markersize": 7,
+        # IEEE PDF eXpress rejects Type 3 fonts; embed TrueType instead.
+        "pdf.fonttype": 42,
+        "ps.fonttype": 42,
     }
 )
 

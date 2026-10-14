@@ -42,19 +42,26 @@ it reproduces bit-for-bit. This covers the validity search, the Shannon-cone
 certification, the ablations, the gap characterization, and the LP-cost
 measurements.
 
-The **real-data half needs datasets we cannot redistribute** (Hetionet,
-Epinions, IMDb/JOB). `data/` ships only `README.md` and `CHECKSUMS.txt`;
-the subdirectories are symlinks on our machines. There is currently **no
-download/prepare script**, and the expected per-metaedge files are derived
-from upstream in a way the docs do not yet specify — so a third party cannot
-presently reproduce Tables on real data. We state this plainly rather than
-let you discover it at step 4.
+The **real-data half**:
+
+- **Hetionet** (CC0) is shipped: the 13 per-metaedge edge lists the suites
+  use are in `data/hetionet_cc0/` with `SHA256SUMS`. Link them as
+  `data/hetionet` (`ln -s hetionet_cc0 data/hetionet`). Row order matters —
+  relations are capped at the first N rows in file order.
+- **IMDb** (Join Order Benchmark snapshot) is not redistributed. Download the
+  JOB CSVs (https://github.com/gregrahn/join-order-benchmark) into
+  `data/job_full/` (or set `LPH_JOB_DIR`), then
+  `python scripts/prepare_imdb_cycles.py` derives the suite's relations;
+  `evaluate_imdb_suite.py` refuses to run unless their sha256s match the
+  registry.
+- **Epinions** (SNAP `soc-Epinions1`) is a public download; see
+  `data/README.md`.
 
 ## How claims stay tied to evidence
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 265 headline numbers must match their source CSV cell |
+| `scripts/claim_audit.py` | 371 headline numbers must match their source CSV cell |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |

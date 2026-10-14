@@ -19,7 +19,7 @@ generate their data in-process with fixed seeds and need **no download**.
 
 | Subdir         | Used by                                   | Source |
 |----------------|-------------------------------------------|--------|
-| `hetionet/`    | `wcoj_e2e_experiment.py`, real-data cycle | Hetionet v1.0 biomedical knowledge graph — Himmelstein et al., *eLife* 2017. https://github.com/hetio/hetionet |
+| `hetionet/`    | every Hetionet experiment and suite | Hetionet v1.0 (Himmelstein et al., *eLife* 2017; **CC0**, https://github.com/hetio/hetionet). The 13 per-metaedge edge lists used here are **shipped** in `data/hetionet_cc0/` with `SHA256SUMS`; use them as `data/hetionet/` (`ln -s hetionet_cc0 data/hetionet`). Row order matters: suites cap relations at the first N rows in file order. |
 | `epinions/`    | real-data cycle/triangle                  | Epinions social/trust network — SNAP `soc-Epinions1`. https://snap.stanford.edu/data/soc-Epinions1.html |
 | `imdb/`        | co-actor cycle queries                    | IMDb non-commercial datasets. https://datasets.imdbws.com/ |
 | `job_medium/`  | `job_experiment.py`, JOB tables           | Join Order Benchmark (IMDb subset) — Leis et al. https://github.com/gregrahn/join-order-benchmark |

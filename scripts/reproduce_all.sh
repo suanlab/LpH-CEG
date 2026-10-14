@@ -43,6 +43,14 @@ run_lint() {
 }
 
 run_experiments() {
+    section "2b. Multi-Seed Synthetic Cycles (Table synthetic: multi_seed.csv)"
+    python scripts/revision_experiments.py
+
+    section "2c. JOB-medium, TPC-H and K-Hyperpath Exploration (bs=1 text results)"
+    python scripts/job_experiment.py
+    python scripts/tpch_experiment.py
+    python scripts/explore_k_experiment.py
+
     section "3. Large-Scale 4-Way Comparison (Tables 1, 6, 7)"
     python scripts/large_scale_comparison.py
 
@@ -111,6 +119,9 @@ run_experiments() {
     section "20e. Total Estimation Cost (statistics vs LP solve)"
     python scripts/stats_cost.py
 
+    section "20e2. Cover LP vs. Valid-Weight Cutting Planes (refinement_hierarchy.csv)"
+    python scripts/refinement_hierarchy.py
+
     section "20f. Statistics Hierarchy and the Statistics-vs-Inference 2x2"
     python scripts/statistics_hierarchy.py
     python scripts/statistics_vs_inference.py
@@ -125,6 +136,9 @@ run_experiments() {
     python scripts/evaluate_long_suite.py
     python scripts/agm_pairjoin_baseline.py   # AGM over pair-join sizes, same suite
     python scripts/stats_catalogue.py         # amortised statistics catalogue, same suite
+    python scripts/lpbound_pset_check.py      # entropic baseline with p in {1..10, inf}
+    python scripts/pset_fair.py               # both sides with p in {1..10, inf} (~2 h)
+    python scripts/p11_reruns.py              # short suite, 2x2 and sweep with ten norms
 
     section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
     python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)
@@ -149,7 +163,7 @@ run_figures() {
     section "21. Generate Paper Figures (9 figures, all CSV-driven)"
     python scripts/generate_plots.py
 
-    section "21b. Claim <-> CSV Audit (265 headline numbers)"
+    section "21b. Claim <-> CSV Audit (371 headline numbers)"
     python scripts/claim_audit.py
 }
 

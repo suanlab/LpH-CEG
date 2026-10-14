@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import statistics
 import sys
 from pathlib import Path
@@ -65,7 +66,6 @@ def main() -> None:
     cost = load("results/cost/stats_cost.csv")
     shannon = load("results/validity/shannon_implication.csv")
     wide = load("results/validity/shannon_wide.csv")
-    svi = load("results/ablation/statistics_vs_inference.csv")
     rfr = load("results/ablation/real_frontier.csv")
     hb2 = load("results/revision/headline_bs2.csv")
     lsu = load("results/suite/long_suite_summary.csv")
@@ -87,6 +87,45 @@ def main() -> None:
     ims = load("results/imdb/imdb_suite_summary.csv")
     isc = load("results/imdb/imdb_scale_n1000_summary.csv")
     ipi = load("results/imdb/imdb_plan_injection_summary.csv")
+    pfs = load("results/suite/pset_fair_summary.csv")
+    pfr = load("results/suite/pset_fair.csv")
+    p11s = load("results/suite/p11_short.csv")
+    p11f = load("results/flow/p11_2x2.csv")
+
+    def med_ratio(rows: list[dict[str, str]], a: str, b: str, **where: str) -> float:
+        rs = [r for r in rows if all(r[k] == v for k, v in where.items())]
+        return statistics.median(float(r[a]) / float(r[b]) for r in rs)
+
+    def rng_ratio(rows: list[dict[str, str]], a: str, b: str) -> tuple[float, float]:
+        v = [float(r[a]) / float(r[b]) for r in rows]
+        return min(v), max(v)
+
+    long_true = {
+        r["query_id"]: r["true_count"]
+        for r in load("results/suite/long_suite_eval.csv")
+    }
+    long_true.update(
+        {
+            r["query_id"]: r["true_count"]
+            for r in load("results/imdb/imdb_suite_eval.csv")
+        }
+    )
+
+    def p11_over_true(suite: str, nv: str, col: str) -> float:
+        rs = [
+            r
+            for r in pfr
+            if r["suite"] == suite
+            and r["n_vars"] == nv
+            and long_true[r["query_id"]] not in ("", "0")
+        ]
+        return statistics.median(
+            float(r[col]) / int(long_true[r["query_id"]]) for r in rs
+        )
+
+    def pf(suite: str, nv: str, col: str) -> float:
+        return pick(pfs, col, suite=suite, n_vars=nv)
+
     ime = load("results/imdb/imdb_suite_eval.csv")
     imsp = load("results/imdb/superseded_sparse_2005/imdb_suite_eval.csv")
     lss = load("results/suite/long_suite_summary.csv")
@@ -293,14 +332,52 @@ def main() -> None:
         ),
         # -- statistics vs inference (the paper's central claim) ------------
         (
-            "cover/block beats entropic/single on all pairs",
-            sum(1 for r in svi if float(r["cover_block_vs_entropic_single"]) < 1.0),
-            len(svi),
+            "cover/block beats entropic/single on all pairs (12/12, flow_2x2)",
+            sum(float(r["cover_bs2"]) < float(r["entropic_bs1"]) for r in f22),
+            12,
         ),
         (
-            "entropic wins at EQUAL statistics on all pairs",
-            sum(1 for r in svi if r["entropic_wins_at_equal_stats"] == "True"),
-            len(svi),
+            "optimum wins at EQUAL statistics on all pairs (12/12, flow_2x2)",
+            sum(float(r["poly_bs2"]) < float(r["cover_bs2"]) for r in f22),
+            12,
+        ),
+        (
+            "2x2 table: K4 optimum on blocks (1,284)",
+            pick(f22, "poly_bs2", family="k4", seed="101"),
+            1284,
+            0.001,
+        ),
+        (
+            "refinement: cutting planes close 0% of the gap on 5/5 instances",
+            sum(
+                float(r["gap_closed_frac"]) == 0.0
+                for r in load("results/cost/refinement_hierarchy.csv")
+            ),
+            5,
+        ),
+        (
+            "refinement: cycle-4 cover bound log2 (15.335)",
+            math.log2(
+                pick(
+                    load("results/cost/refinement_hierarchy.csv"),
+                    "cover_bound",
+                    family="cycle4",
+                )
+            ),
+            15.335,
+            0.0001,
+        ),
+        (
+            "refinement: cycle-4 entropic bound log2 (14.858)",
+            math.log2(
+                pick(
+                    load("results/cost/refinement_hierarchy.csv"),
+                    "entropic_bound",
+                    family="cycle4",
+                )
+            ),
+            14.858,
+            0.0001,
         ),
         (
             "real suite: bs=2 tighter than entropic on all 109",
@@ -799,24 +876,29 @@ def main() -> None:
         ),
         # -- real frontier: absolute distance, and the 229 real queries ----
         (
-            "real frontier: 20 tightest checked, all valid (20)",
+            "real frontier: all 109 checked against exact counts, all valid",
             sum(r["valid"] == "True" for r in rft),
-            20,
+            109,
         ),
         (
-            "real frontier: max true count on the 20 (70)",
+            "real frontier: max true count (334)",
             max(int(r["true_count"]) for r in rft),
-            70,
+            334,
         ),
         (
-            "real frontier: min bs2 on the 20 (291)",
-            min(float(r["bs2"]) for r in rft),
-            291,
+            "real frontier: median true count (30)",
+            statistics.median(int(r["true_count"]) for r in rft),
+            30,
         ),
         (
-            "real frontier: max bs2 on the 20 (827)",
-            max(float(r["bs2"]) for r in rft),
-            827,
+            "real frontier: median bs2/true over positive counts (85x)",
+            statistics.median(
+                float(r["bs2"]) / int(r["true_count"])
+                for r in rft
+                if int(r["true_count"]) > 0
+            ),
+            85,
+            0.01,
         ),
         (
             "real queries below entropic at bs=2 (229 = 109 + 120)",
@@ -1244,11 +1326,11 @@ def main() -> None:
             0.02,
         ),
         (
-            "queries with an exact count across real suites (236 = 20+115+101)",
+            "queries with an exact count across real suites (325 = 109+115+101)",
             len(rft)
             + pick(fls, "n_checked", n_vars="all")
             + pick(ims, "n_checked", n_vars="all"),
-            236,
+            325,
         ),
         # -- IMDb at 5x the films (1,000, |V|=6, bounds only) --------------
         (
@@ -1400,6 +1482,659 @@ def main() -> None:
             / pick(ims, "median_stats_s", n_vars="6"),
             11,
             0.02,
+        ),
+        # -- ten norms on both sides (pset_fair) ---------------------------
+        (
+            "P11 both sides: hetionet gain |V|=6 (1.9)",
+            pf("hetionet", "6", "median_entropic_p3_over_p11"),
+            1.9,
+            0.03,
+        ),
+        (
+            "P11 both sides: hetionet gain |V|=8 (2.7)",
+            pf("hetionet", "8", "median_entropic_p3_over_p11"),
+            2.7,
+            0.03,
+        ),
+        (
+            "P11 both sides: hetionet gain |V|=10 (3.2)",
+            pf("hetionet", "10", "median_entropic_p3_over_p11"),
+            3.2,
+            0.03,
+        ),
+        (
+            "P11 both sides: hetionet c1 |V|=6 (2.66)",
+            pf("hetionet", "6", "median_cover_bs1_over_entropic_p11"),
+            2.66,
+            0.005,
+        ),
+        (
+            "P11 both sides: hetionet c1 |V|=8 (3.1)",
+            pf("hetionet", "8", "median_cover_bs1_over_entropic_p11"),
+            3.1,
+            0.005,
+        ),
+        (
+            "P11 both sides: hetionet c1 |V|=10 (3.0)",
+            pf("hetionet", "10", "median_cover_bs1_over_entropic_p11"),
+            3.0,
+            0.005,
+        ),
+        (
+            "P11 both sides: hetionet c2 |V|=6 (0.022)",
+            pf("hetionet", "6", "median_cover_bs2_over_entropic_p11"),
+            0.022,
+            0.05,
+        ),
+        (
+            "P11 both sides: hetionet c2 |V|=8 (0.0037)",
+            pf("hetionet", "8", "median_cover_bs2_over_entropic_p11"),
+            0.0037,
+            0.05,
+        ),
+        (
+            "P11 both sides: hetionet c2 |V|=10 (0.0011)",
+            pf("hetionet", "10", "median_cover_bs2_over_entropic_p11"),
+            0.0011,
+            0.05,
+        ),
+        (
+            "P11 both sides: hetionet f2 |V|=6 (0.0042)",
+            pf("hetionet", "6", "median_flow_bs2_over_entropic_p11"),
+            0.0042,
+            0.05,
+        ),
+        (
+            "P11 both sides: hetionet f2 |V|=8 (0.0006)",
+            pf("hetionet", "8", "median_flow_bs2_over_entropic_p11"),
+            0.0006,
+            0.05,
+        ),
+        (
+            "P11 both sides: hetionet f2 |V|=10 (0.0001)",
+            pf("hetionet", "10", "median_flow_bs2_over_entropic_p11"),
+            0.0001,
+            0.05,
+        ),
+        (
+            "P11 both sides: hetionet below |V|=6 (40)",
+            pf("hetionet", "6", "n_cover_bs2_below_entropic_p11"),
+            40,
+        ),
+        (
+            "P11 both sides: hetionet below |V|=8 (40)",
+            pf("hetionet", "8", "n_cover_bs2_below_entropic_p11"),
+            40,
+        ),
+        (
+            "P11 both sides: hetionet below |V|=10 (40)",
+            pf("hetionet", "10", "n_cover_bs2_below_entropic_p11"),
+            40,
+        ),
+        (
+            "P11 both sides: imdb gain |V|=6 (3.5)",
+            pf("imdb", "6", "median_entropic_p3_over_p11"),
+            3.5,
+            0.03,
+        ),
+        (
+            "P11 both sides: imdb gain |V|=8 (5.1)",
+            pf("imdb", "8", "median_entropic_p3_over_p11"),
+            5.1,
+            0.03,
+        ),
+        (
+            "P11 both sides: imdb gain |V|=10 (6.7)",
+            pf("imdb", "10", "median_entropic_p3_over_p11"),
+            6.7,
+            0.03,
+        ),
+        (
+            "P11 both sides: imdb c1 |V|=6 (5.14)",
+            pf("imdb", "6", "median_cover_bs1_over_entropic_p11"),
+            5.14,
+            0.005,
+        ),
+        (
+            "P11 both sides: imdb c1 |V|=8 (6.75)",
+            pf("imdb", "8", "median_cover_bs1_over_entropic_p11"),
+            6.75,
+            0.005,
+        ),
+        (
+            "P11 both sides: imdb c1 |V|=10 (5.96)",
+            pf("imdb", "10", "median_cover_bs1_over_entropic_p11"),
+            5.96,
+            0.005,
+        ),
+        (
+            "P11 both sides: imdb c2 |V|=6 (0.79)",
+            pf("imdb", "6", "median_cover_bs2_over_entropic_p11"),
+            0.79,
+            0.05,
+        ),
+        (
+            "P11 both sides: imdb c2 |V|=8 (0.35)",
+            pf("imdb", "8", "median_cover_bs2_over_entropic_p11"),
+            0.35,
+            0.05,
+        ),
+        (
+            "P11 both sides: imdb c2 |V|=10 (0.15)",
+            pf("imdb", "10", "median_cover_bs2_over_entropic_p11"),
+            0.15,
+            0.05,
+        ),
+        (
+            "P11 both sides: imdb f2 |V|=6 (0.11)",
+            pf("imdb", "6", "median_flow_bs2_over_entropic_p11"),
+            0.11,
+            0.05,
+        ),
+        (
+            "P11 both sides: imdb f2 |V|=8 (0.034)",
+            pf("imdb", "8", "median_flow_bs2_over_entropic_p11"),
+            0.034,
+            0.05,
+        ),
+        (
+            "P11 both sides: imdb f2 |V|=10 (0.012)",
+            pf("imdb", "10", "median_flow_bs2_over_entropic_p11"),
+            0.012,
+            0.05,
+        ),
+        (
+            "P11 both sides: imdb below |V|=6 (32)",
+            pf("imdb", "6", "n_cover_bs2_below_entropic_p11"),
+            32,
+        ),
+        (
+            "P11 both sides: imdb below |V|=8 (40)",
+            pf("imdb", "8", "n_cover_bs2_below_entropic_p11"),
+            40,
+        ),
+        (
+            "P11 both sides: imdb below |V|=10 (40)",
+            pf("imdb", "10", "n_cover_bs2_below_entropic_p11"),
+            40,
+        ),
+        (
+            "P11: Hetionet cover bs2 gain |V|=6 (46x)",
+            1 / pf("hetionet", "6", "median_cover_bs2_over_entropic_p11"),
+            46,
+            0.01,
+        ),
+        (
+            "P11: Hetionet cover bs2 gain |V|=8 (270x)",
+            1 / pf("hetionet", "8", "median_cover_bs2_over_entropic_p11"),
+            270,
+            0.01,
+        ),
+        (
+            "P11: Hetionet cover bs2 gain |V|=10 (920x)",
+            1 / pf("hetionet", "10", "median_cover_bs2_over_entropic_p11"),
+            920,
+            0.005,
+        ),
+        (
+            "P11: Hetionet flow bs2 gain |V|=6 (236x)",
+            1 / pf("hetionet", "6", "median_flow_bs2_over_entropic_p11"),
+            236,
+            0.005,
+        ),
+        (
+            "P11: Hetionet flow bs2 gain |V|=10 (9,600x)",
+            1 / pf("hetionet", "10", "median_flow_bs2_over_entropic_p11"),
+            9600,
+            0.005,
+        ),
+        (
+            "P11: IMDb cover bs2 gain |V|=6 (1.3x)",
+            1 / pf("imdb", "6", "median_cover_bs2_over_entropic_p11"),
+            1.3,
+            0.04,
+        ),
+        (
+            "P11: IMDb cover bs2 gain |V|=8 (2.9x)",
+            1 / pf("imdb", "8", "median_cover_bs2_over_entropic_p11"),
+            2.9,
+            0.01,
+        ),
+        (
+            "P11: IMDb cover bs2 gain |V|=10 (6.8x)",
+            1 / pf("imdb", "10", "median_cover_bs2_over_entropic_p11"),
+            6.8,
+            0.01,
+        ),
+        (
+            "P11: IMDb flow bs2 gain |V|=6 (9.5x)",
+            1 / pf("imdb", "6", "median_flow_bs2_over_entropic_p11"),
+            9.5,
+            0.01,
+        ),
+        (
+            "P11: IMDb flow bs2 gain |V|=8 (29x)",
+            1 / pf("imdb", "8", "median_flow_bs2_over_entropic_p11"),
+            29,
+            0.02,
+        ),
+        (
+            "P11: IMDb flow bs2 gain |V|=10 (85x)",
+            1 / pf("imdb", "10", "median_flow_bs2_over_entropic_p11"),
+            85,
+            0.01,
+        ),
+        (
+            "P11: IMDb flow bs2 below entropic (120/120)",
+            pf("imdb", "all", "n_flow_bs2_below_entropic_p11"),
+            120,
+        ),
+        (
+            "P11: P3 rows reproduce the paper (entropic, max rel dev 0)",
+            max(
+                abs(float(r["entropic_p3"]) / float(o["entropic"]) - 1)
+                for r in pfr
+                if r["suite"] == "imdb"
+                for o in ime
+                if o["query_id"] == r["query_id"]
+            ),
+            0,
+        ),
+        (
+            "P11: bounds with an exact count, all valid (864 = 216 x 4)",
+            sum(
+                float(r[c]) >= int(t)
+                for r in pfr
+                for t in [
+                    next(
+                        (
+                            o["true_count"]
+                            for o in (
+                                load("results/suite/long_suite_eval.csv")
+                                if r["suite"] == "hetionet"
+                                else ime
+                            )
+                            if o["query_id"] == r["query_id"]
+                        ),
+                        "",
+                    )
+                ]
+                if t != ""
+                for c in (
+                    "entropic_p11",
+                    "cover_bs1_p11",
+                    "cover_bs2_p11",
+                    "flow_bs2_p11",
+                )
+            ),
+            864,
+        ),
+        # -- ten norms as the primary comparison (p11 reruns) --------------
+        (
+            "short P11: stats gain cover bs1/bs2 (30x)",
+            med_ratio(p11s, "cover_bs1_p11", "cover_bs2_p11"),
+            30,
+            0.005,
+        ),
+        (
+            "short P3: stats gain cover bs1/bs2 (56x)",
+            med_ratio(p11s, "cover_bs1_p3", "cover_bs2_p3"),
+            56,
+            0.005,
+        ),
+        (
+            "short P11: inference gap cover bs1/entropic (2.8x)",
+            med_ratio(p11s, "cover_bs1_p11", "entropic_p11"),
+            2.8,
+            0.015,
+        ),
+        (
+            "short P3: inference gap (2.6x)",
+            med_ratio(p11s, "cover_bs1_p3", "entropic_p3"),
+            2.6,
+            0.01,
+        ),
+        (
+            "short P11: cover bs2/entropic (0.094)",
+            med_ratio(p11s, "cover_bs2_p11", "entropic_p11"),
+            0.094,
+            0.005,
+        ),
+        (
+            "short P3: cover bs2/entropic (0.057)",
+            med_ratio(p11s, "cover_bs2_p3", "entropic_p3"),
+            0.057,
+            0.01,
+        ),
+        (
+            "short P11: flow bs2 below entropic (109/109)",
+            sum(float(r["flow_bs2_p11"]) < float(r["entropic_p11"]) for r in p11s),
+            109,
+        ),
+        (
+            "349 = 109 + 240 below entropic under the flow LP (P11)",
+            sum(float(r["flow_bs2_p11"]) < float(r["entropic_p11"]) for r in p11s)
+            + sum(float(r["flow_bs2_p11"]) < float(r["entropic_p11"]) for r in pfr),
+            349,
+        ),
+        (
+            "2x2 P11 table triangle cover_bs1_p11 (1083)",
+            pick(p11f, "cover_bs1_p11", family="triangle", seed="101"),
+            1083,
+            0.002,
+        ),
+        (
+            "2x2 P11 table triangle cover_bs2_p11 (668)",
+            pick(p11f, "cover_bs2_p11", family="triangle", seed="101"),
+            668,
+            0.002,
+        ),
+        (
+            "2x2 P11 table triangle entropic_p11 (806)",
+            pick(p11f, "entropic_p11", family="triangle", seed="101"),
+            806,
+            0.002,
+        ),
+        (
+            "2x2 P11 table triangle poly_bs2_p11 (352)",
+            pick(p11f, "poly_bs2_p11", family="triangle", seed="101"),
+            352,
+            0.002,
+        ),
+        (
+            "2x2 P11 table cycle4 cover_bs1_p11 (9855)",
+            pick(p11f, "cover_bs1_p11", family="cycle4", seed="101"),
+            9855,
+            0.002,
+        ),
+        (
+            "2x2 P11 table cycle4 cover_bs2_p11 (4716)",
+            pick(p11f, "cover_bs2_p11", family="cycle4", seed="101"),
+            4716,
+            0.002,
+        ),
+        (
+            "2x2 P11 table cycle4 entropic_p11 (7388)",
+            pick(p11f, "entropic_p11", family="cycle4", seed="101"),
+            7388,
+            0.002,
+        ),
+        (
+            "2x2 P11 table cycle4 poly_bs2_p11 (1355)",
+            pick(p11f, "poly_bs2_p11", family="cycle4", seed="101"),
+            1355,
+            0.002,
+        ),
+        (
+            "2x2 P11 table diamond cover_bs1_p11 (9769)",
+            pick(p11f, "cover_bs1_p11", family="diamond", seed="101"),
+            9769,
+            0.002,
+        ),
+        (
+            "2x2 P11 table diamond cover_bs2_p11 (4281)",
+            pick(p11f, "cover_bs2_p11", family="diamond", seed="101"),
+            4281,
+            0.002,
+        ),
+        (
+            "2x2 P11 table diamond entropic_p11 (7388)",
+            pick(p11f, "entropic_p11", family="diamond", seed="101"),
+            7388,
+            0.002,
+        ),
+        (
+            "2x2 P11 table diamond poly_bs2_p11 (1252)",
+            pick(p11f, "poly_bs2_p11", family="diamond", seed="101"),
+            1252,
+            0.002,
+        ),
+        (
+            "2x2 P11 table k4 cover_bs1_p11 (9125)",
+            pick(p11f, "cover_bs1_p11", family="k4", seed="101"),
+            9125,
+            0.002,
+        ),
+        (
+            "2x2 P11 table k4 cover_bs2_p11 (3376)",
+            pick(p11f, "cover_bs2_p11", family="k4", seed="101"),
+            3376,
+            0.002,
+        ),
+        (
+            "2x2 P11 table k4 entropic_p11 (6320)",
+            pick(p11f, "entropic_p11", family="k4", seed="101"),
+            6320,
+            0.002,
+        ),
+        (
+            "2x2 P11 table k4 poly_bs2_p11 (1093)",
+            pick(p11f, "poly_bs2_p11", family="k4", seed="101"),
+            1093,
+            0.002,
+        ),
+        (
+            "2x2 P11 stats cover min (1.5)",
+            rng_ratio(p11f, "cover_bs1_p11", "cover_bs2_p11")[0],
+            1.5,
+            0.034,
+        ),
+        (
+            "2x2 P11 stats cover max (2.7)",
+            rng_ratio(p11f, "cover_bs1_p11", "cover_bs2_p11")[1],
+            2.7,
+            0.01,
+        ),
+        (
+            "2x2 P11 stats opt min (1.8)",
+            rng_ratio(p11f, "entropic_p11", "poly_bs2_p11")[0],
+            1.8,
+            0.01,
+        ),
+        (
+            "2x2 P11 stats opt max (5.9)",
+            rng_ratio(p11f, "entropic_p11", "poly_bs2_p11")[1],
+            5.9,
+            0.01,
+        ),
+        (
+            "2x2 P11 inference single min (1.2)",
+            rng_ratio(p11f, "cover_bs1_p11", "entropic_p11")[0],
+            1.2,
+            0.01,
+        ),
+        (
+            "2x2 P11 inference single max (1.5)",
+            rng_ratio(p11f, "cover_bs1_p11", "entropic_p11")[1],
+            1.5,
+            0.01,
+        ),
+        (
+            "2x2 P11 inference block min (1.6)",
+            rng_ratio(p11f, "cover_bs2_p11", "poly_bs2_p11")[0],
+            1.6,
+            0.03,
+        ),
+        (
+            "2x2 P11 inference block max (3.8)",
+            rng_ratio(p11f, "cover_bs2_p11", "poly_bs2_p11")[1],
+            3.8,
+            0.014,
+        ),
+        (
+            "2x2 P11 flow == polymatroid (7/12)",
+            sum(
+                abs(float(r["flow_bs2_p11"]) / float(r["poly_bs2_p11"]) - 1) < 1e-3
+                for r in p11f
+            ),
+            7,
+        ),
+        (
+            "sweep: cover/entropic identical with P11 (max dev 0)",
+            max(
+                abs(
+                    float(r["cover_bs1_p11"]) / float(r["entropic_p11"])
+                    - float(r["cover_bs1_p3"]) / float(r["entropic_p3"])
+                )
+                for r in load("results/scalability/p11_sweep.csv")
+            ),
+            0,
+        ),
+        (
+            "P11 cover/flow bs2 hetionet |V|=6 (4.95)",
+            med_ratio(
+                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="6"
+            ),
+            4.95,
+            0.005,
+        ),
+        (
+            "P11 cover/flow bs2 hetionet |V|=8 (6.45)",
+            med_ratio(
+                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="8"
+            ),
+            6.45,
+            0.005,
+        ),
+        (
+            "P11 cover/flow bs2 hetionet |V|=10 (9.51)",
+            med_ratio(
+                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="10"
+            ),
+            9.51,
+            0.005,
+        ),
+        (
+            "P11 cover/flow bs2 imdb |V|=6 (7.61)",
+            med_ratio(pfr, "cover_bs2_p11", "flow_bs2_p11", suite="imdb", n_vars="6"),
+            7.61,
+            0.005,
+        ),
+        (
+            "P11 cover/flow bs2 imdb |V|=8 (10.17)",
+            med_ratio(pfr, "cover_bs2_p11", "flow_bs2_p11", suite="imdb", n_vars="8"),
+            10.17,
+            0.005,
+        ),
+        (
+            "P11 cover/flow bs2 imdb |V|=10 (11.49)",
+            med_ratio(pfr, "cover_bs2_p11", "flow_bs2_p11", suite="imdb", n_vars="10"),
+            11.49,
+            0.005,
+        ),
+        (
+            "P11 entropic/exact hetionet |V|=6 (8400)",
+            p11_over_true("hetionet", "6", "entropic_p11"),
+            8400,
+            0.025,
+        ),
+        (
+            "P11 flow bs2/exact hetionet |V|=6 (47)",
+            p11_over_true("hetionet", "6", "flow_bs2_p11"),
+            47,
+            0.025,
+        ),
+        (
+            "P11 entropic/exact hetionet |V|=8 (360000)",
+            p11_over_true("hetionet", "8", "entropic_p11"),
+            360000,
+            0.025,
+        ),
+        (
+            "P11 flow bs2/exact hetionet |V|=8 (277)",
+            p11_over_true("hetionet", "8", "flow_bs2_p11"),
+            277,
+            0.025,
+        ),
+        (
+            "P11 entropic/exact hetionet |V|=10 (28000000)",
+            p11_over_true("hetionet", "10", "entropic_p11"),
+            28000000,
+            0.025,
+        ),
+        (
+            "P11 flow bs2/exact hetionet |V|=10 (2900)",
+            p11_over_true("hetionet", "10", "flow_bs2_p11"),
+            2900,
+            0.025,
+        ),
+        (
+            "P11 entropic/exact imdb |V|=6 (23)",
+            p11_over_true("imdb", "6", "entropic_p11"),
+            23,
+            0.025,
+        ),
+        (
+            "P11 flow bs2/exact imdb |V|=6 (2.2)",
+            p11_over_true("imdb", "6", "flow_bs2_p11"),
+            2.2,
+            0.025,
+        ),
+        (
+            "P11 entropic/exact imdb |V|=8 (171)",
+            p11_over_true("imdb", "8", "entropic_p11"),
+            171,
+            0.025,
+        ),
+        (
+            "P11 flow bs2/exact imdb |V|=8 (6.7)",
+            p11_over_true("imdb", "8", "flow_bs2_p11"),
+            6.7,
+            0.025,
+        ),
+        (
+            "P11 entropic/exact imdb |V|=10 (1300)",
+            p11_over_true("imdb", "10", "entropic_p11"),
+            1300,
+            0.025,
+        ),
+        (
+            "P11 flow bs2/exact imdb |V|=10 (15)",
+            p11_over_true("imdb", "10", "flow_bs2_p11"),
+            15,
+            0.025,
+        ),
+        (
+            "P11 Hetionet flow gain |V|=8 (1,670x)",
+            1 / pf("hetionet", "8", "median_flow_bs2_over_entropic_p11"),
+            1670,
+            0.005,
+        ),
+        (
+            "P11 Hetionet cover/flow bs2 rounded |V|=6 (5.0x)",
+            med_ratio(
+                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="6"
+            ),
+            5.0,
+            0.011,
+        ),
+        (
+            "P11 Hetionet cover/flow bs2 rounded |V|=8 (6.5x)",
+            med_ratio(
+                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="8"
+            ),
+            6.5,
+            0.008,
+        ),
+        (
+            "P11 Hetionet cover/flow bs2 rounded |V|=10 (9.5x)",
+            med_ratio(
+                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="10"
+            ),
+            9.5,
+            0.005,
+        ),
+        (
+            "P11 families cover/flow bs2 min (1.6x)",
+            rng_ratio(p11f, "cover_bs2_p11", "flow_bs2_p11")[0],
+            1.6,
+            0.031,
+        ),
+        (
+            "P11 families cover/flow bs2 max (3.8x)",
+            rng_ratio(p11f, "cover_bs2_p11", "flow_bs2_p11")[1],
+            3.8,
+            0.014,
         ),
         # -- CorrBound proxy: entropic + pair-join sizes -------------------
         (

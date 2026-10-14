@@ -1,0 +1,4 @@
+suite,n,median_p3_over_p11,max_p3_over_p11,n_gain_over_1pct
+hetionet,120,2.655130,5.655415,120
+imdb,120,4.956743,13.103158,120
+all,240,3.436280,13.103158,240
