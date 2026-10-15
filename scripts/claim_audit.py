@@ -91,6 +91,11 @@ def main() -> None:
     pfr = load("results/suite/pset_fair.csv")
     p11s = load("results/suite/p11_short.csv")
     p11f = load("results/flow/p11_2x2.csv")
+    gcs = load("results/gcare/gcare_summary.csv")
+    gce = load("results/gcare/gcare_eval.csv")
+
+    def gc(ds: str, col: str) -> float:
+        return pick(gcs, col, dataset=ds)
 
     def med_ratio(rows: list[dict[str, str]], a: str, b: str, **where: str) -> float:
         rs = [r for r in rows if all(r[k] == v for k, v in where.items())]
@@ -2135,6 +2140,178 @@ def main() -> None:
             rng_ratio(p11f, "cover_bs2_p11", "flow_bs2_p11")[1],
             3.8,
             0.014,
+        ),
+        # -- G-CARE cyclic queries (external benchmark) ---------------------
+        ("G-CARE aids n_cyclic (241)", gc("aids", "n_cyclic"), 241),
+        ("G-CARE aids n_evaluated (241)", gc("aids", "n_evaluated"), 241),
+        (
+            "G-CARE aids n_gcare_true_eq_exact (241)",
+            gc("aids", "n_gcare_true_eq_exact"),
+            241,
+        ),
+        (
+            "G-CARE aids n_cover_bs2_below_entropic_p11 (135)",
+            gc("aids", "n_cover_bs2_below_entropic_p11"),
+            135,
+        ),
+        (
+            "G-CARE aids n_flow_bs2_below_entropic_p11 (241)",
+            gc("aids", "n_flow_bs2_below_entropic_p11"),
+            241,
+        ),
+        ("G-CARE aids n_invalid_p11 (0)", gc("aids", "n_invalid_p11"), 0),
+        ("G-CARE yago n_cyclic (366)", gc("yago", "n_cyclic"), 366),
+        ("G-CARE yago n_evaluated (192)", gc("yago", "n_evaluated"), 192),
+        ("G-CARE yago n_too_large (144)", gc("yago", "n_too_large"), 144),
+        (
+            "G-CARE yago n_pair_join_too_large (30)",
+            gc("yago", "n_pair_join_too_large"),
+            30,
+        ),
+        (
+            "G-CARE yago n_cover_bs2_below_entropic_p11 (177)",
+            gc("yago", "n_cover_bs2_below_entropic_p11"),
+            177,
+        ),
+        (
+            "G-CARE yago n_flow_bs2_below_entropic_p11 (188)",
+            gc("yago", "n_flow_bs2_below_entropic_p11"),
+            188,
+        ),
+        ("G-CARE yago n_invalid_p11 (0)", gc("yago", "n_invalid_p11"), 0),
+        (
+            "G-CARE aids median_cover_bs1_over_entropic_p11 (59)",
+            gc("aids", "median_cover_bs1_over_entropic_p11"),
+            59,
+            0.01,
+        ),
+        (
+            "G-CARE aids median_cover_bs2_over_entropic_p11 (0.74)",
+            gc("aids", "median_cover_bs2_over_entropic_p11"),
+            0.74,
+            0.02,
+        ),
+        (
+            "G-CARE aids median_flow_bs2_over_entropic_p11 (0.066)",
+            gc("aids", "median_flow_bs2_over_entropic_p11"),
+            0.066,
+            0.01,
+        ),
+        (
+            "G-CARE aids median_cover_bs2_over_flow_bs2_p11 (11.8)",
+            gc("aids", "median_cover_bs2_over_flow_bs2_p11"),
+            11.8,
+            0.01,
+        ),
+        (
+            "G-CARE aids median_entropic_over_exact_p11 (513)",
+            gc("aids", "median_entropic_over_exact_p11"),
+            513,
+            0.001,
+        ),
+        (
+            "G-CARE aids median_flow_bs2_over_exact_p11 (66)",
+            gc("aids", "median_flow_bs2_over_exact_p11"),
+            66,
+            0.005,
+        ),
+        (
+            "G-CARE yago median_cover_bs1_over_entropic_p11 (6.1)",
+            gc("yago", "median_cover_bs1_over_entropic_p11"),
+            6.1,
+            0.01,
+        ),
+        (
+            "G-CARE yago median_cover_bs2_over_entropic_p11 (0.11)",
+            gc("yago", "median_cover_bs2_over_entropic_p11"),
+            0.11,
+            0.046,
+        ),
+        (
+            "G-CARE yago median_flow_bs2_over_entropic_p11 (0.042)",
+            gc("yago", "median_flow_bs2_over_entropic_p11"),
+            0.042,
+            0.013,
+        ),
+        (
+            "G-CARE yago median_cover_bs2_over_flow_bs2_p11 (2.4)",
+            gc("yago", "median_cover_bs2_over_flow_bs2_p11"),
+            2.4,
+            0.021,
+        ),
+        (
+            "G-CARE yago median_entropic_over_exact_p11 (2139)",
+            gc("yago", "median_entropic_over_exact_p11"),
+            2139,
+            0.001,
+        ),
+        (
+            "G-CARE yago median_flow_bs2_over_exact_p11 (69)",
+            gc("yago", "median_flow_bs2_over_exact_p11"),
+            69,
+            0.005,
+        ),
+        (
+            "G-CARE aids cover-LP statistics gain (1.35x)",
+            1 / gc("aids", "median_cover_bs2_over_entropic_p11"),
+            1.35,
+            0.005,
+        ),
+        (
+            "G-CARE yago cover-LP statistics gain (8.9x)",
+            1 / gc("yago", "median_cover_bs2_over_entropic_p11"),
+            8.9,
+            0.01,
+        ),
+        (
+            "G-CARE aids flow gain (15x)",
+            1 / gc("aids", "median_flow_bs2_over_entropic_p11"),
+            15,
+            0.02,
+        ),
+        (
+            "G-CARE yago flow gain (24x)",
+            1 / gc("yago", "median_flow_bs2_over_entropic_p11"),
+            24,
+            0.01,
+        ),
+        (
+            "G-CARE aids cover gain (1.35x)",
+            1 / gc("aids", "median_cover_bs2_over_entropic_p11"),
+            1.35,
+            0.005,
+        ),
+        (
+            "G-CARE yago exact==gcare among evaluated (143/192)",
+            sum(
+                r["gcare_true"] == r["exact"]
+                for r in gce
+                if r["dataset"] == "yago" and r.get("cover_bs1_p11") not in ("", None)
+            ),
+            143,
+        ),
+        (
+            "G-CARE yago flow equal to entropic (4)",
+            sum(
+                float(r["flow_bs2_p11"]) == float(r["entropic_p11"])
+                for r in gce
+                if r["dataset"] == "yago" and r.get("cover_bs1_p11") not in ("", None)
+            ),
+            4,
+        ),
+        (
+            "G-CARE yago: one flow bound below G-CARE truth (26 < 33)",
+            sum(
+                float(r["flow_bs2_p11"]) < float(r["gcare_true"])
+                for r in gce
+                if r["dataset"] == "yago" and r.get("cover_bs1_p11") not in ("", None)
+            ),
+            1,
+        ),
+        (
+            "G-CARE: cyclic queries run (433 = 241 + 192)",
+            gc("aids", "n_evaluated") + gc("yago", "n_evaluated"),
+            433,
         ),
         # -- CorrBound proxy: entropic + pair-join sizes -------------------
         (

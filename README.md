@@ -28,7 +28,7 @@ that excludes the paper build inside the container.
 ## The three commands
 
 ```bash
-PYTHONPATH=. pytest tests/ -q            # 118 tests
+PYTHONPATH=. pytest tests/ -q            # 123 tests
 bash scripts/reproduce_all.sh smoke      # tests + lint + figures + paper (~1 min)
 bash scripts/reproduce_all.sh all        # every experiment (~hours; needs data/)
 ```
@@ -61,7 +61,7 @@ The **real-data half**:
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 371 headline numbers must match their source CSV cell |
+| `scripts/claim_audit.py` | 405 headline numbers must match their source CSV cell |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |

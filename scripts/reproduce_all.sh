@@ -21,7 +21,7 @@ section() { echo -e "\n======== $1 ========"; }
 
 # ---------------------------------------------------------------------------
 run_tests() {
-    section "1. Unit Tests (118 tests)"
+    section "1. Unit Tests (123 tests)"
     pytest tests/ -q --tb=short
 }
 
@@ -157,13 +157,17 @@ run_experiments() {
     python scripts/evaluate_imdb_suite.py --data-dir data/imdb_cycles_n1000 \
         --tag imdb_scale_n1000 --no-exact --lengths 6
     python scripts/imdb_plan_injection.py     # bound-guided join order in DuckDB (~2 h)
+
+    section "20l. External Benchmark: G-CARE Cyclic Queries (needs G-CARE data; ~2 h)"
+    python scripts/gcare_prepare.py           # AIDS + YAGO into data/gcare/gcare.duckdb
+    python scripts/gcare_suite.py             # 607 cyclic queries, ten and three norms
 }
 
 run_figures() {
     section "21. Generate Paper Figures (9 figures, all CSV-driven)"
     python scripts/generate_plots.py
 
-    section "21b. Claim <-> CSV Audit (371 headline numbers)"
+    section "21b. Claim <-> CSV Audit (405 headline numbers)"
     python scripts/claim_audit.py
 }
 

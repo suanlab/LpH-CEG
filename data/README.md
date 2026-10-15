@@ -23,6 +23,7 @@ generate their data in-process with fixed seeds and need **no download**.
 | `epinions/`    | real-data cycle/triangle                  | Epinions social/trust network — SNAP `soc-Epinions1`. https://snap.stanford.edu/data/soc-Epinions1.html |
 | `imdb/`        | co-actor cycle queries                    | IMDb non-commercial datasets. https://datasets.imdbws.com/ |
 | `job_medium/`  | `job_experiment.py`, JOB tables           | Join Order Benchmark (IMDb subset) — Leis et al. https://github.com/gregrahn/join-order-benchmark |
+| `gcare/`      | G-CARE cyclic suite (`gcare_suite.py`) | G-CARE (Park et al., SIGMOD 2020), https://github.com/yspark-dblab/gcare: download `dataset.tar.gz`, `queryset.tar.gz` and `true_cardinality.tar.gz` (Google Drive links in its README) into `data/gcare/`; unpack the datasets in place, the queries into `queries/` and the true cardinalities into `truth/` (they share file names). `scripts/gcare_prepare.py` loads AIDS and YAGO into `gcare.duckdb`. |
 | `imdb_cycles/` | IMDb cycle suite (`evaluate_imdb_suite.py`) | **Derived, not downloaded**: `scripts/prepare_imdb_cycles.py` projects JOB's full IMDb snapshot (`cast_info` by role, `movie_companies` by company type, `movie_keyword`) onto the 200 most-voted feature films (an earlier 2005 slice was too sparse; see the script docstring). Put the JOB CSVs in `data/job_full/` or point `LPH_JOB_DIR` at them; `MANIFEST.json` pins each output file's sha256, and evaluation refuses to run on a mismatch. |
 
 ## File format

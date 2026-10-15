@@ -72,9 +72,11 @@ They pay fully with a program that can use them: under our flow LP
 (valid for $\ell_\infty$ by Im et al.; for $\ell_p$ checked, not proved)
 the margins are $236$--$9{,}600\times$ and $9.5$--$85\times$, below the
 entropic bound on all $349$ cycle queries over real data, with no
-violation among the $325$ that have an exact count. Richer statistics
-thus reopen the program: on them the flow LP beats the cover LP by a
-median $5.0$--$11.5\times$ (real), against $2.7$--$6.8\times$ on
+violation among the $325$ that have an exact count. On G-CARE's cyclic
+AIDS and YAGO queries the flow-LP margin is $15$--$24\times$, but there the
+inference gap dominates under the cover LP ($59\times$ on AIDS). On
+Hetionet and IMDb, richer statistics reopen the program: on block
+statistics the flow LP beats the cover LP by a median $5.0$--$11.5\times$, against $2.7$--$6.8\times$ on
 single-relation statistics. Extending Im et al.'s flow LP to $\ell_p$
 block constraints reaches, with three norms, the polymatroid bound over
 block statistics in polynomial time on every synthetic even cycle up to
@@ -182,10 +184,12 @@ $120/120$ longer Hetionet cycles ($|V|{=}6$--$10$), against a median
 $2.7$--$3.1\times$ of inference headroom. On $120$ IMDb cycles from JOB's
 snapshot the cover-LP margin is only $1.3$--$6.8\times$ against a
 $5.1$--$6.8\times$ inference gap (above the entropic bound on $8$
-queries); the flow LP's is $9.5$--$85\times$ on $120/120$. On homogeneous
-synthetic cycles the axes are comparable.
+queries); the flow LP's is $9.5$--$85\times$ on $120/120$. On the external
+G-CARE benchmark (433 cyclic AIDS and YAGO queries run) the flow LP's is
+$15$--$24\times$ while the cover LP's is smaller than the inference gap. On
+homogeneous synthetic cycles the axes are comparable.
 
-\item \textbf{Richer statistics reopen the program
+\item \textbf{Richer statistics can reopen the program
 (Sections~\ref{sec:stats-vs-inference},~\ref{sec:scalability}).}
 On the same block statistics the polymatroid optimum beats the cover LP
 by $1.6$--$3.8\times$ ($12/12$ synthetic), and the flow LP beats it by a
@@ -658,7 +662,9 @@ We evaluate on three real-world datasets:
 45K nodes, 2M edges, heterogeneous);
 \textbf{Epinions} (social network, 75K nodes, 509K edges);
 \textbf{IMDb}, JOB's snapshot~\cite{leis2015goodare}: the $200$
-most-voted feature films for a cycle suite, and the JOB-medium subset.
+most-voted feature films for a cycle suite, and the JOB-medium subset;
+and the AIDS and YAGO graphs of G-CARE~\cite{park2020gcare} with its
+cyclic queries.
 We also use synthetic power-law graphs (100--5{,}000 nodes,
 400--20{,}000 edges).
 Seeds and runs are stated per table: multi-seed results are 10-seed
@@ -975,6 +981,52 @@ $6.8\times$. Collecting the statistics grows faster than the data:
 $4.2\times$ the rows cost $48$\,s per query at the median (from
 $4.4$\,s), up to $25$\,min and $16$\,GiB, measured with $10$ workers
 sharing the machine.
+
+\emph{G-CARE.} As an external check we run every cyclic query of the
+G-CARE benchmark~\cite{park2020gcare} on its AIDS and YAGO graphs ($241$
+and $366$; query sets fixed by G-CARE, so no selection is ours), with
+labelled, directed edges as binary relations filtered by the query's
+vertex labels, homomorphism counts, and ten norms on both sides
+(Table~\ref{tab:gcare}). Our exact counts equal G-CARE's on $241/241$ AIDS
+queries; on YAGO they differ on $49$ of the $192$ we evaluate under every
+semantics we tried (directed or not, injective or not), so we check
+validity against our own counts (one YAGO bound, $26$, lies below
+G-CARE's $33$ but above our $17$). $174$ YAGO queries exceed the
+prototype (a relation over $300$K rows or a pair join over $20$M) and are
+reported, not run. Under the flow LP, block statistics are $15\times$
+(AIDS) and $24\times$ (YAGO) tighter than LpBound and never looser. Under
+the cover LP the inference gap dominates: $59\times$ on AIDS, whose
+bounded molecular degrees make high norms very informative to the
+entropic program, against a $1.35\times$ statistics gain ($6.1\times$
+against $8.9\times$ on YAGO)---and on both
+graphs the bs$=2$ program gap ($11.8\times$, $2.4\times$) is below the
+bs$=1$ one. G-CARE is thus a regime where the program matters as much as
+the statistics.
+
+\begin{table}[t]
+\centering
+\caption{G-CARE cyclic queries, ten norms on both sides (medians). YAGO
+queries with a relation over $300$K rows ($144$) or a pair join over
+$20$M ($30$) are not run. Exact counts by DuckDB; G-CARE's own counts
+agree on $241/241$ AIDS and $143/192$ YAGO queries.}
+\label{tab:gcare}
+\small\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+ & AIDS & YAGO \\
+\midrule
+cyclic queries / evaluated & $241$ / $241$ & $366$ / $192$ \\
+cover $bs{=}1$ / entropic & $59\times$ & $6.1\times$ \\
+cover $bs{=}2$ / entropic & $0.74\times$ & $0.11\times$ \\
+flow $bs{=}2$ / entropic & $0.066\times$ & $0.042\times$ \\
+cover $bs{=}2$ below entropic & $135/241$ & $177/192$ \\
+flow $bs{=}2$ below / equal & $241$ / $0$ & $188$ / $4$ \\
+entropic / exact & $513$ & $2{,}139$ \\
+flow $bs{=}2$ / exact & $66$ & $69$ \\
+invalid bounds & $0$ & $0$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \paragraph{Which statistic needs the join.}
 Of the eight interfaces of a block of binary relations $R(a,b),S(b,c)$,
@@ -1450,8 +1502,9 @@ both sides, block statistics are worth a median $30\times$ on short
 Hetionet cycles and $46$--$920\times$ on longer ones under the cover LP;
 on IMDb only $1.3$--$6.8\times$, level with the inference gap, but
 $9.5$--$85\times$ under the flow LP, which is below the entropic LpBound
-on all $349$ cycle queries over real data. Richer statistics reopen the
-program: on them the flow LP beats the cover LP by $5.0$--$11.5\times$,
+on all $349$ cycle queries over real data; on G-CARE, $15$--$24\times$
+under the flow LP but less than the inference gap under the cover LP.
+Richer statistics reopen the program on Hetionet and IMDb (not on G-CARE): on them the flow LP beats the cover LP by $5.0$--$11.5\times$,
 against $2.7$--$6.8\times$ on single-relation statistics, and---with three
 norms---reaches the polymatroid optimum in polynomial time on synthetic
 even cycles and $189/240$ real-data queries ($7/12$ synthetic pairs with
@@ -1470,7 +1523,7 @@ next step. Even so, the question to ask of
 a pessimistic estimator may be less which inequalities it uses than
 which joins it will pay to materialize---and then, as IMDb shows, which
 program can use what they give. We offer this as a characterization of where bound headroom
-lies, not as a deployable optimizer: our queries are cycle patterns over
+lies---regime-dependent, as G-CARE shows---not as a deployable optimizer: our queries are cycle patterns over
 real data, of the kind subgraph-counting
 work targets~\cite{deeds2025color,wang2025pathce}, our statistics come
 from slices ($20$K rows, $200$--$1{,}000$ films) collected by a Python
