@@ -170,10 +170,13 @@ def _limit_memory() -> None:
 
 
 def _evaluate_safe(q: dict[str, object]) -> dict[str, object]:
+    """Run one query; failures become censored rows instead of ending the run."""
     try:
         return evaluate(q)
-    except MemoryError:
+    except (MemoryError, duckdb.OutOfMemoryException):
         return {**q, "censored": "memory_limit"}
+    except Exception as exc:  # recorded, never silently dropped
+        return {**q, "censored": f"error:{type(exc).__name__}"}
 
 
 def exact_count(
@@ -191,12 +194,15 @@ def exact_count(
         " WHERE " + " AND ".join(conds) if conds else ""
     )
     out: list[int | None] = [None]
+    err: list[BaseException | None] = [None]
 
     def go() -> None:
         try:
             out[0] = int(con.execute(sql).fetchone()[0])  # type: ignore[index]
-        except Exception:
-            out[0] = None
+        except duckdb.InterruptException:
+            out[0] = None  # our own timeout below
+        except Exception as exc:
+            err[0] = exc
 
     th = threading.Thread(target=go, daemon=True)
     th.start()
@@ -205,6 +211,8 @@ def exact_count(
         con.interrupt()
         th.join()
         return None
+    if err[0] is not None:
+        raise err[0]  # e.g. out of memory: censored by _evaluate_safe
     return out[0]
 
 

@@ -38,6 +38,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 from scipy.optimize import linprog
+from scipy.sparse import coo_matrix
 
 from src.statistics.lp_stats import compute_lp_block_extension
 from src.utils.types import Block
@@ -117,14 +118,20 @@ def estimate_lpbound_entropic(
     empty_col = col_of[frozenset()]
     full_col = col_of[full_set]
 
-    a_ub_rows: list[list[float]] = []
+    # Sparse constraint matrix: each row touches at most four of the 2^n
+    # columns, so a dense matrix would cost O(2^n) memory per row and would
+    # inflate the baseline's measured time with matrix construction.
+    rows_i: list[int] = []
+    cols_j: list[int] = []
+    vals_v: list[float] = []
     b_ub: list[float] = []
 
     def add_row(coeffs: dict[int, float], rhs: float) -> None:
-        row = [0.0] * num_vars
+        r = len(b_ub)
         for col, val in coeffs.items():
-            row[col] += val
-        a_ub_rows.append(row)
+            rows_i.append(r)
+            cols_j.append(col)
+            vals_v.append(val)
         b_ub.append(rhs)
 
     # ------------------------------------------------------------------
@@ -194,7 +201,7 @@ def estimate_lpbound_entropic(
     c = [0.0] * num_vars
     c[full_col] = -1.0
 
-    a_ub = np.asarray(a_ub_rows, dtype=float)
+    a_ub = coo_matrix((vals_v, (rows_i, cols_j)), shape=(len(b_ub), num_vars)).tocsr()
     b_ub_arr = np.asarray(b_ub, dtype=float)
 
     # Bounds: h(S) >= 0 for all S; pin h(∅) = 0 exactly.

@@ -144,6 +144,7 @@ run_experiments() {
     python scripts/poly_certify.py            # flow >= polymatroid on every long-suite query (P11; ~5 h)
     python scripts/poly_certify.py --short    # ... and on the 109-query short suite
     python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)
+    python scripts/slice_poly_certify.py      # ... and certify those flow bounds by the polymatroid bound
 
     section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
     python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)

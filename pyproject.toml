@@ -5,22 +5,24 @@ build-backend = "hatchling.build"
 [project]
 name = "lph-ceg"
 version = "0.1.0"
-description = "Lp-norm enhanced H-CEG: tighter cyclic query bounds via fractional block covers"
-requires-python = ">=3.10"
+description = "Block lp-norm statistics for cyclic join cardinality bounds"
+requires-python = ">=3.10,<3.14"
 license = { text = "MIT" }
 dependencies = [
-    "networkx>=3.2",
     "numpy>=1.26",
     "scipy>=1.12",
     "matplotlib>=3.8",
+    "pandas>=2.2",
+    "duckdb>=1.0",
+    "kuzu>=0.10",
+]
+
+[project.optional-dependencies]
+dev = [
     "pytest>=8.0",
     "pytest-cov>=4.1",
     "ruff>=0.4",
     "mypy>=1.9",
-    "pyyaml>=6.0",
-    "pandas>=2.2",
-    "duckdb>=1.0",
-    "kuzu>=0.10",
 ]
 
 [tool.ruff]
@@ -52,10 +54,6 @@ warn_unused_configs = true
 disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
-module = "networkx.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
 module = "numpy.*"
 ignore_missing_imports = true
 
@@ -69,10 +67,6 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "pandas.*"
-ignore_missing_imports = true
-
-[[tool.mypy.overrides]]
-module = "yaml.*"
 ignore_missing_imports = true
 
 [tool.hatch.build.targets.wheel]

@@ -152,6 +152,7 @@ def main() -> None:
     lpv = load("results/scalability/lp_pvalues.csv")
     pcs = load("results/suite/poly_certify_summary.csv")
     gpc = load("results/gcare/gcare_poly_certify_summary.csv")
+    spc = load("results/suite/slice_poly_certify_summary.csv")
     jfu = load("results/large_scale/job_full.csv")
     prk = load("results/cost/plan_ranking.csv")
 
@@ -247,16 +248,17 @@ def main() -> None:
         # -- tab:scalability / LP overhead ---------------------------------
         ("cycle-10 improvement (971x)", pick(sc, "improvement", k="10"), 970.6752),
         # -- entropic crossover (C1) ---------------------------------------
-        ("cover LP solve at k=12 (33ms)", pick(se, "cover_ms", k="12"), 33.0980),
         (
-            "entropic LP at k=12 (43s, interior-point)",
+            "entropic LP at k=12 (25 s, sparse, interior-point)",
             pick(se, "entropic_ms", k="12") / 1000.0,
-            42.9301,
+            25,
+            0.5 / 25,
         ),
         (
-            "entropic LP at k=14 (3,679s -- NOT intractable)",
+            "entropic LP at k=14 (2,480 s -- NOT intractable)",
             pick(se, "entropic_ms", k="14") / 1000.0,
-            3679.3821,
+            2480,
+            0.5 / 2480,
         ),
         (
             "max synthetic cover/entropic gap (1.43x)",
@@ -264,19 +266,16 @@ def main() -> None:
             1.4293,
         ),
         (
-            "real crossover k=12 cover (1.68s)",
-            pick(cr, "cover_ms", k="12") / 1000.0,
-            1.6752,
-        ),
-        (
-            "real crossover k=12 entropic (46s, interior-point)",
+            "real crossover k=12 entropic (22 s, sparse, interior-point)",
             pick(cr, "entropic_ms", k="12") / 1000.0,
-            45.6589,
+            22,
+            0.5 / 22,
         ),
         (
-            "real crossover k=14 entropic (2,319s -- solves)",
-            pick(cr, "entropic_ms", k="14") / 1000.0,
-            2318.9376,
+            "real crossover k=14 entropic (27 min -- solves)",
+            pick(cr, "entropic_ms", k="14") / 60000.0,
+            27,
+            0.5 / 27,
         ),
         (
             "extreme real gap (8.8x)",
@@ -979,10 +978,10 @@ def main() -> None:
             0.015,
         ),
         (
-            "entropic 2^|V| LP at |V|=8 (111 ms)",
+            "entropic 2^|V| LP at |V|=8 (81 ms)",
             pick(sent, "entropic_ms", k="8"),
-            111,
-            0.005,
+            81,
+            0.5 / 81,
         ),
         (
             "long suite: flow bs1 == entropic (120/120)",
@@ -2480,14 +2479,26 @@ def main() -> None:
             ),
             0,
         ),
+        ("certified: slice queries checked (80)", float(spc[0]["n"]), 80),
         (
-            "certified: flow == polymatroid on all suites (567)",
+            "certified: slice flow below polymatroid (0)",
+            float(spc[0]["n_flow_below_poly"]),
+            0,
+        ),
+        (
+            "certified: slice flow reproduces slice_robustness exactly (0)",
+            float(spc[0]["max_flow_vs_slice_robustness"]),
+            0,
+        ),
+        (
+            "certified: flow == polymatroid on all suites (633)",
             sum(
                 pick(pcs, "n_flow_eq_poly", suite=x)
                 for x in ("short", "hetionet", "imdb")
             )
-            + sum(pick(gpc, "n_flow_eq_poly", dataset=d) for d in ("aids", "yago")),
-            567,
+            + sum(pick(gpc, "n_flow_eq_poly", dataset=d) for d in ("aids", "yago"))
+            + float(spc[0]["n_flow_eq_poly"]),
+            633,
         ),
         (
             "certified: flow reproduces pset_fair/p11_short exactly (0)",

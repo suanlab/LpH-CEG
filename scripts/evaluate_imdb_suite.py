@@ -393,7 +393,9 @@ def main() -> None:
     # Queries are independent; WORKERS processes evaluate them concurrently
     # (timings are per query, measured inside each worker).
     # one fresh process per query, so peak_rss_mb is that query's peak
-    with multiprocessing.Pool(processes=WORKERS, maxtasksperchild=1) as pool:
+    # fork: workers inherit DATA/EXACT set above (spawn/forkserver would not)
+    ctx = multiprocessing.get_context("fork")
+    with ctx.Pool(processes=WORKERS, maxtasksperchild=1) as pool:
         for r, elapsed in pool.imap_unordered(_evaluate_timed, queries):
             rows.append(r)
             rows.sort(key=lambda x: str(x["query_id"]))
