@@ -229,7 +229,19 @@ run_paper() {
             exit 1
         fi
     done
-    echo "Paper build clean: 0 LaTeX errors, environments balanced."
+    # ICDE page limit: the body (everything before the acknowledgment) must
+    # end on page 12. Checking only where the acknowledgment starts is not
+    # enough: body lines can spill onto page 13 above it.
+    if command -v pdftotext > /dev/null; then
+        body_end=$(pdftotext main.pdf - | awk 'BEGIN{p=1} /\f/{p++} /^A ?CKNOWLEDGMENT/{print p; exit}')
+        first13=$(pdftotext main.pdf - | awk 'BEGIN{p=1} /\f/{p++} p==13 && NF{print; exit}')
+        if [ -z "$body_end" ] || [ "$body_end" -gt 13 ] || \
+           { [ "$body_end" -eq 13 ] && ! echo "$first13" | grep -q "CKNOWLEDGMENT"; }; then
+            echo "FAIL: body exceeds 12 pages (page 13 starts: '$first13')"
+            exit 1
+        fi
+    fi
+    echo "Paper build clean: 0 LaTeX errors, environments balanced, body <= 12 pages."
     cd ../..
 }
 
