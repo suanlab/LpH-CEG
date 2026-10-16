@@ -1289,7 +1289,10 @@ HyperLogLog distinct counts).
 Two findings frame the result. First, a cardinality \emph{upper
 bound} is a conservative cost model: it never underestimates, so ranking
 plans by it does not beat---and need not even match---an engine optimizer
-on average. Second, and structurally, on a single cycle every proper
+on average; ranking all left-deep orders, the cover LP also correlates
+less with true intermediate cost than the entropic bound on all four
+families tried (Kendall $\tau$ $0.27$--$0.87$ against $0.33$--$0.94$).
+Second, and structurally, on a single cycle every proper
 sub-query is acyclic, where the LP has no cyclic slack
 (Section~\ref{prop:acyclic}), so the two bounds largely induce the
 same order; the bound changes the ranking only when an
@@ -1396,7 +1399,8 @@ occupy~\cite{barabasi1999emergence}---$\ell_2$ captures the heavy tail.
 On our workloads LpH-CEG yields no improvement ($1.00\times$) on
 (1)~acyclic star queries---no redundant coverage---and (2)~cycles of replicated relations with
 near-symmetric sampled degrees (the $5$K-edge Epinions cycles,
-Section~\ref{sec:realdata}); case~(2) is a property of the sample, as $20$K
+Section~\ref{sec:realdata}, and all $8$ IMDb co-actor/co-director and
+replicated movie--actor cycle-$4$ instances at $5$K--$1$M rows); case~(2) is a property of the sample, as $20$K
 edges of the same graph give $2.06\times$ on cycle-4
 (Section~\ref{sec:suite}). What is required is \emph{asymmetric degree
 structure in cyclic joins}. Synthetic power-law graphs improve more (up to

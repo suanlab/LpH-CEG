@@ -152,6 +152,8 @@ def main() -> None:
     lpv = load("results/scalability/lp_pvalues.csv")
     pcs = load("results/suite/poly_certify_summary.csv")
     gpc = load("results/gcare/gcare_poly_certify_summary.csv")
+    jfu = load("results/large_scale/job_full.csv")
+    prk = load("results/cost/plan_ranking.csv")
 
     def gc(ds: str, col: str) -> float:
         return pick(gcs, col, dataset=ds)
@@ -2418,6 +2420,48 @@ def main() -> None:
             pick(pcs, "n_flow_below_poly", suite="imdb"),
             0,
             0,
+        ),
+        (
+            "plan ranking: cover tau below entropic on (4) families",
+            sum(
+                float(r["tau_cover_vs_true"]) < float(r["tau_entropic_vs_true"])
+                for r in prk
+            ),
+            4,
+        ),
+        (
+            "plan ranking: cover tau min (0.27)",
+            min(float(r["tau_cover_vs_true"]) for r in prk),
+            0.27,
+            0.005 / 0.27,
+        ),
+        (
+            "plan ranking: cover tau max (0.87)",
+            max(float(r["tau_cover_vs_true"]) for r in prk),
+            0.87,
+            0.005 / 0.87,
+        ),
+        (
+            "plan ranking: entropic tau min (0.33)",
+            min(float(r["tau_entropic_vs_true"]) for r in prk),
+            0.33,
+            0.005 / 0.33,
+        ),
+        (
+            "plan ranking: entropic tau max (0.94)",
+            max(float(r["tau_entropic_vs_true"]) for r in prk),
+            0.94,
+            0.005 / 0.94,
+        ),
+        (
+            "no improvement: IMDb replicated/co-director cycle-4 rows (8)",
+            sum(
+                1
+                for r in jfu
+                if ("cycle-4" in r["name"] and "JOB" not in r["name"])
+                and float(r["lp_ratio"]) == 1.0
+            ),
+            8,
         ),
         (
             "certified: G-CARE queries checked (433)",

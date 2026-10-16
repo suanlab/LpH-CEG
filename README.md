@@ -67,7 +67,7 @@ The **real-data half**:
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 436 headline numbers must match their source CSV cell (counts exactly), and reports pinned values missing from `main.tex` |
+| `scripts/claim_audit.py` | 442 headline numbers must match their source CSV cell (counts exactly), and reports pinned values missing from `main.tex` |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |
@@ -79,9 +79,12 @@ The **real-data half**:
 | build gate in `reproduce_all.sh paper` | fails on any LaTeX error or unbalanced theorem env |
 | `MANIFEST.sha256` | source-file integrity (`scripts/gen_manifest.sh` regenerates) |
 
-Each gate has been checked to actually *fail* when violated, not merely to
-pass. The query suite is registered **before** measurement and hash-pinned,
-so query selection cannot have followed the results.
+Every suite is admitted by a fixed, data-blind rule (SHA-256 order of the
+canonical relation sequence) and hash-pinned. The v1 suite was committed
+before it was measured; the long and IMDb suites were committed together
+with their first results, so for them the rule, not the commit order, is
+the guarantee. Post-registration choices (the 109-query short subset, row
+caps, G-CARE size caps) are disclosed in the paper.
 
 ## Layout
 

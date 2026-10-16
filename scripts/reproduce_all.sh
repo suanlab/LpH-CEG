@@ -99,6 +99,7 @@ run_experiments() {
 
     section "18. Broad Tail-Robustness Distribution (C4)"
     python scripts/robustness_broad.py
+    python scripts/plan_ranking_study.py     # Kendall tau of bound rankings vs true cost
 
     section "19. p-value Sufficiency Ablation across Families"
     python scripts/pvalue_ablation.py
