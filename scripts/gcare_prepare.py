@@ -26,6 +26,11 @@ GCARE = Path(os.environ.get("LPH_GCARE_DIR", str(ROOT / "data" / "gcare")))
 DATASETS = ("aids", "yago")
 
 
+def _sql_str(path: object) -> str:
+    """Escape a path for use inside a single-quoted SQL literal."""
+    return str(path).replace("'", "''")
+
+
 def main() -> None:
     con = duckdb.connect(str(GCARE / "gcare.duckdb"))
     for ds in DATASETS:
@@ -46,11 +51,11 @@ def main() -> None:
                     elif t[0] == "e":
                         ef.write(f"{t[1]}\t{t[2]}\t{t[3]}\n")
             con.execute(
-                f"CREATE OR REPLACE TABLE {ds}_vlabel AS SELECT * FROM read_csv('{vpath}', "
+                f"CREATE OR REPLACE TABLE {ds}_vlabel AS SELECT * FROM read_csv('{_sql_str(vpath)}', "
                 "delim='\t', header=false, columns={'vid': 'BIGINT', 'label': 'INT'})"
             )
             con.execute(
-                f"CREATE OR REPLACE TABLE {ds}_edges AS SELECT * FROM read_csv('{epath}', "
+                f"CREATE OR REPLACE TABLE {ds}_edges AS SELECT * FROM read_csv('{_sql_str(epath)}', "
                 "delim='\t', header=false, columns={'src': 'BIGINT', 'dst': 'BIGINT', 'label': 'INT'})"
             )
         n_v = con.execute(f"SELECT count(*) FROM {ds}_vlabel").fetchone()[0]  # type: ignore[index]

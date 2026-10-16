@@ -262,9 +262,10 @@ $d_i = |\ext{\rel}{a_i}|$, the $\ell_p$-norm is
 $\lpnorm{\mathbf{d}}{p} = (\sum_i d_i^p)^{1/p}$.
 The core inequality is: for any $p \ge 1$,
 \[
-\tfrac{1}{p}\, h(U) + h(V \mid U) \le \log \lpnorm{\mathbf{d}}{p}
+\tfrac{1}{p}\, h(X) + h(Y \mid X) \le \log \lpnorm{\mathbf{d}}{p}
 \]
-where $h$ denotes entropy.
+where $h$ denotes entropy and $\mathbf{d}$ is the degree sequence of $Y$
+given $X$ in $\rel$.
 Optimizing over all valid inequalities via an LP yields bounds
 orders of magnitude tighter than max-degree alone.
 
