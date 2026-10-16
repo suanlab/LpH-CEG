@@ -321,7 +321,13 @@ def summarise(rows: list[dict[str, object]]) -> list[dict[str, object]]:
                     1
                     for r in rs
                     if str(r["flow_bs2_over_poly_bs2"]) != "nan"
-                    and float(str(r["flow_bs2_over_poly_bs2"])) < 1.0001
+                    and abs(float(str(r["flow_bs2_over_poly_bs2"])) - 1) < 1e-4
+                ),
+                "n_flow_below_poly": sum(
+                    1
+                    for r in rs
+                    if str(r["flow_bs2_over_poly_bs2"]) != "nan"
+                    and float(str(r["flow_bs2_over_poly_bs2"])) < 1 - 1e-4
                 ),
                 "max_flow_over_poly": f"{max(col(rs, 'flow_bs2_over_poly_bs2')):.4f}",
                 "median_entropic_over_sizes": med(rs, "entropic_over_sizes"),

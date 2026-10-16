@@ -3,15 +3,16 @@
 #
 # Usage:
 #   cd <repo root>
-#   bash scripts/reproduce_all.sh          # run all (~10 min)
-#   bash scripts/reproduce_all.sh smoke    # tests+lint+figures+paper (~1 min, no long experiments)
+#   bash scripts/reproduce_all.sh          # run all (many hours; real-data suites need data/)
+#   bash scripts/reproduce_all.sh quick    # tests+lint+figures (no LaTeX; the Docker default)
+#   bash scripts/reproduce_all.sh smoke    # quick + paper build (~2 min, no long experiments)
 #   bash scripts/reproduce_all.sh tests    # tests only
 #   bash scripts/reproduce_all.sh lint     # ruff + mypy on contribution modules
 #   bash scripts/reproduce_all.sh figures  # figures only
 #   bash scripts/reproduce_all.sh paper    # build paper only
 #
-# Prerequisites: Python 3.11+, numpy, scipy, matplotlib, pytest, ruff
-# Expected runtime: ~10 minutes (large-scale experiments dominate)
+# Prerequisites: Python 3.10 (requirements.lock); LaTeX for the paper target
+# Expected runtime of 'all': many hours (pset_fair, poly_certify, G-CARE dominate)
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -21,7 +22,7 @@ section() { echo -e "\n======== $1 ========"; }
 
 # ---------------------------------------------------------------------------
 run_tests() {
-    section "1. Unit Tests (123 tests)"
+    section "1. Unit Tests"
     pytest tests/ -q --tb=short
 }
 
@@ -139,6 +140,9 @@ run_experiments() {
     python scripts/lpbound_pset_check.py      # entropic baseline with p in {1..10, inf}
     python scripts/pset_fair.py               # both sides with p in {1..10, inf} (~2 h)
     python scripts/p11_reruns.py              # short suite, 2x2 and sweep with ten norms
+    python scripts/poly_certify.py            # flow >= polymatroid on every long-suite query (P11; ~5 h)
+    python scripts/poly_certify.py --short    # ... and on the 109-query short suite
+    python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)
 
     section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
     python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)
@@ -161,13 +165,15 @@ run_experiments() {
     section "20l. External Benchmark: G-CARE Cyclic Queries (needs G-CARE data; ~2 h)"
     python scripts/gcare_prepare.py           # AIDS + YAGO into data/gcare/gcare.duckdb
     python scripts/gcare_suite.py             # 607 cyclic queries, ten and three norms
+    python scripts/gcare_poly_certify.py      # flow >= polymatroid on every evaluated query (~8 h)
+    python scripts/gcare_recount.py           # independent recount of the 49 disputed YAGO counts
 }
 
 run_figures() {
     section "21. Generate Paper Figures (9 figures, all CSV-driven)"
     python scripts/generate_plots.py
 
-    section "21b. Claim <-> CSV Audit (405 headline numbers)"
+    section "21b. Claim <-> CSV Audit"
     python scripts/claim_audit.py
 }
 
@@ -232,6 +238,12 @@ case "${1:-all}" in
     experiments) run_experiments ;;
     figures)    run_figures ;;
     paper)      run_paper ;;
+    quick)
+        run_tests
+        run_lint
+        run_figures
+        section "QUICK DONE — tests, lint, figures (no LaTeX needed)."
+        ;;
     smoke)
         run_tests
         run_lint
@@ -248,7 +260,7 @@ case "${1:-all}" in
         section "DONE — All experiments, figures, and paper reproduced."
         ;;
     *)
-        echo "Usage: $0 {all|smoke|tests|lint|experiments|figures|paper}"
+        echo "Usage: $0 {all|quick|smoke|tests|lint|experiments|figures|paper}"
         exit 1
         ;;
 esac

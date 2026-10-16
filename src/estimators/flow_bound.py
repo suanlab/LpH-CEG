@@ -19,9 +19,13 @@ constraints already make the polymatroid bound as hard as the general case.
 Following their Section 7 "flow bound", a non-simple constraint is relaxed
 along an attribute order ``pi`` to ``(I, Y', p, c)`` where ``Y'`` keeps the
 attributes of ``Y`` that come after every attribute of ``I``; it carries no
-flow but reduces the unit demand at each sink ``t ∈ Y'`` by ``delta``.  The
-resulting value upper-bounds the polymatroid bound of the relaxed constraint
-set, hence the true cardinality (Im et al., Thm. 1.5a).
+flow but reduces the unit demand at each sink ``t ∈ Y'`` by ``delta``.  For
+l_inf (degree) constraints the resulting value upper-bounds the polymatroid
+bound of the relaxed constraint set, hence the true cardinality (Im et al.,
+Thm. 1.5a).  For l_p constraints with ``p < inf`` this is not proved; the
+paper certifies each reported bound a posteriori by checking it against
+``polymatroid_bound`` over the unrelaxed constraints, which is valid for
+every p (``scripts/poly_certify.py``, ``scripts/gcare_poly_certify.py``).
 
 The module also ships the generic ``2**|V|`` polymatroid LP over the same
 constraint list so both inferences can be compared on identical statistics.

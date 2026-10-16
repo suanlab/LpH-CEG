@@ -39,11 +39,62 @@ def pick(rows: list[dict[str, str]], col: str, **where: str) -> float:
 
 
 def check(
-    claim: str, actual: float, printed: float, tol: float = 0.005
+    claim: str, actual: float, printed: float, tol: float | None = None
 ) -> tuple[bool, str]:
-    """Claim holds if `actual` rounds to `printed` within a relative tol."""
-    ok = abs(actual - printed) <= tol * max(abs(printed), 1e-9)
+    """Claim holds if `actual` matches what the paper prints.
+
+    With the default tolerance, counts (an integral CSV value printed as an
+    integer) must match exactly and other values within 0.5%; an explicit
+    `tol` is a relative tolerance for deliberately rounded magnitudes.
+    """
+    if tol is None and actual == round(actual) and printed == round(printed):
+        ok = actual == printed
+    else:
+        rel = 0.005 if tol is None else tol
+        ok = abs(actual - printed) <= rel * max(abs(printed), 1e-9)
     return ok, f"{claim:<52} paper={printed:<12g} csv={actual:<12.4f}"
+
+
+def _tex_forms(claim: str, printed: float) -> list[str]:
+    """Spellings of the claimed number as main.tex writes numbers.
+
+    Taken from the label's parenthetical, e.g. "(614x)" or "(3,679s)",
+    when it has one; otherwise from `printed`.
+    """
+    import re
+
+    paren = re.findall(r"\(([^()]*)\)", claim)
+    tokens = re.findall(r"\d[\d,]*(?:\.\d+)?", paren[-1]) if paren else []
+    if not tokens:
+        n = round(printed)
+        tokens = [str(n) if printed == n else f"{printed:g}"]
+    forms = []
+    for t in tokens:
+        plain = t.replace(",", "")
+        forms += [t, t.replace(",", "{,}"), plain]
+        if "." in plain:
+            forms.append(plain.rstrip("0").rstrip("."))
+        elif len(plain) > 3:
+            forms.append(f"{int(plain):,}".replace(",", "{,}"))
+    return forms
+
+
+def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-arg]
+    """Pinned values whose printed number does not occur in main.tex.
+
+    Non-fatal: a number can legitimately appear only in a figure or in a
+    derived form; the list exists to catch pins that outlived their text.
+    """
+    import re
+
+    tex = (ROOT / "docs" / "paper" / "main.tex").read_text()
+    out = []
+    for entry in checks:
+        claim, printed = entry[0], float(entry[2])
+        forms = _tex_forms(claim, printed)
+        if not any(re.search(rf"(?<![\d.]){re.escape(f)}(?![\d])", tex) for f in forms):
+            out.append(f"{claim} [{forms[-1]}]")
+    return out
 
 
 def main() -> None:
@@ -68,6 +119,7 @@ def main() -> None:
     wide = load("results/validity/shannon_wide.csv")
     rfr = load("results/ablation/real_frontier.csv")
     hb2 = load("results/revision/headline_bs2.csv")
+    lsc = load("results/large_scale/comparison.csv")
     lsu = load("results/suite/long_suite_summary.csv")
     lse = load("results/suite/long_suite_eval.csv")
     apj = load("results/suite/agm_pairjoin_summary.csv")
@@ -93,6 +145,13 @@ def main() -> None:
     p11f = load("results/flow/p11_2x2.csv")
     gcs = load("results/gcare/gcare_summary.csv")
     gce = load("results/gcare/gcare_eval.csv")
+    gcr = load("results/gcare/gcare_recount.csv")
+    slr = load("results/suite/slice_robustness_summary.csv")
+    lse = load("results/suite/long_suite_eval.csv")
+    sco = load("results/cost/stats_cost.csv")
+    lpv = load("results/scalability/lp_pvalues.csv")
+    pcs = load("results/suite/poly_certify_summary.csv")
+    gpc = load("results/gcare/gcare_poly_certify_summary.csv")
 
     def gc(ds: str, col: str) -> float:
         return pick(gcs, col, dataset=ds)
@@ -347,12 +406,6 @@ def main() -> None:
             12,
         ),
         (
-            "2x2 table: K4 optimum on blocks (1,284)",
-            pick(f22, "poly_bs2", family="k4", seed="101"),
-            1284,
-            0.001,
-        ),
-        (
             "refinement: cutting planes close 0% of the gap on 5/5 instances",
             sum(
                 float(r["gap_closed_frac"]) == 0.0
@@ -394,6 +447,78 @@ def main() -> None:
             statistics.median(float(r["bs2_over_entropic"]) for r in rfr),
             0.0570,
             0.02,
+        ),
+        (
+            "one seed: bs=1 LP over CEG_M on cycle-3 (2.9x)",
+            pick(
+                lsc,
+                "ratio_vs_ceg",
+                experiment="cycle_scale",
+                query="cycle_3",
+                method="LpBound (bs=1,LP)",
+            ),
+            2.9,
+            0.0172,
+        ),
+        (
+            "one seed: max-degree blocks over CEG_M on cycle-3 (4.0x)",
+            pick(
+                lsc,
+                "ratio_vs_ceg",
+                experiment="cycle_scale",
+                query="cycle_3",
+                method="H-CEG_M (bs=2)",
+            ),
+            4.0,
+            0.0125,
+        ),
+        (
+            "one seed: bs=1 LP over CEG_M on cycle-4 (8.5x)",
+            pick(
+                lsc,
+                "ratio_vs_ceg",
+                experiment="cycle_scale",
+                query="cycle_4",
+                method="LpBound (bs=1,LP)",
+            ),
+            8.5,
+            0.0059,
+        ),
+        (
+            "one seed: max-degree blocks over CEG_M on cycle-4 (11x)",
+            pick(
+                lsc,
+                "ratio_vs_ceg",
+                experiment="cycle_scale",
+                query="cycle_4",
+                method="H-CEG_M (bs=2)",
+            ),
+            11,
+            0.0455,
+        ),
+        (
+            "one seed: bs=1 LP over CEG_M on cycle-5 (25.9x)",
+            pick(
+                lsc,
+                "ratio_vs_ceg",
+                experiment="cycle_scale",
+                query="cycle_5",
+                method="LpBound (bs=1,LP)",
+            ),
+            25.9,
+            0.0019,
+        ),
+        (
+            "one seed: max-degree blocks over CEG_M on cycle-5 (45x)",
+            pick(
+                lsc,
+                "ratio_vs_ceg",
+                experiment="cycle_scale",
+                query="cycle_5",
+                method="H-CEG_M (bs=2)",
+            ),
+            45,
+            0.0111,
         ),
         # -- three-axis comparison (Section: statistics vs inference) -------
         (
@@ -759,12 +884,6 @@ def main() -> None:
         ),
         # -- 2x2 on one identical catalogue (flow_2x2.csv) -----------------
         (
-            "2x2 table: triangle optimum on blocks (368)",
-            pick(f22, "poly_bs2", family="triangle", seed="101"),
-            368,
-            0.002,
-        ),
-        (
             "2x2 table: cycle-4 optimum on blocks (1,355)",
             pick(f22, "poly_bs2", family="cycle4", seed="101"),
             1355,
@@ -934,32 +1053,6 @@ def main() -> None:
             0.03,
         ),
         (
-            "Hetionet long: flow bs2/entropic |V|=6 (0.0035)",
-            het_flow("6", "ent"),
-            0.0035,
-            0.03,
-        ),
-        ("Hetionet long: flow bs2/exact |V|=6 (81)", het_flow("6", "true"), 81, 0.01),
-        (
-            "Hetionet long: flow bs2/entropic |V|=8 (0.00038)",
-            het_flow("8", "ent"),
-            0.00038,
-            0.03,
-        ),
-        ("Hetionet long: flow bs2/exact |V|=8 (406)", het_flow("8", "true"), 406, 0.01),
-        (
-            "Hetionet long: flow bs2/entropic |V|=10 (6.3e-05)",
-            het_flow("10", "ent"),
-            6.3e-05,
-            0.03,
-        ),
-        (
-            "Hetionet long: flow bs2/exact |V|=10 (5600)",
-            het_flow("10", "true"),
-            5600,
-            0.01,
-        ),
-        (
             "IMDb: median_improvement_maxdeg_over_bs1 |V|=6 (1.8)",
             pick(ims, "median_improvement_maxdeg_over_bs1", n_vars="6"),
             1.8,
@@ -1014,22 +1107,10 @@ def main() -> None:
             0.01,
         ),
         (
-            "IMDb: median_flow_bs2_over_entropic |V|=6 (0.06)",
-            pick(ims, "median_flow_bs2_over_entropic", n_vars="6"),
-            0.06,
-            0.01,
-        ),
-        (
             "IMDb: median_flow_bs2_over_entropic |V|=8 (0.019)",
             pick(ims, "median_flow_bs2_over_entropic", n_vars="8"),
             0.019,
             0.03,
-        ),
-        (
-            "IMDb: median_flow_bs2_over_entropic |V|=10 (0.0056)",
-            pick(ims, "median_flow_bs2_over_entropic", n_vars="10"),
-            0.0056,
-            0.01,
         ),
         (
             "IMDb: n_bs2_beats_entropic |V|=6 (40)",
@@ -1093,24 +1174,6 @@ def main() -> None:
             "IMDb: n_flow_eq_poly |V|=10 (30)",
             pick(ims, "n_flow_eq_poly", n_vars="10"),
             30,
-        ),
-        (
-            "IMDb: median_entropic_over_true |V|=6 (74)",
-            pick(ims, "median_entropic_over_true", n_vars="6"),
-            74,
-            0.01,
-        ),
-        (
-            "IMDb: median_entropic_over_true |V|=8 (970)",
-            pick(ims, "median_entropic_over_true", n_vars="8"),
-            970,
-            0.005,
-        ),
-        (
-            "IMDb: median_entropic_over_true |V|=10 (9200)",
-            pick(ims, "median_entropic_over_true", n_vars="10"),
-            9200,
-            0.005,
         ),
         (
             "IMDb: median_flow_bs2_over_true |V|=6 (4.2)",
@@ -1806,6 +1869,12 @@ def main() -> None:
             0.005,
         ),
         (
+            "short P11: cover bs2 below LpBound (10.7x)",
+            1 / med_ratio(p11s, "cover_bs2_p11", "entropic_p11"),
+            10.7,
+            0.005,
+        ),
+        (
             "short P3: cover bs2/entropic (0.057)",
             med_ratio(p11s, "cover_bs2_p3", "entropic_p3"),
             0.057,
@@ -2252,6 +2321,236 @@ def main() -> None:
             0.005,
         ),
         (
+            "slice prefix: cover bs2 below LpBound at |V|=6 (46x)",
+            1 / pick(slr, "median_cover_bs2_over_entropic_p11", slice="prefix"),
+            46,
+            0.5 / 46,
+        ),
+        (
+            "slice prefix: flow bs2 below LpBound at |V|=6 (236x)",
+            1 / pick(slr, "median_flow_bs2_over_entropic_p11", slice="prefix"),
+            236,
+            0.5 / 236,
+        ),
+        (
+            "slice prefix: flow bs2 below LpBound on (40/40)",
+            pick(slr, "n_flow_bs2_below_entropic_p11", slice="prefix"),
+            40,
+        ),
+        (
+            "slice 1: cover bs2 below LpBound at |V|=6 (46x)",
+            1 / pick(slr, "median_cover_bs2_over_entropic_p11", slice="1"),
+            46,
+            0.5 / 46,
+        ),
+        (
+            "slice 1: flow bs2 below LpBound at |V|=6 (233x)",
+            1 / pick(slr, "median_flow_bs2_over_entropic_p11", slice="1"),
+            233,
+            0.5 / 233,
+        ),
+        (
+            "slice 1: flow bs2 below LpBound on (40/40)",
+            pick(slr, "n_flow_bs2_below_entropic_p11", slice="1"),
+            40,
+        ),
+        (
+            "slice 2: cover bs2 below LpBound at |V|=6 (49x)",
+            1 / pick(slr, "median_cover_bs2_over_entropic_p11", slice="2"),
+            49,
+            0.5 / 49,
+        ),
+        (
+            "slice 2: flow bs2 below LpBound at |V|=6 (244x)",
+            1 / pick(slr, "median_flow_bs2_over_entropic_p11", slice="2"),
+            244,
+            0.5 / 244,
+        ),
+        (
+            "slice 2: flow bs2 below LpBound on (40/40)",
+            pick(slr, "n_flow_bs2_below_entropic_p11", slice="2"),
+            40,
+        ),
+        (
+            "Fig.1 caption: cover LP end to end, min (8 ms)",
+            min(float(r["cover_ms"]) for r in fsc),
+            8,
+            0.5 / 8,
+        ),
+        (
+            "Fig.1 caption: cover LP end to end, max (44 ms)",
+            max(float(r["cover_ms"]) for r in fsc),
+            44,
+            0.5 / 44,
+        ),
+        (
+            "certified: short queries checked (109)",
+            pick(pcs, "n", suite="short"),
+            109,
+            0,
+        ),
+        (
+            "certified: short flow below polymatroid (0)",
+            pick(pcs, "n_flow_below_poly", suite="short"),
+            0,
+            0,
+        ),
+        (
+            "certified: hetionet queries checked (120)",
+            pick(pcs, "n", suite="hetionet"),
+            120,
+            0,
+        ),
+        (
+            "certified: hetionet flow below polymatroid (0)",
+            pick(pcs, "n_flow_below_poly", suite="hetionet"),
+            0,
+            0,
+        ),
+        (
+            "certified: imdb queries checked (120)",
+            pick(pcs, "n", suite="imdb"),
+            120,
+            0,
+        ),
+        (
+            "certified: imdb flow below polymatroid (0)",
+            pick(pcs, "n_flow_below_poly", suite="imdb"),
+            0,
+            0,
+        ),
+        (
+            "certified: G-CARE queries checked (433)",
+            sum(pick(gpc, "n", dataset=d) for d in ("aids", "yago")),
+            433,
+        ),
+        (
+            "certified: G-CARE flow below polymatroid (0)",
+            sum(pick(gpc, "n_flow_below_poly", dataset=d) for d in ("aids", "yago")),
+            0,
+        ),
+        (
+            "certified: G-CARE flow reproduces gcare_eval exactly (0)",
+            max(
+                pick(gpc, "max_flow_vs_gcare_eval", dataset=d) for d in ("aids", "yago")
+            ),
+            0,
+        ),
+        (
+            "certified: flow == polymatroid on all suites (567)",
+            sum(
+                pick(pcs, "n_flow_eq_poly", suite=x)
+                for x in ("short", "hetionet", "imdb")
+            )
+            + sum(pick(gpc, "n_flow_eq_poly", dataset=d) for d in ("aids", "yago")),
+            567,
+        ),
+        (
+            "certified: flow reproduces pset_fair/p11_short exactly (0)",
+            max(
+                pick(pcs, "max_flow_vs_pset_fair", suite=x)
+                for x in ("short", "hetionet", "imdb")
+            ),
+            0,
+            0,
+        ),
+        (
+            "robustness: synthetic cyclic queries timed (24)",
+            pick(rb, "n", strategy="bound-guided"),
+            24,
+        ),
+        (
+            "cycle-6 p-values {1,inf} (17.6x)",
+            pick(lpv, "improvement", p_values="1.0,inf"),
+            17.6,
+            0.05 / 17.6,
+        ),
+        (
+            "cycle-6 p-values {1,2,inf} (35.7x)",
+            pick(lpv, "improvement", p_values="1.0,2.0,inf"),
+            35.7,
+            0.05 / 35.7,
+        ),
+        (
+            "cycle-6 p-values: l3, l5 add nothing (35.7x)",
+            pick(lpv, "improvement", p_values="1.0,1.5,2.0,3.0,5.0,inf"),
+            35.7,
+            0.05 / 35.7,
+        ),
+        (
+            "bs=1 growth per step of k over k=3..8 (3x)",
+            (cyc("cycle_8") / cyc("cycle_3")) ** (1 / 5),
+            3,
+            0.5 / 3,
+        ),
+        (
+            "Hetionet suite bs2/bs1 collection cost, median (61x)",
+            statistics.median(
+                float(r["cover_bs2_s"]) / float(r["cover_bs1_s"]) for r in lse
+            ),
+            61,
+            0.5 / 61,
+        ),
+        (
+            "Hetionet suite bs2/bs1 collection cost, min (8x)",
+            min(float(r["cover_bs2_s"]) / float(r["cover_bs1_s"]) for r in lse),
+            8,
+            0.5 / 8,
+        ),
+        (
+            "Hetionet suite bs2/bs1 collection cost, max (558x)",
+            max(float(r["cover_bs2_s"]) / float(r["cover_bs1_s"]) for r in lse),
+            558,
+            0.5 / 558,
+        ),
+        (
+            "synthetic families bs2/bs1 collection cost, median (45x)",
+            statistics.median(
+                float(b["stats_ms"]) / float(a["stats_ms"])
+                for a, b in zip(sco[0::2], sco[1::2], strict=True)
+            ),
+            45,
+            0.5 / 45,
+        ),
+        (
+            "G-CARE yago cyclic queries with a count (364)",
+            sum(1 for r in gce if r["dataset"] == "yago" and r["exact"]),
+            364,
+            0,
+        ),
+        (
+            "G-CARE yago counts differing from G-CARE's, all (80)",
+            sum(
+                1
+                for r in gce
+                if r["dataset"] == "yago"
+                and r["exact"]
+                and int(float(r["exact"])) != int(r["gcare_true"])
+            ),
+            80,
+            0,
+        ),
+        (
+            "G-CARE yago recount agrees with DuckDB (49/49)",
+            sum(r["recount"] == r["duckdb_exact"] for r in gcr),
+            49,
+        ),
+        ("G-CARE yago disputed queries recounted (49)", len(gcr), 49),
+        (
+            "G-CARE yago disputed queries in Petal families (45)",
+            sum(r["petal"] == "True" for r in gcr),
+            45,
+        ),
+        (
+            "G-CARE yago Petal queries evaluated (100)",
+            sum(
+                "/Petal_" in r["path"]
+                for r in gce
+                if r["dataset"] == "yago" and r["cover_bs1_p11"]
+            ),
+            100,
+        ),
+        (
             "G-CARE aids cover-LP statistics gain (1.35x)",
             1 / gc("aids", "median_cover_bs2_over_entropic_p11"),
             1.35,
@@ -2504,7 +2803,7 @@ def main() -> None:
 
     for entry in checks:
         claim, actual, printed = entry[0], entry[1], entry[2]
-        tol = entry[3] if len(entry) > 3 else 0.005
+        tol = entry[3] if len(entry) > 3 else None
         ok, line = check(claim, actual, printed, tol)
         lines.append(("  OK   " if ok else "  FAIL ") + line)
         if not ok:
@@ -2517,6 +2816,13 @@ def main() -> None:
     print(
         f"  {len(checks) - len(failures)}/{len(checks)} claims match their source CSV"
     )
+
+    absent = missing_from_paper(checks)
+    print(
+        f"  {len(checks) - len(absent)}/{len(checks)} pinned values occur in main.tex"
+    )
+    for m in absent:
+        print(f"    not in main.tex: {m}")
 
     if failures:
         print("\nDRIFTED CLAIMS (paper text must be updated or CSV regenerated):")

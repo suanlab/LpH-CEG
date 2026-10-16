@@ -1,0 +1,4 @@
+slice,n,median_cover_bs1_over_entropic_p11,median_cover_bs2_over_entropic_p11,median_flow_bs2_over_entropic_p11,n_cover_bs2_below_entropic_p11,n_flow_bs2_below_entropic_p11
+prefix,40,2.66352,0.0219034,0.0042409,40,40
+1,40,2.49648,0.0219452,0.00430002,40,40
+2,40,2.49686,0.0204299,0.00409667,40,40

@@ -23,8 +23,7 @@ mapfile -t files < <(
       ! -path '*__pycache__*'
     printf '%s\n' \
       docs/paper/main.tex docs/paper/references.bib docs/paper/extended_version.tex \
-      pyproject.toml requirements.txt requirements.lock Dockerfile \
-      configs/experiments.yaml
+      pyproject.toml requirements.txt requirements.lock Dockerfile
   } | sort -u
 )
 

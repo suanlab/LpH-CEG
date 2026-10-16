@@ -1,7 +1,7 @@
 # Reproducible environment for LpH-CEG artifact evaluation.
 #
 #   docker build -t lph-ceg .
-#   docker run --rm lph-ceg                      # runs the smoke reproduction
+#   docker run --rm lph-ceg                      # tests + lint + figures
 #   docker run --rm lph-ceg bash scripts/reproduce_all.sh experiments
 #
 # Real-data experiments need the datasets placed under data/ (see data/README.md);
@@ -21,4 +21,4 @@ ENV PYTHONDONTWRITEBYTECODE=1
 # Default: quick reproduction (tests + lint + figures). The paper build
 # (scripts/reproduce_all.sh paper) additionally requires a LaTeX toolchain
 # (e.g. apt-get install texlive-latex-extra), omitted here to keep the image small.
-CMD ["bash", "scripts/reproduce_all.sh", "smoke"]
+CMD ["bash", "scripts/reproduce_all.sh", "quick"]

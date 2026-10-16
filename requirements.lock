@@ -1,9 +1,10 @@
 # Pinned environment for reproducible artifact evaluation.
-# Generated from the tested environment (Python 3.10.12).
+# Python 3.10.12.
 # Install with:  pip install -r requirements.lock
 #
-# These exact versions reproduce the reported numbers (71 unit tests,
-# scipy HiGHS LP behavior, matplotlib figures). For looser ranges see
+# A fresh clone installed from these pins passes every unit test and the
+# claim audit (the results were produced with numpy 1.26.4; every other pin
+# matches that environment exactly). For looser ranges see
 # requirements.txt / pyproject.toml.
 numpy==2.2.6
 scipy==1.15.3

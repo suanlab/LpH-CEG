@@ -392,6 +392,31 @@ class TestJointOptimization:
         r10 = estimate_lph_ceg(q, _TEST_DATA, max_block_size=1, explore_k=10)
         assert r10.estimate <= r1.estimate + 1e-6
 
+    @pytest.mark.parametrize(("k", "bs"), [(6, 1), (6, 2), (8, 2)])
+    def test_explore_k_never_looser_on_cycles(self, k: int, bs: int) -> None:
+        """More candidates may only tighten: the shortest path is always kept.
+
+        Regression: the candidate DFS once dropped the l_inf-shortest
+        hyperpath, so explore_k>1 was looser on cycle-6/8 at bs=2.
+        """
+        import random
+
+        from src.estimators.lph_ceg import estimate_lph_ceg
+        from src.utils.query import cycle_query
+
+        q = cycle_query(k)
+        rng = random.Random(k * 10 + bs)
+        data = {}
+        for rel in q.relations:
+            rows = {
+                (str(int(rng.paretovariate(1.2)) % 40), str(rng.randrange(40)))
+                for _ in range(160)
+            }
+            data[rel.name] = (tuple(sorted(rel.attributes)), sorted(rows))
+        r1 = estimate_lph_ceg(q, data, max_block_size=bs, explore_k=1)
+        r3 = estimate_lph_ceg(q, data, max_block_size=bs, explore_k=3)
+        assert r3.estimate <= r1.estimate * (1 + 1e-9)
+
     def test_metadata_tracks_paths(self) -> None:
         """Metadata should report paths_explored and explore_k."""
         from src.estimators.lph_ceg import estimate_lph_ceg

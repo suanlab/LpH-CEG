@@ -1,0 +1,4 @@
+suite,n,n_flow_below_poly,n_flow_eq_poly,median_flow_over_poly,max_flow_over_poly,max_flow_vs_pset_fair,max_poly_s
+short,109,0,102,1,1.04117,0,0.03
+hetionet,120,0,98,1,1.86239,0,4.14
+imdb,120,0,81,1,1.10836,0,3.54

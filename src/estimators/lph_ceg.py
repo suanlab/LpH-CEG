@@ -48,20 +48,22 @@ def _enumerate_k_best_hyperpaths(
     dag: HCEGDAG,
     k: int,
 ) -> list[tuple[Hyperpath, float]]:
-    """Enumerate up to k shortest hyperpaths in the DAG.
+    """Return the shortest hyperpath plus up to ``k - 1`` other candidates.
 
-    Uses Yen's-style successive shortest path approach adapted for
-    DAGs: after finding each shortest path, edges along that path are
-    penalized to diversify the next candidate.
+    The first entry is always the l_inf-shortest hyperpath (so exploring
+    more candidates can never loosen the bound).  The others are the
+    lightest of the first ``10 k`` source-to-sink paths found by a bounded
+    DFS; this is a heuristic candidate set, not a true k-best enumeration.
 
-    Returns list of (hyperpath, total_weight) pairs sorted by weight.
+    Returns list of (hyperpath, total_weight) pairs, shortest first.
     """
     from src.core.hyperpath import shortest_hyperpath as _sp
     from src.utils.types import Hyperpath, State
 
+    result = _sp(dag)
+    shortest = (result.hyperpath, result.total_weight)
     if k <= 1:
-        result = _sp(dag)
-        return [(result.hyperpath, result.total_weight)]
+        return [shortest]
 
     # Build outgoing edge map
     outgoing: dict[State, list[HCEGHyperedge]] = {v: [] for v in dag.vertices}
@@ -93,7 +95,8 @@ def _enumerate_k_best_hyperpaths(
             break
 
     all_paths.sort(key=lambda x: x[1])
-    return all_paths[:k]
+    others = [p for p in all_paths if p[0].blocks != shortest[0].blocks]
+    return [shortest, *others[: k - 1]]
 
 
 # ---------------------------------------------------------------------------
@@ -108,7 +111,7 @@ def estimate_lph_ceg(
     max_block_size: int = 3,
     max_states: int = DEFAULT_MAX_STATES,
     p_values: tuple[float, ...] = DEFAULT_P_VALUES,
-    apply_selectivity: bool = True,
+    apply_selectivity: bool = False,
     explore_k: int = 1,
     lp_stats: dict[tuple[Block, Interface], LpBlockExtensionStats] | None = None,
 ) -> EstimationResult:

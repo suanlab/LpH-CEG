@@ -1,0 +1,13 @@
+.git
+.omc
+.venv
+**/__pycache__
+docs/paper/*.log
+docs/paper/*.aux
+docs/paper/*.bbl
+docs/paper/*.blg
+docs/paper/*.out
+AUDIT.md
+CHECK.md
+REVIEW.md
+*_PLAN.md

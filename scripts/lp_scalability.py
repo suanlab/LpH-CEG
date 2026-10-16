@@ -139,6 +139,7 @@ def main() -> None:
 
     std6 = estimate_pessimistic(q6, data6, max_block_size=1)
 
+    rows_p: list[dict[str, object]] = []
     for pvals in [
         (float("inf"),),
         (1.0, float("inf")),
@@ -152,6 +153,15 @@ def main() -> None:
         ratio = std6.estimate / max(lph.estimate, 1e-10)
         pstr = ",".join("inf" if p == float("inf") else str(p) for p in pvals)
         print(f"{len(pvals):>4}  {pstr:>30}  {t_lph:>10.1f}  {ratio:>11.1f}x")
+        rows_p.append(
+            {"n_p": len(pvals), "p_values": pstr, "improvement": f"{ratio:.4f}"}
+        )
+    p_path = out_path.parent / "lp_pvalues.csv"
+    with open(p_path, "w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=list(rows_p[0]))
+        writer.writeheader()
+        writer.writerows(rows_p)
+    print(f"\n(wrote {p_path})")
 
 
 if __name__ == "__main__":

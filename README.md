@@ -1,10 +1,16 @@
-# LpH-CEG — polynomial-size cardinality bounds for cyclic joins
+# LpH-CEG — block ℓp-norm statistics for cyclic join bounds
 
-LpH-CEG computes **guaranteed upper bounds** on join cardinality by solving a
-small linear program over ℓp-norms of degree sequences along a fixed
-hyperpath. Compared with the entropic LpBound formulation, whose LP has
-2^|V| variables, ours has O(m·|P|) and decomposes per join step — trading
-some tightness for tractability at large query patterns.
+LpH-CEG computes **guaranteed upper bounds** on the cardinality of cyclic
+joins from ℓp-norms of degree sequences, and asks where the remaining
+headroom lies: in the *program* that combines the statistics, or in the
+*statistics* themselves. On single-relation statistics LpBound's
+polynomial flow LP already reaches the polymatroid optimum, and our
+fractional block-cover LP is dominated. Block statistics (degree sequences
+of two-relation joins, conditioned on their interfaces) tighten LpBound by
+a median 46–920× on registered Hetionet cycles, much less on IMDb unless a
+better program (our ℓp extension of the flow LP, certified per query by
+the polymatroid bound) uses them, and on G-CARE's AIDS the program gap
+dominates. Paper: `docs/paper/main.tex`.
 
 **Status: research artifact under submission (ICDE 2027); public copy at
 <https://github.com/suanlab/LpH-CEG>.** The validity
@@ -28,7 +34,7 @@ that excludes the paper build inside the container.
 ## The three commands
 
 ```bash
-PYTHONPATH=. pytest tests/ -q            # 123 tests
+PYTHONPATH=. pytest tests/ -q            # 127 tests (2 need the real data)
 bash scripts/reproduce_all.sh smoke      # tests + lint + figures + paper (~1 min)
 bash scripts/reproduce_all.sh all        # every experiment (~hours; needs data/)
 ```
@@ -61,7 +67,7 @@ The **real-data half**:
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 405 headline numbers must match their source CSV cell |
+| `scripts/claim_audit.py` | 436 headline numbers must match their source CSV cell (counts exactly), and reports pinned values missing from `main.tex` |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |

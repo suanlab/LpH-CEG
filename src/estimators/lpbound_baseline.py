@@ -29,7 +29,7 @@ def estimate_lpbound(
     relation_data: RelationDataMap,
     *,
     p_values: tuple[float, ...] = DEFAULT_P_VALUES,
-    apply_selectivity: bool = True,
+    apply_selectivity: bool = False,
 ) -> EstimationResult:
     """Estimate cardinality using the LpBound approach (binary LP only).
 

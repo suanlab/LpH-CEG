@@ -12,8 +12,9 @@
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
 
-\title{Statistics Before Programs: Block $\ell_p$-Norms for Cyclic Join Bounds\\[4pt]
+\title{Where the Headroom Lies: Block $\ell_p$-Norm Statistics for Cyclic Join Bounds\\[4pt]
 \large Extended version: full proofs}
 \author{Suan Lee\\ Semyung University\\ \texttt{suanlee@semyung.ac.kr}}
 \date{}
@@ -131,13 +132,33 @@ apply Lemma~\ref{lem:obl}.
 \paragraph{Scope.} The proof uses only monotonicity and submodularity, so
 it holds over the whole polymatroid cone and for every hyperpath, block
 size and $p\ge1$. It requires (C) exactly: an LP solver may return weights
-violating (C) by about $10^{-7}$, which is removed by scaling $w$ by
-$1/\min_a(\text{coverage of }a)$. It requires exact statistics of the
+violating (C) by about $10^{-7}$; scaling $w$ by
+$1/\min_a(\text{coverage of }a)$ restores (C) and changes the bound by a
+factor $1+O(10^{-7})$, which the released code does not apply. It requires exact statistics of the
 database being bounded (or deterministic upper bounds on them, since the
 bound is monotone in each $\mu$); a sampled or sketched statistic, such as
 the Hutchinson estimate of the common-neighbour $\ell_2$ in the paper, is
 outside the guarantee. When some block join is empty the query is empty
-and the bound is $0$.
+and the inequality holds trivially (the released LP gives such a factor
+weight zero, which only loosens the bound).
+
+\begin{proposition}[Necessity]
+If nonnegative weights $(w_{j,p})$ make the product above an upper bound on
+$|\query(D)|$ for every database $D$, they satisfy (C). Hence on a fixed
+hyperpath the cover LP is optimal over all weightings of its statistics
+that are valid on every database.
+\end{proposition}
+\begin{proof}
+Fix $a\in V$ and $N\ge2$, and let $D_N$ give $a$ the domain $[N]$ and every
+other attribute a single value, each relation holding all tuples over
+these domains. Then $|\query(D_N)|=N$, and the block join of $\block_j$ has
+$N$ tuples if $a\in A_j$ and one otherwise, so
+$\muLp{p}{\block_j}{\interface_j}$ is $N^{1/p}$ if $a\in\interface_j$, $N$
+if $a\in E_j$, and $1$ if $a\notin A_j$. The bound is $N^{c_a}$ with $c_a$
+the left side of (C) at $a$, and $N^{c_a}\ge N$ forces $c_a\ge1$. (The
+entropy of $D_N$'s join is the modular polymatroid $h(S)=[a\in S]\log_2N$,
+so the proposition also holds over the polymatroid cone.)
+\end{proof}
 
 \paragraph{Why the elementary argument does not suffice.} If $w_j\ge1$ for
 every step, Lemma~\ref{lem:obl} follows from (iii) alone. The LP's optima
@@ -193,9 +214,12 @@ general (e.g.\ $p_j=1$, $p_{j+1}=\infty$ covers that attribute only to
 $\frac12$); the LP may still mix exponents within a step.
 
 \paragraph{Growth.} At $p=2$ a middle factor $M_j/\mu_2(R_j)^{2/3}$ exceeds
-$1$ exactly when $\mu_2(R_j)<M_j^{3/2}$, i.e.\ for skewed relations, so
-under fixed skew the ratio grows geometrically in the number $k-2$ of
-middle edges. As $p\to\infty$ every factor tends to $1$, and LpH-CEG
+$1$ exactly when $\mu_2(R_j)^2<M_j^3$: the sum of squared degrees is
+below the cube of the maximum degree. A few high-degree values satisfy it;
+many low-degree ones need not ($n$ values of uniform degree $d$ qualify
+iff $n<d$, and $10^4$ values of degree $1$ plus one of degree $20$ do not).
+When every middle factor is at least $c>1$ the ratio grows geometrically
+in the number $k-2$ of middle edges. As $p\to\infty$ every factor tends to $1$, and LpH-CEG
 returns $\min(B_{\max},B_{\mathrm{LP}})$, so the realized ratio is always
 at least $1$. The boundary factor $(N_1/N_k)^{1/(p+1)}$ does not depend on
 $k$; it is $1$ for a uniform cycle.
@@ -211,7 +235,7 @@ above.
 Collecting $\muLp{p}{\block}{\interface}$ for a single relation is one
 scan, $O(N)$; for a two-relation block it materializes the pair join,
 except for the interfaces computable from single-relation degree tables
-(all but the common-neighbour interface of a binary block; Section VI-C of
+(all but the common-neighbour interface of a binary block; Section V-C of
 the paper). The cover LP has $m|\mathcal P|$ variables and $|V|$
 constraints; it solves in milliseconds for the queries in the paper. The
 flow LP over a $bs\le2$ catalog is polynomial in the number of constraints

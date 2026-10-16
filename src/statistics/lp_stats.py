@@ -59,9 +59,19 @@ class LpBlockExtensionStats:
     log_max_extension: float
 
     def norm(self, p: float) -> float:
-        """Return the lp-norm, computing on the fly if not precomputed."""
+        """Return the lp-norm, computing on the fly if not precomputed.
+
+        Raises:
+            KeyError: If ``p`` was not precomputed and the degree sequence
+                was not materialized (``count > 0`` but no sequence), so
+                the norm cannot be recovered; returning 0 would let the
+                LP treat the step as free.
+        """
         if p in self.lp_norms:
             return self.lp_norms[p]
+        if not self.degree_sequence and self.count > 0:
+            msg = f"l_{p} norm was not precomputed and the sequence is absent"
+            raise KeyError(msg)
         return _compute_lp_norm(self.degree_sequence, p)
 
     def log_norm(self, p: float) -> float:
