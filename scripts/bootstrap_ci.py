@@ -20,22 +20,53 @@ import numpy as np
 ROOT = Path(__file__).resolve().parent.parent
 DRAWS = 10_000
 SEED = 0
-RATIOS = ("cover_bs1_p11", "cover_bs2_p11", "flow_bs2_p11")
+RATIOS = ("cover_bs1_p11", "cover_bs2_p11", "flow_bs2_p11", "poly_bs2_p11")
 
 
 def _rows(rel: str) -> list[dict[str, str]]:
     return list(csv.DictReader((ROOT / rel).read_text().splitlines()))
 
 
+def _with_poly(
+    rows: list[dict[str, str]], poly: dict[str, str], key: str
+) -> list[dict[str, str]]:
+    return [{**r, "poly_bs2_p11": poly[r[key]]} for r in rows]
+
+
 def groups() -> list[tuple[str, str, list[dict[str, str]]]]:
     out: list[tuple[str, str, list[dict[str, str]]]] = []
-    fair = _rows("results/suite/pset_fair.csv")
+    lp = {
+        r["query_id"]: r["poly_bs2_p11"]
+        for r in _rows("results/suite/poly_certify.csv")
+    }
+    fair = _with_poly(_rows("results/suite/pset_fair.csv"), lp, "query_id")
     for suite in ("hetionet", "imdb"):
         for nv in ("6", "8", "10"):
             rs = [r for r in fair if r["suite"] == suite and r["n_vars"] == nv]
             out.append((suite, nv, rs))
-    out.append(("hetionet_short", "3-4", _rows("results/suite/p11_short.csv")))
-    gc = _rows("results/gcare/gcare_eval.csv")
+    sp = {
+        r["query_id"]: r["poly_bs2_p11"]
+        for r in _rows("results/suite/poly_certify_short.csv")
+    }
+    out.append(
+        (
+            "hetionet_short",
+            "3-4",
+            _with_poly(_rows("results/suite/p11_short.csv"), sp, "query_id"),
+        )
+    )
+    gp = {
+        r["path"]: r["poly_bs2_p11"]
+        for r in _rows("results/gcare/gcare_poly_certify.csv")
+    }
+    gc = [
+        r
+        for r in _with_poly(
+            [r for r in _rows("results/gcare/gcare_eval.csv") if r["path"] in gp],
+            gp,
+            "path",
+        )
+    ]
     for ds in ("aids", "yago"):
         rs = [r for r in gc if r["dataset"] == ds and r["cover_bs1_p11"]]
         out.append((f"gcare_{ds}", "all", rs))

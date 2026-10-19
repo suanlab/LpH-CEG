@@ -145,7 +145,9 @@ run_experiments() {
     python scripts/poly_certify.py --short    # ... and on the 109-query short suite
     python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)
     python scripts/slice_poly_certify.py      # ... and certify those flow bounds by the polymatroid bound
+    python scripts/poly_headline.py           # headline medians with the bs<=2 polymatroid bound as the program
     python scripts/bootstrap_ci.py            # query-level bootstrap intervals of the headline medians
+    python scripts/sweep_poly_certify.py      # certify the k=12..16 sweep flow bounds (long)
 
     section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
     python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)
@@ -234,10 +236,12 @@ run_paper() {
     # end on page 12. Checking only where the acknowledgment starts is not
     # enough: body lines can spill onto page 13 above it.
     if command -v pdftotext > /dev/null; then
-        body_end=$(pdftotext main.pdf - | awk 'BEGIN{p=1} /\f/{p++} /^A ?CKNOWLEDGMENT/{print p; exit}')
-        first13=$(pdftotext main.pdf - | awk 'BEGIN{p=1} /\f/{p++} p==13 && NF{print; exit}')
+        # no early `exit` in awk: under pipefail a SIGPIPE to pdftotext
+        # would abort the script without a message
+        body_end=$(pdftotext main.pdf - | awk 'BEGIN{p=1} /\f/{p++} /^\f?A ?CKNOWLEDGMENT/ && !f {print p; f=1}')
+        first13=$(pdftotext main.pdf - | awk 'BEGIN{p=1} /\f/{p++} p==13 && NF && !f {print; f=1}')
         if [ -z "$body_end" ] || [ "$body_end" -gt 13 ] || \
-           { [ "$body_end" -eq 13 ] && ! echo "$first13" | grep -q "CKNOWLEDGMENT"; }; then
+           { [ "$body_end" -eq 13 ] && [[ "$first13" != *CKNOWLEDGMENT* ]]; }; then
             echo "FAIL: body exceeds 12 pages (page 13 starts: '$first13')"
             exit 1
         fi

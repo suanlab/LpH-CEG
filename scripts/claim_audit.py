@@ -153,6 +153,15 @@ def main() -> None:
     gpc = load("results/gcare/gcare_poly_certify_summary.csv")
     spc = load("results/suite/slice_poly_certify_summary.csv")
     bci = load("results/suite/bootstrap_ci.csv")
+    phl = load("results/suite/poly_headline.csv")
+    pce = load("results/suite/poly_certify.csv")
+    gpe = load("results/gcare/gcare_poly_certify.csv")
+    spe = load("results/suite/slice_poly_certify.csv")
+    pse = load("results/suite/poly_certify_short.csv")
+
+    def ph(suite: str, group: str, col: str) -> float:
+        return pick(phl, col, suite=suite, group=group)
+
     jfu = load("results/large_scale/job_full.csv")
     prk = load("results/cost/plan_ranking.csv")
 
@@ -832,11 +841,6 @@ def main() -> None:
             pick(fls, "median_cover_bs2_over_flow_bs2", n_vars="10"),
             5.1,
             0.02,
-        ),
-        (
-            "flow long suite: flow == polymatroid on 104/120",
-            pick(fls, "n_flow_bs2_eq_poly_bs2", n_vars="all"),
-            104,
         ),
         (
             "flow long suite: max gap to polymatroid (1.73x)",
@@ -1608,18 +1612,6 @@ def main() -> None:
             0.05,
         ),
         (
-            "P11 both sides: hetionet f2 |V|=8 (0.0006)",
-            pf("hetionet", "8", "median_flow_bs2_over_entropic_p11"),
-            0.0006,
-            0.05,
-        ),
-        (
-            "P11 both sides: hetionet f2 |V|=10 (0.0001)",
-            pf("hetionet", "10", "median_flow_bs2_over_entropic_p11"),
-            0.0001,
-            0.05,
-        ),
-        (
             "P11 both sides: hetionet below |V|=6 (40)",
             pf("hetionet", "6", "n_cover_bs2_below_entropic_p11"),
             40,
@@ -1740,18 +1732,6 @@ def main() -> None:
             0.005,
         ),
         (
-            "P11: Hetionet flow bs2 gain |V|=6 (236x)",
-            1 / pf("hetionet", "6", "median_flow_bs2_over_entropic_p11"),
-            236,
-            0.005,
-        ),
-        (
-            "P11: Hetionet flow bs2 gain |V|=10 (9,600x)",
-            1 / pf("hetionet", "10", "median_flow_bs2_over_entropic_p11"),
-            9600,
-            0.005,
-        ),
-        (
             "P11: IMDb cover bs2 gain |V|=6 (1.3x)",
             1 / pf("imdb", "6", "median_cover_bs2_over_entropic_p11"),
             1.3,
@@ -1767,24 +1747,6 @@ def main() -> None:
             "P11: IMDb cover bs2 gain |V|=10 (6.8x)",
             1 / pf("imdb", "10", "median_cover_bs2_over_entropic_p11"),
             6.8,
-            0.01,
-        ),
-        (
-            "P11: IMDb flow bs2 gain |V|=6 (9.5x)",
-            1 / pf("imdb", "6", "median_flow_bs2_over_entropic_p11"),
-            9.5,
-            0.01,
-        ),
-        (
-            "P11: IMDb flow bs2 gain |V|=8 (29x)",
-            1 / pf("imdb", "8", "median_flow_bs2_over_entropic_p11"),
-            29,
-            0.02,
-        ),
-        (
-            "P11: IMDb flow bs2 gain |V|=10 (85x)",
-            1 / pf("imdb", "10", "median_flow_bs2_over_entropic_p11"),
-            85,
             0.01,
         ),
         (
@@ -2050,48 +2012,6 @@ def main() -> None:
             0,
         ),
         (
-            "P11 cover/flow bs2 hetionet |V|=6 (4.95)",
-            med_ratio(
-                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="6"
-            ),
-            4.95,
-            0.005,
-        ),
-        (
-            "P11 cover/flow bs2 hetionet |V|=8 (6.45)",
-            med_ratio(
-                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="8"
-            ),
-            6.45,
-            0.005,
-        ),
-        (
-            "P11 cover/flow bs2 hetionet |V|=10 (9.51)",
-            med_ratio(
-                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="10"
-            ),
-            9.51,
-            0.005,
-        ),
-        (
-            "P11 cover/flow bs2 imdb |V|=6 (7.61)",
-            med_ratio(pfr, "cover_bs2_p11", "flow_bs2_p11", suite="imdb", n_vars="6"),
-            7.61,
-            0.005,
-        ),
-        (
-            "P11 cover/flow bs2 imdb |V|=8 (10.17)",
-            med_ratio(pfr, "cover_bs2_p11", "flow_bs2_p11", suite="imdb", n_vars="8"),
-            10.17,
-            0.005,
-        ),
-        (
-            "P11 cover/flow bs2 imdb |V|=10 (11.49)",
-            med_ratio(pfr, "cover_bs2_p11", "flow_bs2_p11", suite="imdb", n_vars="10"),
-            11.49,
-            0.005,
-        ),
-        (
             "P11 entropic/exact hetionet |V|=6 (8400)",
             p11_over_true("hetionet", "6", "entropic_p11"),
             8400,
@@ -2122,21 +2042,9 @@ def main() -> None:
             0.025,
         ),
         (
-            "P11 flow bs2/exact hetionet |V|=10 (2900)",
-            p11_over_true("hetionet", "10", "flow_bs2_p11"),
-            2900,
-            0.025,
-        ),
-        (
             "P11 entropic/exact imdb |V|=6 (23)",
             p11_over_true("imdb", "6", "entropic_p11"),
             23,
-            0.025,
-        ),
-        (
-            "P11 flow bs2/exact imdb |V|=6 (2.2)",
-            p11_over_true("imdb", "6", "flow_bs2_p11"),
-            2.2,
             0.025,
         ),
         (
@@ -2146,52 +2054,10 @@ def main() -> None:
             0.025,
         ),
         (
-            "P11 flow bs2/exact imdb |V|=8 (6.7)",
-            p11_over_true("imdb", "8", "flow_bs2_p11"),
-            6.7,
-            0.025,
-        ),
-        (
             "P11 entropic/exact imdb |V|=10 (1300)",
             p11_over_true("imdb", "10", "entropic_p11"),
             1300,
             0.025,
-        ),
-        (
-            "P11 flow bs2/exact imdb |V|=10 (15)",
-            p11_over_true("imdb", "10", "flow_bs2_p11"),
-            15,
-            0.025,
-        ),
-        (
-            "P11 Hetionet flow gain |V|=8 (1,670x)",
-            1 / pf("hetionet", "8", "median_flow_bs2_over_entropic_p11"),
-            1670,
-            0.005,
-        ),
-        (
-            "P11 Hetionet cover/flow bs2 rounded |V|=6 (5.0x)",
-            med_ratio(
-                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="6"
-            ),
-            5.0,
-            0.011,
-        ),
-        (
-            "P11 Hetionet cover/flow bs2 rounded |V|=8 (6.5x)",
-            med_ratio(
-                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="8"
-            ),
-            6.5,
-            0.008,
-        ),
-        (
-            "P11 Hetionet cover/flow bs2 rounded |V|=10 (9.5x)",
-            med_ratio(
-                pfr, "cover_bs2_p11", "flow_bs2_p11", suite="hetionet", n_vars="10"
-            ),
-            9.5,
-            0.005,
         ),
         (
             "P11 families cover/flow bs2 min (1.6x)",
@@ -2256,18 +2122,6 @@ def main() -> None:
             0.02,
         ),
         (
-            "G-CARE aids median_flow_bs2_over_entropic_p11 (0.066)",
-            gc("aids", "median_flow_bs2_over_entropic_p11"),
-            0.066,
-            0.01,
-        ),
-        (
-            "G-CARE aids median_cover_bs2_over_flow_bs2_p11 (11.8)",
-            gc("aids", "median_cover_bs2_over_flow_bs2_p11"),
-            11.8,
-            0.01,
-        ),
-        (
             "G-CARE aids median_entropic_over_exact_p11 (513)",
             gc("aids", "median_entropic_over_exact_p11"),
             513,
@@ -2292,28 +2146,10 @@ def main() -> None:
             0.046,
         ),
         (
-            "G-CARE yago median_flow_bs2_over_entropic_p11 (0.042)",
-            gc("yago", "median_flow_bs2_over_entropic_p11"),
-            0.042,
-            0.013,
-        ),
-        (
-            "G-CARE yago median_cover_bs2_over_flow_bs2_p11 (2.4)",
-            gc("yago", "median_cover_bs2_over_flow_bs2_p11"),
-            2.4,
-            0.021,
-        ),
-        (
             "G-CARE yago median_entropic_over_exact_p11 (2139)",
             gc("yago", "median_entropic_over_exact_p11"),
             2139,
             0.001,
-        ),
-        (
-            "G-CARE yago median_flow_bs2_over_exact_p11 (69)",
-            gc("yago", "median_flow_bs2_over_exact_p11"),
-            69,
-            0.005,
         ),
         (
             "slice prefix: cover bs2 below LpBound at |V|=6 (46x)",
@@ -2474,6 +2310,240 @@ def main() -> None:
             0,
         ),
         (
+            "poly headline: Hetionet |V|=6 below LpBound (236x)",
+            1 / ph("hetionet", "6", "median_poly_over_entropic"),
+            236,
+            0.5 / 236,
+        ),
+        (
+            "poly headline: Hetionet |V|=8 below LpBound (1720x)",
+            1 / ph("hetionet", "8", "median_poly_over_entropic"),
+            1720,
+            0.005,
+        ),
+        (
+            "poly headline: Hetionet |V|=10 below LpBound (10200x)",
+            1 / ph("hetionet", "10", "median_poly_over_entropic"),
+            10200,
+            0.005,
+        ),
+        (
+            "poly headline: IMDb |V|=6 below LpBound (9.7x)",
+            1 / ph("imdb", "6", "median_poly_over_entropic"),
+            9.7,
+            0.05 / 9.7,
+        ),
+        (
+            "poly headline: IMDb |V|=8 below LpBound (30x)",
+            1 / ph("imdb", "8", "median_poly_over_entropic"),
+            30,
+            0.5 / 30,
+        ),
+        (
+            "poly headline: IMDb |V|=10 below LpBound (87x)",
+            1 / ph("imdb", "10", "median_poly_over_entropic"),
+            87,
+            0.5 / 87,
+        ),
+        (
+            "poly headline: G-CARE aids below LpBound (15x)",
+            1 / ph("gcare_aids", "all", "median_poly_over_entropic"),
+            15,
+            0.5 / 15,
+        ),
+        (
+            "poly headline: G-CARE yago below LpBound (24x)",
+            1 / ph("gcare_yago", "all", "median_poly_over_entropic"),
+            24,
+            0.5 / 24,
+        ),
+        (
+            "poly program gap over cover bs2: hetionet |V|=6 (5.0x)",
+            ph("hetionet", "6", "median_cover2_over_poly"),
+            5.0,
+            0.05 / 5.0,
+        ),
+        (
+            "poly program gap over cover bs2: hetionet |V|=8 (6.7x)",
+            ph("hetionet", "8", "median_cover2_over_poly"),
+            6.7,
+            0.05 / 6.7,
+        ),
+        (
+            "poly program gap over cover bs2: hetionet |V|=10 (11.1x)",
+            ph("hetionet", "10", "median_cover2_over_poly"),
+            11.1,
+            0.05 / 11.1,
+        ),
+        (
+            "poly program gap over cover bs2: imdb |V|=6 (7.6x)",
+            ph("imdb", "6", "median_cover2_over_poly"),
+            7.6,
+            0.05 / 7.6,
+        ),
+        (
+            "poly program gap over cover bs2: imdb |V|=10 (11.6x)",
+            ph("imdb", "10", "median_cover2_over_poly"),
+            11.6,
+            0.05 / 11.6,
+        ),
+        (
+            "poly program gap over cover bs2: G-CARE aids (12x)",
+            ph("gcare_aids", "all", "median_cover2_over_poly"),
+            12,
+            0.5 / 12,
+        ),
+        (
+            "poly program gap over cover bs2: G-CARE yago (2.7x)",
+            ph("gcare_yago", "all", "median_cover2_over_poly"),
+            2.7,
+            0.05 / 2.7,
+        ),
+        (
+            "poly / exact: hetionet |V|=10 (2800)",
+            ph("hetionet", "10", "median_poly_over_exact"),
+            2800,
+            0.05 / 2.8,
+        ),
+        (
+            "poly / exact: imdb |V|=8 (6.4)",
+            ph("imdb", "8", "median_poly_over_exact"),
+            6.4,
+            0.05 / 6.4,
+        ),
+        (
+            "poly / exact: imdb |V|=6 (2.2)",
+            ph("imdb", "6", "median_poly_over_exact"),
+            2.2,
+            0.05 / 2.2,
+        ),
+        (
+            "poly / exact: imdb |V|=10 (15)",
+            ph("imdb", "10", "median_poly_over_exact"),
+            15,
+            0.5 / 15,
+        ),
+        (
+            "poly / exact: G-CARE aids (66)",
+            ph("gcare_aids", "all", "median_poly_over_exact"),
+            66,
+            0.5 / 66,
+        ),
+        (
+            "poly / exact: G-CARE yago (67)",
+            ph("gcare_yago", "all", "median_poly_over_exact"),
+            67,
+            0.5 / 67,
+        ),
+        (
+            "poly: invalid bounds against exact counts, all suites (0)",
+            sum(float(r["n_poly_below_exact"]) for r in phl),
+            0,
+        ),
+        (
+            "poly below LpBound on Hetionet+IMDb (240)",
+            sum(
+                float(r["n_poly_below_entropic"])
+                for r in phl
+                if r["suite"] in ("hetionet", "imdb")
+            ),
+            240,
+        ),
+        (
+            "poly below LpBound on short (109)",
+            ph("short", "3-4", "n_poly_below_entropic"),
+            109,
+        ),
+        (
+            "poly YAGO below / equal LpBound (188)",
+            ph("gcare_yago", "all", "n_poly_below_entropic"),
+            188,
+        ),
+        (
+            "poly YAGO equal to LpBound (4)",
+            ph("gcare_yago", "all", "n_poly_eq_entropic"),
+            4,
+        ),
+        (
+            "flow within (2.41x) of polymatroid on every reported query (upper bound)",
+            float(
+                max(
+                    float(r["flow_over_poly_p11"])
+                    for rs in (pce, gpe, spe, pse)
+                    for r in rs
+                )
+                <= 2.41
+            ),
+            1,
+        ),
+        (
+            "flow == polymatroid on (633) of the reported queries",
+            sum(
+                abs(float(r["flow_over_poly_p11"]) - 1) <= 1e-6
+                for rs in (pce, gpe, spe, pse)
+                for r in rs
+            ),
+            633,
+        ),
+        (
+            "poly / exact: hetionet |V|=6 (47)",
+            ph("hetionet", "6", "median_poly_over_exact"),
+            47,
+            0.5 / 47,
+        ),
+        (
+            "poly / exact: hetionet |V|=8 (277)",
+            ph("hetionet", "8", "median_poly_over_exact"),
+            277,
+            0.5 / 277,
+        ),
+        (
+            "reported real-data queries (862)",
+            len(pce) + len(gpe) + len(spe) + len(pse),
+            862,
+        ),
+        (
+            "poly solve, max over real data (63 s)",
+            max(float(r["poly_s"]) for rs in (pce, gpe, spe, pse) for r in rs),
+            63,
+            0.5 / 63,
+        ),
+        (
+            "poly solve median Hetionet |V|=6 (0.02 s)",
+            statistics.median(
+                float(r["poly_s"])
+                for r in pce
+                if r["suite"] == "hetionet" and r["n_vars"] == "6"
+            ),
+            0.02,
+            0.005 / 0.02,
+        ),
+        (
+            "poly solve median Hetionet |V|=8 (0.18 s)",
+            statistics.median(
+                float(r["poly_s"])
+                for r in pce
+                if r["suite"] == "hetionet" and r["n_vars"] == "8"
+            ),
+            0.18,
+            0.005 / 0.18,
+        ),
+        (
+            "poly solve median Hetionet |V|=10 (2.4 s)",
+            statistics.median(
+                float(r["poly_s"])
+                for r in pce
+                if r["suite"] == "hetionet" and r["n_vars"] == "10"
+            ),
+            2.4,
+            0.05 / 2.4,
+        ),
+        (
+            "bootstrap: poly rows crossing 1 (0)",
+            sum(r["crosses_1"] == "True" for r in bci if r["ratio"].startswith("poly")),
+            0,
+        ),
+        (
             "bootstrap: median ratios whose 95% CI crosses 1 (1)",
             sum(r["crosses_1"] == "True" for r in bci),
             1,
@@ -2626,18 +2696,6 @@ def main() -> None:
             "G-CARE yago cover-LP statistics gain (8.9x)",
             1 / gc("yago", "median_cover_bs2_over_entropic_p11"),
             8.9,
-            0.01,
-        ),
-        (
-            "G-CARE aids flow gain (15x)",
-            1 / gc("aids", "median_flow_bs2_over_entropic_p11"),
-            15,
-            0.02,
-        ),
-        (
-            "G-CARE yago flow gain (24x)",
-            1 / gc("yago", "median_flow_bs2_over_entropic_p11"),
-            24,
             0.01,
         ),
         (

@@ -50,27 +50,23 @@
 Pessimistic cardinality estimators are usually improved by strengthening
 the \emph{program} that combines degree statistics, from fractional edge
 covers to LpBound's linear program over the Shannon cone. We ask where
-the remaining headroom lies for cyclic joins, using LpH-CEG, which
-combines $\ell_p$-norm degree sequences with multi-way block extensions
-through a fractional block-cover LP. On single-relation statistics little
-is left: on a fixed hyperpath the cover LP is provably optimal among
+the remaining headroom lies for cyclic joins, using LpH-CEG, a fractional block-cover LP over $\ell_p$-norm degree
+sequences of multi-way blocks. On single-relation statistics little is left on Hetionet and IMDb: on a fixed hyperpath the cover LP is provably optimal among
 weightings valid on every database, and LpBound's polynomial flow LP
 reaches the polymatroid optimum. Block statistics, degree sequences of
 two-relation joins conditioned on their interfaces, open the statistics
 axis. With ten norms on both sides they tighten LpBound by a median
 $46$--$920\times$ on $120$ registered Hetionet cycles ($|V|{=}6$--$10$)
 under the cover LP, but by only $1.3$--$6.8\times$ on $120$ IMDb cycles,
-level with the inference gap. Our extension of Im et al.'s flow LP to
-$\ell_p$ block constraints uses them fully: $236$--$9{,}600\times$ and
-$9.5$--$85\times$, below LpBound on all $349$ Hetionet and IMDb queries,
-each bound certified by the $2^{|V|}$ polymatroid bound. On G-CARE's
-cyclic queries (all $241$ AIDS, $192$ of $366$ YAGO) the flow-LP margin
-is $15$--$24\times$, again certified, but under the cover LP the inference gap dominates
-on AIDS. For a block of two binary relations all statistics but one
-avoid the join. We prove an $\ell_p$ Composition Inequality for validity
-and state the limits: statistics come from data slices, their cost grows
-faster than the data, and bound-guided join orders do not beat DuckDB's
-optimizer on IMDb.
+level with the inference gap. The polymatroid program, valid for every $p$ and solved in seconds here, uses them fully:
+$236$--$10{,}200\times$ and $9.7$--$87\times$, below LpBound on all $349$
+Hetionet and IMDb queries; our $\ell_p$ extension of Im et al.'s flow LP
+tracks it in polynomial time. On G-CARE ($241$ AIDS, $192$ of $366$ YAGO
+queries) the margin is $15$--$24\times$, but on AIDS the inference gap
+dominates. For a block of two binary relations all statistics but one
+avoid the join. We prove an $\ell_p$ Composition Inequality for validity. Limits:
+statistics come from data slices, their cost grows faster than the data,
+and bound-guided join orders lose to DuckDB on IMDb.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -163,9 +159,9 @@ $120/120$ longer Hetionet cycles ($|V|{=}6$--$10$), against a median
 $2.7$--$3.1\times$ of inference headroom. On $120$ IMDb cycles from JOB's
 snapshot the cover-LP margin is only $1.3$--$6.8\times$ against a
 $5.1$--$6.8\times$ inference gap (above the entropic bound on $8$
-queries); the flow LP's is $9.5$--$85\times$ on $120/120$. On the external
-G-CARE benchmark (433 cyclic AIDS and YAGO queries run) the flow LP's is
-$15$--$24\times$, while the cover LP's is far below the inference gap on
+queries); the polymatroid program's is $9.7$--$87\times$ on $120/120$.
+On the external G-CARE benchmark (433 cyclic AIDS and YAGO queries run)
+it is $15$--$24\times$, while the cover LP's is far below the inference gap on
 AIDS ($1.35\times$ against $59\times$) and comparable to it on YAGO
 ($8.9\times$ against $6.1\times$). On
 homogeneous synthetic cycles the axes are comparable.
@@ -173,14 +169,13 @@ homogeneous synthetic cycles the axes are comparable.
 \item \textbf{Richer statistics can reopen the program
 (Sections~\ref{sec:stats-vs-inference},~\ref{sec:scalability}).}
 On the same block statistics the polymatroid optimum beats the cover LP
-by $1.6$--$3.8\times$ ($12/12$ synthetic), and the flow LP beats it by a
-median $5.0$--$9.5\times$ (Hetionet) and $7.6$--$11.5\times$ (IMDb),
-against $1.2$--$1.5\times$ and $2.7$--$6.8\times$ on single-relation
-statistics. Extending Im et al.'s flow LP to $\ell_p$ block constraints
-reaches the polymatroid optimum in polynomial time on every synthetic
-even cycle to $k{=}10$ and $189/240$ real-data queries with three norms
-($7/12$ synthetic instances with ten), in $0.03$--$4.4$\,s at
-$k{=}3$--$16$.
+by $1.6$--$3.8\times$ ($12/12$ synthetic) and a median $5.0$--$11.1\times$
+(Hetionet) and $7.6$--$11.6\times$ (IMDb),
+against $1.2$--$1.5\times$ (synthetic), $2.7$--$3.1\times$ (Hetionet)
+and $5.1$--$6.8\times$ (IMDb) on single-relation statistics. The $2^{|V|}$ program over the $bs{\le}2$ catalog solves every real-data
+query in at most $63$\,s; our $\ell_p$ extension of Im et al.'s flow LP
+matches it on $633$ of $862$ queries (within $2.41\times$) in polynomial
+time and scales to $k{=}16$ ($4.4$\,s).
 
 \item \textbf{Which block statistic matters
 (Section~\ref{sec:stats-vs-inference}).}
@@ -320,7 +315,7 @@ attribute $a \in V$,
 The LP has $O(m \cdot |\mathcal{P}|)$ variables and $|V|$ constraints,
 solvable in about $1$--$2$\,ms for typical queries.
 
-\subsection{Why Cyclic Queries Benefit}
+\subsection{Why Cyclic Queries Benefit}\label{sec:whycyclic}
 
 \paragraph{Where the slack comes from}\label{prop:acyclic}\label{prop:cyclic}
 With binary extensions every attribute is new at exactly one step. On a
@@ -694,8 +689,8 @@ The ``LpH-CEG'' column throughout denotes our
 \emph{not} the entropic LpBound of
 Zhang et al.~\cite{zhang2025lpbound}, against which we compare
 separately in Section~\ref{sec:vs-lpbound} (our cover bound is
-$1.3\times$ looser on synthetic cycles, a median $2.7$--$6.8\times$ on
-real data).
+$1.25$--$1.43\times$ looser on synthetic cycles, a median
+$2.7$--$6.8\times$ on Hetionet and IMDb).
 Learned and summary estimators (FactorJoin, GNCE,
 COLOR~\cite{wu2023factorjoin,schwabe2024gnce,deeds2025color}) produce \emph{point}
 estimates without guaranteed upper bounds; CorrBound, which enriches the
@@ -709,7 +704,7 @@ with AGM incomparable (it ignores degrees). Our cover-LP is
 $2.3$--$35.7\times$ tighter than CEG$_M$ on synthetic cycles, is also
 consistently tighter than AGM (e.g.\ $2.0\times$ on cycle-6), and stays
 within $1.25$--$1.36\times$ of the entropic (polymatroid) optimum on the
-same single-relation $\ell_p$ statistics.
+same single-relation $\ell_p$ statistics on these cycle-$3$--$6$ instances.
 
 \begin{table}[t]
 \centering
@@ -864,8 +859,8 @@ SHA-256 order of the canonical relation sequence. Hetionet: metagraph
 cycles over distinct relations, the first $20$K rows of each relation in
 file order. IMDb (JOB snapshot): the $200$ most-voted feature films (a
 dense, popularity-biased slice), nine cast roles, two company types and
-keywords, one relation each. Medians over queries; ``flow'' is the flow LP
-over the $bs{\le}2$ catalog. Upper block: every program with ten norms
+keywords, one relation each. Medians over queries; ``polymatroid'' is the $2^{|V|}$ program and
+``flow'' our flow LP, both over the $bs{\le}2$ catalog. Upper block: every program with ten norms
 ($\mathcal{P}=\{1,\ldots,10,\infty\}$), the comparison against LpBound;
 lower block: three ($\{1,2,\infty\}$, the cover LP's default). Exact counts
 by DuckDB ($60$\,s budget); queries that time out are unchecked, not
@@ -884,10 +879,10 @@ $|V|$ & $6$ & $8$ & $10$ & $6$ & $8$ & $10$ \\
 \multicolumn{7}{@{}l}{\emph{Ten norms on both sides:}} \\
 cover $bs{=}1$ / entropic & $2.66\times$ & $3.10\times$ & $3.00\times$ & $5.14\times$ & $6.75\times$ & $5.96\times$ \\
 cover $bs{=}2$ / entropic & $0.022\times$ & $0.0037\times$ & $0.0011\times$ & $0.79\times$ & $0.35\times$ & $0.15\times$ \\
-flow $bs{=}2$ / entropic & $0.0042\times$ & $0.00060\times$ & $0.00010\times$ & $0.11\times$ & $0.034\times$ & $0.012\times$ \\
-cover / flow $bs{=}2$ below entropic & $40$/$40$ & $40$/$40$ & $40$/$40$ & $32$/$40$ & $40$/$40$ & $40$/$40$ \\
+polymatroid $bs{=}2$ / entropic & $0.0042\times$ & $0.00058\times$ & $0.000098\times$ & $0.10\times$ & $0.034\times$ & $0.012\times$ \\
+of $40$ below entropic, cover; polym. & $40$; $40$ & $40$; $40$ & $40$; $40$ & $32$; $40$ & $40$; $40$ & $40$; $40$ \\
 entropic / exact & $8.4{\cdot}10^{3}$ & $3.6{\cdot}10^{5}$ & $2.8{\cdot}10^{7}$ & $23$ & $171$ & $1.3{\cdot}10^{3}$ \\
-flow $bs{=}2$ / exact & $47$ & $277$ & $2.9{\cdot}10^{3}$ & $2.2$ & $6.7$ & $15$ \\
+polymatroid $bs{=}2$ / exact & $47$ & $277$ & $2.8{\cdot}10^{3}$ & $2.2$ & $6.4$ & $15$ \\
 entropic gain over three norms & $1.9\times$ & $2.7\times$ & $3.2\times$ & $3.5\times$ & $5.1\times$ & $6.7\times$ \\
 \midrule
 \multicolumn{7}{@{}l}{\emph{Three norms on both sides:}} \\
@@ -912,14 +907,15 @@ introduction motivates, $|V|{=}6$--$10$, on two registered suites
 diverge with $|V|$ on Hetionet: the inference gap stays at
 $2.7$--$3.1\times$, while $bs{=}2$ statistics are $46$/$270$/$920\times$
 tighter than the entropic bound at the median under the cover LP and
-$236$/$1{,}670$/$9{,}600\times$ under the flow LP, on $120/120$ queries.
+$236$/$1{,}720$/$10{,}200\times$ under the polymatroid program, on
+$120/120$ queries.
 The exact counts are $10^{4}$--$10^{9}$, so this is not a small-count
 artifact: the entropic bound is $2.8{\cdot}10^{7}\times$ the truth at
-$|V|{=}10$ and the flow LP on $bs{=}2$ brings that to
-$2.9{\cdot}10^{3}\times$. Nor is it a prefix artifact: with each relation
+$|V|{=}10$ and the polymatroid program on $bs{=}2$ brings that to
+$2.8{\cdot}10^{3}\times$. Nor is it a prefix artifact: with each relation
 replaced by a uniform $20$K-row sample of the full file (two fixed seeds)
 the $|V|{=}6$ medians are $46$/$46$/$49\times$ (cover) and
-$236$/$233$/$244\times$ (flow) for prefix/seed\,1/seed\,2, all $40$ below
+$236$/$233$/$244\times$ (polymatroid) for prefix/seed\,1/seed\,2, all $40$ below
 LpBound in each. Query-level bootstrap $95\%$ intervals ($10{,}000$
 resamples) keep every median ratio to LpBound in this table and in
 Table~\ref{tab:gcare} on one side of $1$, except the cover LP on block
@@ -962,10 +958,10 @@ statistics. With ten norms the inference gap is $5.1$--$6.8\times$, and
 $bs{=}2$ statistics are only $1.3$/$2.9$/$6.8\times$ tighter than the
 entropic bound under the cover LP (level with or below that gap, and
 above the entropic bound on $8$ of the $40$ queries at $|V|{=}6$), but
-$9.5$/$29$/$85\times$ under the flow LP, on $120/120$. On these
-statistics the flow LP beats the cover LP by $7.6$--$11.5\times$, against
+$9.7$/$30$/$87\times$ under the polymatroid program, on $120/120$. On
+these statistics it beats the cover LP by $7.6$--$11.6\times$, against
 $5.1$--$6.8\times$ at $bs{=}1$: richer statistics reopen the program here
-too. Under the flow LP the bound moves from $23$--$1{,}300\times$ the
+too. Under it the bound moves from $23$--$1{,}300\times$ the
 truth to $2.2$--$15\times$ ($101$ checked queries, exact counts
 $3{\cdot}10^{5}$--$9{\cdot}10^{7}$ at the median; $19$ of the $80$ at
 $|V|{=}8$--$10$ timed out; these are the largest, so the ratios to the
@@ -1005,14 +1001,15 @@ others), which points to those published counts. We
 therefore check validity against our counts (one YAGO bound, $26$, lies
 below G-CARE's $33$ but above our $17$). $174$ YAGO queries exceed the
 prototype (a relation over $300$K rows or a pair join over $20$M) and are
-reported, not run. Under the flow LP, block statistics are $15\times$
-(AIDS) and $24\times$ (YAGO) tighter than LpBound and never looser. Under
+reported, not run. Under the polymatroid program, block statistics are
+$15\times$ (AIDS) and $24\times$ (YAGO) tighter than LpBound and never
+looser. Under
 the cover LP the inference gap dominates on AIDS: $59\times$, as bounded
 molecular degrees make high norms very informative to the entropic
 program, against a $1.35\times$ statistics gain (block statistics beat
 LpBound on only $135/241$); on YAGO the two are comparable ($6.1\times$
 against $8.9\times$). On both
-graphs the bs$=2$ program gap ($11.8\times$, $2.4\times$) is below the
+graphs the bs$=2$ program gap ($12\times$, $2.7\times$) is below the
 bs$=1$ one. G-CARE is thus a regime where the program matters as much as
 the statistics.
 
@@ -1031,11 +1028,11 @@ agree on $241/241$ AIDS and $143/192$ YAGO queries.}
 cyclic queries / evaluated & $241$ / $241$ & $366$ / $192$ \\
 cover $bs{=}1$ / entropic & $59\times$ & $6.1\times$ \\
 cover $bs{=}2$ / entropic & $0.74\times$ & $0.11\times$ \\
-flow $bs{=}2$ / entropic & $0.066\times$ & $0.042\times$ \\
+polymatroid $bs{=}2$ / entropic & $0.066\times$ & $0.041\times$ \\
 cover $bs{=}2$ below entropic & $135/241$ & $177/192$ \\
-flow $bs{=}2$ below / equal & $241$ / $0$ & $188$ / $4$ \\
+polymatroid below / equal & $241$ / $0$ & $188$ / $4$ \\
 entropic / exact & $513$ & $2{,}139$ \\
-flow $bs{=}2$ / exact & $66$ & $69$ \\
+polymatroid $bs{=}2$ / exact & $66$ & $67$ \\
 invalid bounds & $0$ & $0$ \\
 \bottomrule
 \end{tabular}
@@ -1055,7 +1052,10 @@ full $bs{=}2$ bound on the Hetionet long suite, $1.5$--$2.9\times$ on the famili
 $1.9$--$57\times$ on the sweep. What closes it is one number per block,
 the $\ell_2$ norm of the common-neighbour sequence,
 $\|A_R^{\top}A_S\|_F$ for the $b{\times}a$ and $b{\times}c$ incidence
-matrices. Added to $bs{=}1$ alone it already reaches a median
+matrices, whose square counts the $4$-cycles $a$--$b$--$c$--$b'$--$a$
+built from two copies of $R$ and of $S$: a sub-pattern count, where
+CorrBound's $\ell_1$ inner product counts paths $a$--$b$--$c$. Added to
+$bs{=}1$ alone it already reaches a median
 $1.03\times$ of the full bound ($53/120$ exact), so the attribution is
 order-dependent; added to the join-free seven it returns the full bound on $12/12$ families, $10/10$ sweep points,
 $85/120$ Hetionet and $116/120$ IMDb queries (Hetionet median
@@ -1086,7 +1086,7 @@ At $bs{=}1$ on real data the LP fires only where cyclic structure meets
 cross-relation degree asymmetry (Section~\ref{sec:noimprove}). The
 heterogeneous Hetionet cycle-4, four relation types with asymmetric
 degrees, improves $7.59\times$ ($53$M${\to}7.0$M, relations capped at
-$30$K edges); the low-skew Hetionet triangle and the replicated Epinions
+$30$K edges); the C-D-G and D-G-A Hetionet triangles and the replicated Epinions
 cycles on $2$--$5$K-edge subsets yield exactly $1.00\times$ (at $20$K
 edges the Epinions cycle-4 improves $2.06\times$,
 Section~\ref{sec:suite}). Over six closed metapaths of length $3$--$5$
@@ -1187,7 +1187,7 @@ we have no proof and certify each bound instead. The $2^{|V|}$
 polymatroid bound over the \emph{unrelaxed} constraints is valid for
 every $p$ (each $\ell_p$ constraint holds on the join's entropy, as in
 Theorem~\ref{thm:composition}), so a flow bound at or above it is valid.
-Every flow bound we report passes (ten norms: $109/109$ short,
+Every real-data flow bound passes (ten norms: $109/109$ short,
 $240/240$ long-suite, $433/433$ G-CARE and $80/80$ resampled slice
 queries, equal on $633$, to $10^{-6}$), as do $40$ random connected shapes ($|V| \le 5$, all
 $2{,}046$ order--instance pairs, also never below the exact join). Two facts make the
@@ -1212,14 +1212,16 @@ $1.5$--$3.8\times$ tighter on the small families (ten norms:
 $1.6$--$3.8\times$) and, with three norms, $2.2\times$ at $k{=}3$ growing
 to $288\times$ at $k{=}16$ on the sweep (below the $bs{=}1$ optimum by
 $2$--$800\times$ where the cover LP manages $1$--$6\times$;
-Figure~\ref{fig:positioning}). On the $120$-query Hetionet long suite
-($|V|{=}6/8/10$) the median gain over the cover LP on the same statistics
-is $5.0/6.5/9.5\times$ with ten norms ($3.2/4.2/5.1\times$ with three);
-with three norms the flow LP matches the $2^{|V|}$ polymatroid bound on
-$104/120$ queries (max gap $1.73\times$); it never falls below the exact
-count on the $115$ with one, and takes
-$0.27$--$1.1$\,s (median) against $0.5$--$2.2$\,s for the $2^{|V|}$
-program at $bs{=}1$.
+Figure~\ref{fig:positioning}). On real data the $2^{|V|}$ program over
+the same catalog is cheap enough to solve directly (ten norms: median
+$0.02$/$0.18$/$2.4$\,s at $|V|{=}6$/$8$/$10$ on Hetionet, at most
+$63$\,s at $|V|{=}12$ on G-CARE), so the ten-norm real-data bounds we
+report are its optimum. The flow LP equals it on $633$ of the $862$ reported
+queries and is within $2.41\times$ on all; it is the route beyond
+$|V|{\approx}12$. On the $120$-query Hetionet long suite the median gain
+of the polymatroid program over the cover LP on the same statistics is
+$5.0/6.7/11.1\times$ at $|V|{=}6/8/10$; no bound falls below the exact
+count.
 
 \begin{figure}[t]
 \centering
@@ -1289,7 +1291,7 @@ less with true intermediate cost than the entropic bound on all four
 families tried (Kendall $\tau$ $0.27$--$0.87$ against $0.33$--$0.94$).
 Second, and structurally, on a single cycle every proper
 sub-query is acyclic, where the LP has no cyclic slack
-(Section~\ref{prop:acyclic}), so the two bounds largely induce the
+(Section~\ref{sec:whycyclic}), so the two bounds largely induce the
 same order; the bound changes the ranking only when an
 \emph{intermediate} sub-query is itself cyclic (cliques, chordal cycles).
 
@@ -1488,28 +1490,20 @@ $\mathcal{P} = \{1,2,\infty\}$; without a cycle, skip the LP. Degree
 sequences can come from catalog histograms
 ($\lpnorm{\mathbf{d}}{p} = (\sum_i c_i d_i^p)^{1/p}$ over buckets
 $(d_i, c_i)$) at \texttt{ANALYZE} time, on the filtered relation under
-predicates. Optimizing $K{=}10$ candidate hyperpaths instead of one adds
-$12.7$--$14.3\%$ on cycle-4 and $0\%$ on cycle-5.
+predicates.
 
 \paragraph{Which block size to pay for}
-At $bs{=}1$, collecting degree sequences costs $22$--$27$\,ms against
-${\sim}1.9$\,ms to solve. $bs{\ge}2$ multiplies that term by a median
-$45\times$ on synthetic cycles ($24\times$ more entries, $9$--$19$\,MiB
-against ${\sim}0.3$\,MiB) and $61\times$ ($8$--$558\times$) on the
-Hetionet suite; cataloged (a per-workload cache of
-the blocks the queries touch), a $bs{=}2$ estimate then costs $10$\,ms
-(Table~\ref{tab:long-suite}), and all but one
-statistic per binary block need no join
-(Section~\ref{sec:stats-vs-inference}). Use $bs{=}1$ when the bound is
-re-solved many times per statistics build (per candidate order, per
-prefix) and $bs{\ge}2$ when the pair joins can be materialized ahead of
-the workload (the $\ell_2$ codegree norm needs them). Under a selection,
-block statistics of the unfiltered relations remain valid upper bounds
-(degrees only shrink) but are looser, and one catalog per predicate is
-not practical; this, not the program, is the main obstacle to using
-$bs{\ge}2$ under general predicates. Solve them with the flow
-LP (Section~\ref{sec:scalability}) unless per-step residuals are
-wanted.
+At $bs{=}1$, collecting degree sequences on the four cost-study families
+costs $22$--$27$\,ms against ${\sim}1.9$\,ms to solve; $bs{\ge}2$
+multiplies that term by a median $45\times$ there ($24\times$ more
+entries) and $61\times$ ($8$--$558\times$) on the Hetionet suite, and a
+cataloged $bs{=}2$ estimate costs $10$\,ms (Table~\ref{tab:long-suite}).
+Use $bs{=}1$ when the bound is re-solved many times per statistics build
+and $bs{\ge}2$ when the pair joins can be materialized ahead of the
+workload. Under a selection, block statistics of the unfiltered
+relations remain valid upper bounds (degrees only shrink) but are
+looser, and one catalog per predicate is not practical: this, not the
+program, is the main obstacle to $bs{\ge}2$ under general predicates.
 
 %% ===================================================================
 \section{Conclusion}
@@ -1520,20 +1514,22 @@ great deal ($614\times$ at cycle-8), but on single-relation statistics
 little is left after it: on a fixed hyperpath the cover LP is optimal over
 every weighting valid on all databases
 (Proposition~\ref{prop:necessity}), yet sits $1.25$--$1.43\times$
-(synthetic) and a median $2.7$--$6.8\times$ (real) above the entropic
-optimum, which LpBound's flow LP reaches in polynomial time. With ten norms
+(synthetic) and a median $2.7$--$6.8\times$ on Hetionet and IMDb ($59\times$
+on AIDS) above the entropic optimum, which LpBound's flow LP reaches in polynomial time. With ten norms
 on both sides, block statistics put the cover LP a median
 $46$--$920\times$ below LpBound on registered Hetionet cycles
 ($|V|{=}6$--$10$), whether the data are sliced by prefix or by random
 sample, but on IMDb only $1.3$--$6.8\times$, level with the inference gap.
-The flow LP over block statistics recovers $9.5$--$85\times$ there; on
-Hetionet and IMDb it beats the cover LP by $5.0$--$11.5\times$ on block
-statistics against $2.7$--$6.8\times$ on single-relation ones, so richer
-statistics reopen the program. G-CARE is the counterpoint: $15$--$24\times$
-under the flow LP, but under the cover LP the inference gap dominates on
-AIDS. The flow LP's validity for $\ell_p$ constraints is not proved in
-general; we certify each reported bound by the polymatroid bound
-($349/349$ on Hetionet and IMDb, $433/433$ on G-CARE).
+The polymatroid program over block statistics, valid for every $p$ and
+solved in seconds here, recovers $9.7$--$87\times$ there; on Hetionet and
+IMDb it beats the cover LP by $5.0$--$11.6\times$ on block statistics
+against $2.7$--$6.8\times$ on single-relation ones, so richer statistics
+reopen the program. G-CARE is the counterpoint: $15$--$24\times$ under
+the polymatroid program, but under the cover LP the inference gap
+dominates on AIDS. Our $\ell_p$ flow LP tracks the polymatroid optimum in
+polynomial time (equal on $633$ of $862$ queries), its validity for
+$\ell_p$ is certified per query rather than proved, and it is what scales
+past $|V|{\approx}12$.
 
 \emph{Limits.} Our evidence is binary graph patterns on Hetionet and IMDb
 slices ($20$K rows, $200$--$1{,}000$ films) and on G-CARE's AIDS and

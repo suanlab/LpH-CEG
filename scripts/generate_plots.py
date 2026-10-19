@@ -16,6 +16,19 @@ import numpy as np
 OUTPUT_DIR = Path("docs/paper/figures")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+# Style for the three figures printed in the paper. They are drawn at the
+# 3.5 in column width so these point sizes are what the reader sees.
+PAPER_RC = {
+    "font.size": 8,
+    "axes.labelsize": 8,
+    "axes.titlesize": 8,
+    "legend.fontsize": 7,
+    "xtick.labelsize": 7,
+    "ytick.labelsize": 7,
+    "lines.linewidth": 1.4,
+    "lines.markersize": 4.5,
+}
+
 # IEEE publication style
 plt.rcParams.update(
     {
@@ -189,15 +202,15 @@ def plot_pvalue_sensitivity() -> None:
     ax.set_ylabel("Improvement ratio")
     ax.set_yscale("log")
     ax.set_xticks(range(len(csv_cols)))
-    ax.set_xticklabels(labels, rotation=25, ha="right", fontsize=9)
-    ax.legend(loc="lower right", fontsize=8, ncol=2)
+    ax.set_xticklabels(labels, rotation=25, ha="right", fontsize=7)
+    ax.legend(loc="lower right", fontsize=7, ncol=2)
     ax.grid(True, axis="y", alpha=0.3, linestyle="--")
 
     ax.annotate(
         "saturates",
         xy=(2, 30),
         xytext=(0.55, 26),
-        fontsize=9,
+        fontsize=7,
         arrowprops={"arrowstyle": "->", "color": "black"},
         ha="center",
     )
@@ -433,7 +446,7 @@ def plot_crossover() -> None:
                 flow1_ms.append(float(r["flow_bs1_ms"]))
                 flow2_ms.append(float(r["flow_bs2_ms_total"]))
 
-    fig, ax = plt.subplots(figsize=(4.2, 3.0))
+    fig, ax = plt.subplots(figsize=(3.5, 2.6))
     ax.semilogy(ks, cover_ms, "o-", color=COLORS["lph"], label="Cover LP ($3k$ vars)")
     if flow_k:
         ax.semilogy(
@@ -470,7 +483,7 @@ def plot_crossover() -> None:
             min(intractable_ks) + 0.1,
             ax.get_ylim()[1] * 0.3,
             "$2^k$ LP\nintractable",
-            fontsize=8,
+            fontsize=7,
             color=COLORS["hceg"],
             va="top",
         )
@@ -488,7 +501,7 @@ def plot_crossover() -> None:
                 (k_ann, dict(zip(ent_k, ent_ms, strict=False))[k_ann]),
                 textcoords="offset points",
                 xytext=(-10, 10) if k_ann == 8 else (6, -14),
-                fontsize=8,
+                fontsize=7,
                 color=COLORS["lpbound"],
             )
 
@@ -496,7 +509,7 @@ def plot_crossover() -> None:
     ax.set_ylabel("LP solve time (ms, log scale)")
     ax.set_xticks(ks)
     ax.grid(True, alpha=0.3, linestyle="--", which="both")
-    ax.legend(loc="upper left", fontsize=6.5)
+    ax.legend(loc="upper left", fontsize=7)
     fig.savefig(OUTPUT_DIR / "crossover_entropic.pdf")
     plt.close(fig)
     print("  Saved crossover_entropic.pdf")
@@ -643,7 +656,7 @@ def plot_positioning() -> None:
                 cv_y2.append(float(r["cover_bs2_bound"]) / ent)
                 fl_k.append(k)
 
-    fig, ax = plt.subplots(figsize=(5.0, 4.1))
+    fig, ax = plt.subplots(figsize=(3.5, 2.45))
 
     # 2^|V| Shannon-cone formulation: tight (y=1) but solve time explodes.
     ax.plot(
@@ -652,7 +665,7 @@ def plot_positioning() -> None:
         "o-",
         color=COLORS["lpbound"],
         markersize=5,
-        label="Shannon-cone LP ($2^{|V|}$ vars), $bs{=}1$",
+        label="$2^{|V|}$ Shannon-cone LP, $bs{=}1$",
     )
     if fl_x1:
         ax.plot(
@@ -661,7 +674,7 @@ def plot_positioning() -> None:
             "P-",
             color="tab:red",
             markersize=6,
-            label="flow LP (LpBound's LPflow), $bs{=}1$: same bound",
+            label="LpBound flow LP, $bs{=}1$",
         )
     _last_k = ks[-1]
     _last_s = ent_ms[-1] / 1000.0
@@ -672,7 +685,7 @@ def plot_positioning() -> None:
         (ent_ms[-1], 1.0),
         textcoords="offset points",
         xytext=(-6, 12),
-        fontsize=8,
+        fontsize=7,
         ha="right",
         color=COLORS["lpbound"],
     )
@@ -684,14 +697,14 @@ def plot_positioning() -> None:
         "*-",
         color=COLORS["lph"],
         markersize=10,
-        label="cover LP (ours): cheap, near-tight, decomposable",
+        label="cover LP (ours), $bs{=}1$",
     )
     ax.annotate(
         "$k{=}3$",
         (cover_ms[0], gap[0]),
         textcoords="offset points",
         xytext=(-4, -12),
-        fontsize=8,
+        fontsize=7,
         color=COLORS["lph"],
     )
     ax.annotate(
@@ -699,7 +712,7 @@ def plot_positioning() -> None:
         (cover_ms[-1], gap[-1]),
         textcoords="offset points",
         xytext=(4, 4),
-        fontsize=8,
+        fontsize=7,
         color=COLORS["lph"],
     )
 
@@ -710,7 +723,7 @@ def plot_positioning() -> None:
         "^--",
         color=COLORS["ceg"],
         markersize=6,
-        label="CEG$_M$ / PANDA ($\\ell_\\infty$): cheap but loose",
+        label="CEG$_M$ / PANDA ($\\ell_\\infty$)",
     )
 
     # Statistics axis: the same two programs on bs=2 block statistics.
@@ -722,7 +735,7 @@ def plot_positioning() -> None:
             color=COLORS["lph"],
             markersize=8,
             markerfacecolor="white",
-            label="cover LP on $bs{=}2$ block statistics",
+            label="cover LP, $bs{=}2$",
         )
         ax.plot(
             fl_x2,
@@ -730,14 +743,14 @@ def plot_positioning() -> None:
             "v-",
             color="tab:purple",
             markersize=6,
-            label="flow LP on $bs{=}2$ block statistics ($4k$ orders)",
+            label="flow LP, $bs{=}2$",
         )
         ax.annotate(
             f"$k{{=}}{fl_k[-1]}$",
             (fl_x2[-1], fl_y2[-1]),
             textcoords="offset points",
-            xytext=(4, -10),
-            fontsize=8,
+            xytext=(-22, 2),
+            fontsize=7,
             color="tab:purple",
         )
         ax.axhline(1.0, color="gray", linewidth=0.6, alpha=0.5, zorder=0)
@@ -745,7 +758,7 @@ def plot_positioning() -> None:
             cv_x2[-1] * 4.0,
             0.75,
             "statistics axis:\nbelow the $bs{=}1$ optimum",
-            fontsize=7.5,
+            fontsize=7,
             color="tab:purple",
             style="italic",
             va="top",
@@ -758,7 +771,7 @@ def plot_positioning() -> None:
     ax.grid(True, alpha=0.25, linestyle="--", which="both")
     ax.legend(
         loc="upper center",
-        bbox_to_anchor=(0.5, -0.2),
+        bbox_to_anchor=(0.5, -0.18),
         fontsize=7,
         framealpha=0.9,
         ncol=2,
@@ -770,14 +783,17 @@ def plot_positioning() -> None:
 
 def main() -> None:
     print("Generating LpH-CEG paper figures...")
-    plot_positioning()
+    with plt.rc_context(PAPER_RC):
+        plot_positioning()
     plot_cycle_improvement()
     plot_overhead()
-    plot_pvalue_sensitivity()
+    with plt.rc_context(PAPER_RC):
+        plot_pvalue_sensitivity()
     plot_wcoj_comparison()
     plot_4way_comparison()
     plot_skew_sensitivity()
-    plot_crossover()
+    with plt.rc_context(PAPER_RC):
+        plot_crossover()
     plot_robustness()
     print(f"\nAll figures saved to {OUTPUT_DIR}")
 
