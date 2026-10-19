@@ -27,6 +27,9 @@ ids prefixed P/M/C/K) and ``data/imdb_cycles/MANIFEST.json``.
 
 Usage:
     PYTHONPATH=. python scripts/prepare_imdb_cycles.py
+    # the superseded pilot scope (results/imdb/superseded_sparse_2005/):
+    PYTHONPATH=. python scripts/prepare_imdb_cycles.py \
+        --pilot-year 2005 --n-movies 3500 --out data/imdb_cycles_2005
 """
 
 from __future__ import annotations
@@ -87,12 +90,23 @@ def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--n-movies", type=int, default=N_MOVIES)
     ap.add_argument("--out", type=Path, default=OUT)
+    ap.add_argument(
+        "--pilot-year",
+        type=int,
+        default=None,
+        help="pilot scope: the first n_movies feature films of this year by id",
+    )
     args = ap.parse_args()
-    prepare(args.n_movies, args.out)
+    prepare(args.n_movies, args.out, pilot_year=args.pilot_year)
 
 
-def prepare(n_movies: int, out_dir: Path) -> None:
-    """Write the typed relations of the n_movies most-voted films to out_dir."""
+def prepare(n_movies: int, out_dir: Path, *, pilot_year: int | None = None) -> None:
+    """Write the typed relations of the chosen movie set to out_dir.
+
+    By default the n_movies most-voted feature films; with ``pilot_year``,
+    the first n_movies feature films of that year by ``title.id`` (the
+    superseded pilot scope).
+    """
     con = duckdb.connect()
     _csv(
         con,
@@ -152,11 +166,17 @@ def prepare(n_movies: int, out_dir: Path) -> None:
             ("note", "VARCHAR"),
         ],
     )
-    con.execute(
-        "CREATE TABLE m AS SELECT t.id FROM title t JOIN movie_info_idx v "
-        "ON v.movie_id = t.id AND v.info_type_id = 100 WHERE t.kind_id = 1 "
-        f"ORDER BY CAST(v.info AS BIGINT) DESC, t.id LIMIT {n_movies}"
-    )
+    if pilot_year is None:
+        con.execute(
+            "CREATE TABLE m AS SELECT t.id FROM title t JOIN movie_info_idx v "
+            "ON v.movie_id = t.id AND v.info_type_id = 100 WHERE t.kind_id = 1 "
+            f"ORDER BY CAST(v.info AS BIGINT) DESC, t.id LIMIT {n_movies}"
+        )
+    else:
+        con.execute(
+            "CREATE TABLE m AS SELECT id FROM title WHERE kind_id = 1 "
+            f"AND production_year = {int(pilot_year)} ORDER BY id LIMIT {n_movies}"
+        )
     queries: dict[str, str] = {}
     for rid, name in ROLES.items():
         queries[name] = (
@@ -174,8 +194,12 @@ def prepare(n_movies: int, out_dir: Path) -> None:
     )
     out_dir.mkdir(parents=True, exist_ok=True)
     manifest: dict[str, object] = {
-        "source": str(JOB_DIR),
-        "scope": "top-voted feature films",
+        "source": "LPH_JOB_DIR (JOB's IMDb CSVs)",
+        "scope": (
+            "top-voted feature films"
+            if pilot_year is None
+            else f"first feature films of {pilot_year} by title.id"
+        ),
         "n_movies": con.execute("SELECT count(*) FROM m").fetchone()[0],  # type: ignore[index]
         "relations": {},
     }

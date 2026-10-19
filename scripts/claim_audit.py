@@ -108,7 +108,6 @@ def main() -> None:
     real = load("results/real/cyclic_real.csv")
     pj = load("results/e2e/plan_injection.csv")
     rb = load("results/e2e/robustness_broad_summary.csv")
-    fit = load("results/characterization/skew_gap_fit.csv")
     ordr = load("results/wcoj/ordering_study_summary.csv")
     pv = load("results/ablation/pvalue_ablation.csv")
     sub = load("results/ablation/substitutes_ablation.csv")
@@ -153,6 +152,7 @@ def main() -> None:
     pcs = load("results/suite/poly_certify_summary.csv")
     gpc = load("results/gcare/gcare_poly_certify_summary.csv")
     spc = load("results/suite/slice_poly_certify_summary.csv")
+    bci = load("results/suite/bootstrap_ci.csv")
     jfu = load("results/large_scale/job_full.csv")
     prk = load("results/cost/plan_ranking.csv")
 
@@ -307,12 +307,6 @@ def main() -> None:
         ),
         ("DuckDB P95 (5.82x)", pick(rb, "p95", strategy="DuckDB-opt"), 5.816),
         # -- gap predictor (C2) --------------------------------------------
-        ("held-out R^2 (0.87)", pick(fit, "value", metric="r2_heldout"), 0.8738),
-        (
-            "Spearman rho (-0.74)",
-            pick(fit, "value", metric="spearman_maxskew_gap"),
-            -0.735,
-        ),
         # -- WCOJ ordering honest negative (C3) ----------------------------
         (
             "LpH vs H-CEG median ratio (-1.3%)",
@@ -2478,6 +2472,23 @@ def main() -> None:
                 pick(gpc, "max_flow_vs_gcare_eval", dataset=d) for d in ("aids", "yago")
             ),
             0,
+        ),
+        (
+            "bootstrap: median ratios whose 95% CI crosses 1 (1)",
+            sum(r["crosses_1"] == "True" for r in bci),
+            1,
+        ),
+        (
+            "bootstrap: AIDS cover bs2/entropic CI low (0.42)",
+            pick(bci, "ci_lo", suite="gcare_aids", ratio="cover_bs2_p11/entropic_p11"),
+            0.42,
+            0.005 / 0.42,
+        ),
+        (
+            "bootstrap: AIDS cover bs2/entropic CI high (1.00)",
+            pick(bci, "ci_hi", suite="gcare_aids", ratio="cover_bs2_p11/entropic_p11"),
+            1.0,
+            0.005,
         ),
         ("certified: slice queries checked (80)", float(spc[0]["n"]), 80),
         (

@@ -67,7 +67,7 @@ The **real-data half**:
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 443 headline numbers must match their source CSV cell (counts exactly), and reports pinned values missing from `main.tex` |
+| `scripts/claim_audit.py` | 444 headline numbers must match their source CSV cell (counts exactly), and reports pinned values missing from `main.tex` |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |
