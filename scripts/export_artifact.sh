@@ -23,7 +23,7 @@ git archive HEAD | tar -x -C "$out"
 
 internal=(
     AUDIT.md CHECK.md CLAUDE.md ENHANCEMENT_PLAN.md ICDE_PLAN.md PLAN.md
-    REVIEW.md TOP_PLAN.md docs/proof_review_request.md
+    REVIEW.md TOP_PLAN.md docs/proof_review_request.md docs/submission
     docs/BREAKTHROUGH_STRATEGY_2026Q3.md docs/PORTFOLIO_STRATEGY_2026Q2.md
     docs/archive
     docs/paper/korean.tex docs/paper/korean.pdf docs/paper/korean.xdv

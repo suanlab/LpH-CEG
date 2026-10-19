@@ -158,6 +158,7 @@ def main() -> None:
     gpe = load("results/gcare/gcare_poly_certify.csv")
     spe = load("results/suite/slice_poly_certify.csv")
     pse = load("results/suite/poly_certify_short.csv")
+    swc = load("results/flow/sweep_poly_certify.csv")
 
     def ph(suite: str, group: str, col: str) -> float:
         return pick(phl, col, suite=suite, group=group)
@@ -2496,6 +2497,15 @@ def main() -> None:
             ph("hetionet", "8", "median_poly_over_exact"),
             277,
             0.5 / 277,
+        ),
+        (
+            "sweep certified: flow == polymatroid at k=12 and k=14 (2)",
+            sum(
+                r["status"] == "ok" and abs(float(r["flow_over_poly"]) - 1) <= 1e-6
+                for r in swc
+                if r["k"] in ("12", "14")
+            ),
+            2,
         ),
         (
             "reported real-data queries (862)",
