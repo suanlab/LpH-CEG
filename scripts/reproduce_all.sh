@@ -151,6 +151,7 @@ run_experiments() {
     python scripts/spectral_bound.py          # trace-Holder spectral bounds on the long suites
     python scripts/spectral_summary.py        # ... against the polymatroid bound and the truth
     python scripts/opt_stats_gap.py           # program vs information gap on small cycles (OPT_S lower bounds)
+    python scripts/voi_selection.py           # which pair joins to materialize: sketch-guided vs oracle vs random
 
     section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
     python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)

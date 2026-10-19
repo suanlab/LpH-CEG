@@ -1,0 +1,3 @@
+suite,n,median_full_gain_x,median_voi_frac_b1,median_oracle_frac_b1,median_random_frac_b1,median_voi_frac_b2,median_oracle_frac_b2,median_random_frac_b2,median_voi_frac_b3,median_oracle_frac_b3,median_random_frac_b3
+hetionet,34,2.376,0.4772,0.6135,0.1651,0.6461,0.796,0.3308,1,1,0.4925
+imdb,32,1.155,0.6061,0.6061,0.1667,1,1,0.3333,1,1,0.5

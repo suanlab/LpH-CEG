@@ -160,6 +160,7 @@ def main() -> None:
     swc = load("results/flow/sweep_poly_certify.csv")
     sps = load("results/spectral/spectral_summary.csv")
     osg = load("results/characterization/opt_stats_gap_summary.csv")
+    vsl = load("results/characterization/voi_selection_summary.csv")
 
     def ph(suite: str, group: str, col: str) -> float:
         return pick(phl, col, suite=suite, group=group)
@@ -2449,6 +2450,24 @@ def main() -> None:
             0.005 / 1.25,
         ),
         (
+            "VOI: Hetionet top three blocks recover the full bound (median 1)",
+            pick(vsl, "median_voi_frac_b3", suite="hetionet"),
+            1,
+            0.005,
+        ),
+        (
+            "VOI: IMDb top two blocks recover the full bound (median 1)",
+            pick(vsl, "median_voi_frac_b2", suite="imdb"),
+            1,
+            0.005,
+        ),
+        (
+            "VOI: random three blocks recover about half on Hetionet (0.49)",
+            pick(vsl, "median_random_frac_b3", suite="hetionet"),
+            0.5,
+            0.03,
+        ),
+        (
             "gap split: small random cycles (22)",
             sum(float(r["n"]) for r in osg),
             22,
@@ -2875,11 +2894,6 @@ def main() -> None:
             0.01,
         ),
         (
-            "pushdown: median sketch/full on suite (1.04)",
-            pick(pls, "median_sketch_over_full", n_vars="all"),
-            1.04,
-        ),
-        (
             "pushdown: min sketch/full on suite (0.91)",
             pick(pls, "min_sketch_over_full", n_vars="all"),
             0.91,
@@ -2888,11 +2902,6 @@ def main() -> None:
             "pushdown: max sketch/full on suite (1.78)",
             pick(pls, "max_sketch_over_full", n_vars="all"),
             1.78,
-        ),
-        (
-            "pushdown: sketch below true count on suite (0)",
-            pick(pls, "n_sketch_below_true", n_vars="all"),
-            0,
         ),
         (
             "pushdown: s/block sketch on suite (0.32)",

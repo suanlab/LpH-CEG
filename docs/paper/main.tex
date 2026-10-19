@@ -907,9 +907,7 @@ tighter than the entropic bound at the median under the cover LP and
 $236$/$1{,}720$/$10{,}200\times$ under the polymatroid program, on
 $120/120$ queries.
 The exact counts are $10^{4}$--$10^{9}$, so this is not a small-count
-artifact: the entropic bound is $2.8{\cdot}10^{7}\times$ the truth at
-$|V|{=}10$ and the polymatroid program on $bs{=}2$ brings that to
-$2.8{\cdot}10^{3}\times$. Nor is it a prefix artifact: with each relation
+artifact (Table~\ref{tab:long-suite}). Nor is it a prefix artifact: with each relation
 replaced by a uniform $20$K-row sample of the full file (two fixed seeds)
 the $|V|{=}6$ medians are $46$/$46$/$49\times$ (cover) and
 $236$/$233$/$244\times$ (polymatroid) for prefix/seed\,1/seed\,2, all $40$ below
@@ -1061,10 +1059,11 @@ $\ell_\infty$ does not ($1.70\times$) and its $\ell_1$ (the join size,
 CorrBound's inner product~\cite{mayer2026corrbound}) is already
 join-free. The one-pass upper bound on that norm from the triangle
 inequality recovers nothing on Hetionet ($2.2\times$); a $64$-probe
-Hutchinson sketch lands within $0.91$--$1.78\times$ of the full bound
-(median $1.04\times$ on Hetionet, above the truth on all $115$ checked) in
-$0.32$\,s per block---an estimate, not a bound, so a cost floor
-rather than a method.
+Hutchinson sketch lands within $0.91$--$1.78\times$ of the full bound in
+$0.32$\,s per block, but is an estimate, not a bound. It does pick which joins to pay for: ranking a
+$|V|{=}6$ query's six blocks by how much a sketch of their norm lowers the
+bound and joining the top three recovers the full $bs{\le}2$ bound on the
+median Hetionet query (top two on IMDb), against half for a random three.
 
 \emph{A spectral reading.} For an even $k$-cycle of binary relations the
 count is a trace, $|\query|=\mathrm{Tr}(A_1\cdots A_k)$ for the incidence
@@ -1546,10 +1545,9 @@ checked against our own counts, which differ from G-CARE's on $49$ of
 $192$. Our LpBound is a reimplementation without its predicate support,
 and our block statistics are collected without predicates, so
 STATS-CEB~\cite{han2021stats} and JOB's own queries are out of scope.
-Blocks cost a median $61\times$ more to collect, the cost grew $11\times$
-for $4.2\times$ the data, and full-scale use needs them cataloged inside
-the system. Bound-guided join orders lose to DuckDB on IMDb. This is a
-characterization of where bound headroom lies, not a deployable optimizer.
+Blocks cost a median $61\times$ more to collect, a cost that grows faster
+than the data and calls for cataloging inside the system. Bound-guided join orders lose to DuckDB on IMDb: this maps where bound
+headroom lies; it is not an optimizer.
 
 %% ===================================================================
 % ICDE 2027 requires disclosure of AI-generated content in the
