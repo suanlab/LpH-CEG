@@ -148,6 +148,9 @@ run_experiments() {
     python scripts/poly_headline.py           # headline medians with the bs<=2 polymatroid bound as the program
     python scripts/bootstrap_ci.py            # query-level bootstrap intervals of the headline medians
     python scripts/sweep_poly_certify.py      # certify the k=12..16 sweep flow bounds (long)
+    python scripts/spectral_bound.py          # trace-Holder spectral bounds on the long suites
+    python scripts/spectral_summary.py        # ... against the polymatroid bound and the truth
+    python scripts/opt_stats_gap.py           # program vs information gap on small cycles (OPT_S lower bounds)
 
     section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
     python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)

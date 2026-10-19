@@ -883,15 +883,12 @@ polymatroid $bs{=}2$ / entropic & $0.0042\times$ & $0.00058\times$ & $0.000098\t
 of $40$ below entropic, cover; polym. & $40$; $40$ & $40$; $40$ & $40$; $40$ & $32$; $40$ & $40$; $40$ & $40$; $40$ \\
 entropic / exact & $8.4{\cdot}10^{3}$ & $3.6{\cdot}10^{5}$ & $2.8{\cdot}10^{7}$ & $23$ & $171$ & $1.3{\cdot}10^{3}$ \\
 polymatroid $bs{=}2$ / exact & $47$ & $277$ & $2.8{\cdot}10^{3}$ & $2.2$ & $6.4$ & $15$ \\
-entropic gain over three norms & $1.9\times$ & $2.7\times$ & $3.2\times$ & $3.5\times$ & $5.1\times$ & $6.7\times$ \\
 \midrule
 \multicolumn{7}{@{}l}{\emph{Three norms on both sides:}} \\
 max-degree / cover $bs{=}1$ & $1.8\times$ & $5.1\times$ & $8.9\times$ & $1.8\times$ & $1.9\times$ & $3.2\times$ \\
 cover $bs{=}1$ / entropic & $2.53\times$ & $3.24\times$ & $3.61\times$ & $3.75\times$ & $4.33\times$ & $4.14\times$ \\
 cover $bs{=}2$ / entropic & $0.012\times$ & $0.0016\times$ & $0.00039\times$ & $0.25\times$ & $0.075\times$ & $0.023\times$ \\
 $bs{=}2$ below entropic & $40/40$ & $40/40$ & $40/40$ & $40/40$ & $40/40$ & $40/40$ \\
-entropic+pair sizes / entropic & $0.067\times$ & $0.037\times$ & $0.010\times$ & $1.00\times$ & $1.00\times$ & $1.00\times$ \\
-flow $bs{=}2$ / entropic+sizes & $0.054\times$ & $0.012\times$ & $0.0065\times$ & $0.060\times$ & $0.019\times$ & $0.0059\times$ \\
 cover / flow, both $bs{=}2$ & $3.2\times$ & $4.2\times$ & $5.1\times$ & $4.2\times$ & $4.0\times$ & $3.3\times$ \\
 flow $=$ polymatroid & $39$ & $35$ & $30$ & $28$ & $27$ & $30$ \\
 checked (invalid) & $40$ ($0$) & $40$ ($0$) & $35$ ($0$) & $40$ ($0$) & $33$ ($0$) & $28$ ($0$) \\
@@ -1069,15 +1066,26 @@ Hutchinson sketch lands within $0.91$--$1.78\times$ of the full bound
 $0.32$\,s per block---an estimate, not a bound, so a cost floor
 rather than a method.
 
-On cycle-$3$/$4$/$5$ (one seed), max-degree \emph{blocks} with no LP
-already tighten CEG$_M$ more ($4.0$/$11$/$45\times$) than the $bs{=}1$ LP
-($2.9$/$8.5$/$25.9\times$), and the cover LP adds nothing on top of
-$bs{=}2$: one hyperpath uses too few block statistics (the flow LP gains
-$2.2$--$7.1\times$ on the same ones).
+\emph{A spectral reading.} For an even $k$-cycle of binary relations the
+count is a trace, $|\query|=\mathrm{Tr}(A_1\cdots A_k)$ for the incidence
+matrices $A_i$ ($v_i\times v_{i+1}$), and the common-neighbour $\ell_2$
+norm is the Frobenius (Schatten-$2$) norm of the block product
+$B=A_iA_{i+1}$. Hölder's inequality for Schatten norms gives, over $m=k/2$
+consecutive blocks, $|\query|\le\prod_j\|B_j\|_{S_m}$, and
+$\|B\|_{S_m}^m\le\sigma_{\max}(B)^{m-2}\|B\|_F^2$ with $\sigma_{\max}$
+bounded above by a Collatz--Wielandt certificate on $B^{\top}B$. Two
+numbers per block, both from the pair join (a statistic outside the
+polymatroid catalog), give a bound tighter than the polymatroid program on
+$96/240$ long-suite queries (by a median $1.25\times$ there, though $1.11\times$
+looser over all) and never below an exact count; with each block's top
+$24$ singular values (Lanczos; uncertified, yet above every exact count)
+it is tighter on $220/240$ and takes IMDb at $|V|{=}10$ from
+$14.9\times$ to $3.2\times$ the truth. The next step on the statistics axis may thus be spectral order rather
+than block size. On $22$ small random cycles, a search over databases with the same
+$bs{\le}2$ statistics puts at most $1.5\times$ of the gap on the program and
+at least $2.5\times$ on the statistics (cycle-$4$ medians).
 
-Over $k = 3$--$8$ (10-seed means) the $bs{=}1$ improvement grows
-geometrically, as the Observation in Section~\ref{sec:theory} predicts, by
-roughly $3\times$ per step of $k$.
+
 
 \subsection{Real Data Results}
 \label{sec:realdata}
@@ -1265,15 +1273,12 @@ additional norms add ${<}2.4\%$.}
 \subsection{Bound-Guided Join Ordering}
 \label{sec:robustness}\label{sec:wcoj}
 
-\emph{Multi-way ordering.} The per-step decomposition gives a residual
-bound for any variable prefix, which can order a worst-case-optimal join
-greedily. On the Hetionet cycle-4 this cuts GenericJoin iterations
-$2.3\times$ in our simulator (outputs cross-checked against Ku\-zu), but
-it does not generalize: over $66$ synthetic queries the median ratio of
-baseline to bound-guided iterations is $0.99$ (bound-guided $1.3\%$
-worse; $20$ wins, $43$ losses; Wilcoxon $p{=}0.003$, indicative only, as queries share shapes and
-seeds),
-so we treat it as a targeted heuristic.
+\emph{Multi-way ordering.} The per-step residuals can order a
+worst-case-optimal join greedily: GenericJoin iterations drop $2.3\times$
+on the Hetionet cycle-4 in our simulator, but over $66$ synthetic queries
+the bound-guided order is $1.3\%$ worse at the median ($20$ wins, $43$
+losses; Wilcoxon $p{=}0.003$, indicative, as queries share shapes and
+seeds), so it is a targeted heuristic.
 
 \emph{Binary ordering in an engine.} Can the cover bound guide
 \emph{binary} join ordering inside a modern engine, and how does that compare to the
@@ -1526,7 +1531,8 @@ The polymatroid program over block statistics, valid for every $p$ and
 solved in seconds here, recovers $9.7$--$87\times$ there; on Hetionet and
 IMDb it beats the cover LP by $5.0$--$11.6\times$ on block statistics
 against $2.7$--$6.8\times$ on single-relation ones, so richer statistics
-reopen the program. G-CARE is the counterpoint: $15$--$24\times$ under
+reopen the program; the decisive block statistic admits a spectral reading
+(Section~\ref{sec:stats-vs-inference}). G-CARE is the counterpoint: $15$--$24\times$ under
 the polymatroid program, but under the cover LP the inference gap
 dominates on AIDS. Our $\ell_p$ flow LP tracks the polymatroid optimum in
 polynomial time (equal on $633$ of $862$ queries), its validity for
@@ -1542,10 +1548,8 @@ and our block statistics are collected without predicates, so
 STATS-CEB~\cite{han2021stats} and JOB's own queries are out of scope.
 Blocks cost a median $61\times$ more to collect, the cost grew $11\times$
 for $4.2\times$ the data, and full-scale use needs them cataloged inside
-the system. Bound-guided
-join orders trim a tail on synthetic queries but do not beat DuckDB's
-optimizer on IMDb. We offer this as a characterization of where bound headroom
-lies, not as a deployable optimizer.
+the system. Bound-guided join orders lose to DuckDB on IMDb. This is a
+characterization of where bound headroom lies, not a deployable optimizer.
 
 %% ===================================================================
 % ICDE 2027 requires disclosure of AI-generated content in the

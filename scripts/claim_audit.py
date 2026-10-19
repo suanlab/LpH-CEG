@@ -118,7 +118,6 @@ def main() -> None:
     wide = load("results/validity/shannon_wide.csv")
     rfr = load("results/ablation/real_frontier.csv")
     hb2 = load("results/revision/headline_bs2.csv")
-    lsc = load("results/large_scale/comparison.csv")
     lsu = load("results/suite/long_suite_summary.csv")
     lse = load("results/suite/long_suite_eval.csv")
     apj = load("results/suite/agm_pairjoin_summary.csv")
@@ -159,6 +158,8 @@ def main() -> None:
     spe = load("results/suite/slice_poly_certify.csv")
     pse = load("results/suite/poly_certify_short.csv")
     swc = load("results/flow/sweep_poly_certify.csv")
+    sps = load("results/spectral/spectral_summary.csv")
+    osg = load("results/characterization/opt_stats_gap_summary.csv")
 
     def ph(suite: str, group: str, col: str) -> float:
         return pick(phl, col, suite=suite, group=group)
@@ -452,78 +453,6 @@ def main() -> None:
             statistics.median(float(r["bs2_over_entropic"]) for r in rfr),
             0.0570,
             0.02,
-        ),
-        (
-            "one seed: bs=1 LP over CEG_M on cycle-3 (2.9x)",
-            pick(
-                lsc,
-                "ratio_vs_ceg",
-                experiment="cycle_scale",
-                query="cycle_3",
-                method="LpBound (bs=1,LP)",
-            ),
-            2.9,
-            0.0172,
-        ),
-        (
-            "one seed: max-degree blocks over CEG_M on cycle-3 (4.0x)",
-            pick(
-                lsc,
-                "ratio_vs_ceg",
-                experiment="cycle_scale",
-                query="cycle_3",
-                method="H-CEG_M (bs=2)",
-            ),
-            4.0,
-            0.0125,
-        ),
-        (
-            "one seed: bs=1 LP over CEG_M on cycle-4 (8.5x)",
-            pick(
-                lsc,
-                "ratio_vs_ceg",
-                experiment="cycle_scale",
-                query="cycle_4",
-                method="LpBound (bs=1,LP)",
-            ),
-            8.5,
-            0.0059,
-        ),
-        (
-            "one seed: max-degree blocks over CEG_M on cycle-4 (11x)",
-            pick(
-                lsc,
-                "ratio_vs_ceg",
-                experiment="cycle_scale",
-                query="cycle_4",
-                method="H-CEG_M (bs=2)",
-            ),
-            11,
-            0.0455,
-        ),
-        (
-            "one seed: bs=1 LP over CEG_M on cycle-5 (25.9x)",
-            pick(
-                lsc,
-                "ratio_vs_ceg",
-                experiment="cycle_scale",
-                query="cycle_5",
-                method="LpBound (bs=1,LP)",
-            ),
-            25.9,
-            0.0019,
-        ),
-        (
-            "one seed: max-degree blocks over CEG_M on cycle-5 (45x)",
-            pick(
-                lsc,
-                "ratio_vs_ceg",
-                experiment="cycle_scale",
-                query="cycle_5",
-                method="H-CEG_M (bs=2)",
-            ),
-            45,
-            0.0111,
         ),
         # -- three-axis comparison (Section: statistics vs inference) -------
         (
@@ -947,18 +876,6 @@ def main() -> None:
             "2x2: flow bs2 == polymatroid on blocks (12/12)",
             sum(abs(float(r["flow_bs2_over_poly_bs2"]) - 1) < 1e-3 for r in f22),
             12,
-        ),
-        (
-            "sweep: flow over cover on bs2, cycle-3 (2.2x)",
-            pick(fsc, "cover_bs2_over_flow_bs2", k="3"),
-            2.2,
-            0.01,
-        ),
-        (
-            "sweep: flow over cover on bs2, cycle-4 (7.1x)",
-            pick(fsc, "cover_bs2_over_flow_bs2", k="4"),
-            7.1,
-            0.01,
         ),
         (
             "real cycles: cover/entropic min (1.9x)",
@@ -2508,6 +2425,69 @@ def main() -> None:
             2,
         ),
         (
+            "spectral: certified Holder below polymatroid on (96)/240",
+            pick(sps, "n_certified_below_poly", suite="all"),
+            96,
+        ),
+        ("spectral: long-suite queries (240)", pick(sps, "n", suite="all"), 240),
+        (
+            "spectral: certified/poly median (1.11x)",
+            pick(sps, "median_certified_over_poly", suite="all"),
+            1.11,
+            0.005 / 1.11,
+        ),
+        (
+            "spectral: invalid certified + Lanczos bounds (0)",
+            pick(sps, "n_invalid_certified", suite="all")
+            + pick(sps, "n_invalid_lanczos", suite="all"),
+            0,
+        ),
+        (
+            "spectral: certified gain where tighter, median (1.25x)",
+            pick(sps, "median_certified_gain_where_tighter", suite="all"),
+            1.25,
+            0.005 / 1.25,
+        ),
+        (
+            "gap split: small random cycles (22)",
+            sum(float(r["n"]) for r in osg),
+            22,
+        ),
+        (
+            "gap split: cycle-4 bs<=2 program gap at most (1.5x)",
+            pick(osg, "median_program_gap_ub_bs2", k="4"),
+            1.5,
+            0.05 / 1.5,
+        ),
+        (
+            "gap split: cycle-4 bs<=2 information gap at least (2.5x)",
+            pick(osg, "median_info_gap_lb_bs2", k="4"),
+            2.5,
+            0.05 / 2.5,
+        ),
+        (
+            "gap split: no search result exceeds its bound (0)",
+            sum(float(r["n_lb_above_bound"]) for r in osg),
+            0,
+        ),
+        (
+            "spectral: Lanczos below polymatroid on (220)/240",
+            pick(sps, "n_lanczos_below_poly", suite="all"),
+            220,
+        ),
+        (
+            "spectral: IMDb |V|=10 polymatroid/true (14.9x)",
+            pick(sps, "median_poly_over_true", suite="imdb", n_vars="10"),
+            14.9,
+            0.05 / 14.9,
+        ),
+        (
+            "spectral: IMDb |V|=10 min(Lanczos, poly)/true (3.2x)",
+            pick(sps, "median_min_lanczos_poly_over_true", suite="imdb", n_vars="10"),
+            3.2,
+            0.05 / 3.2,
+        ),
+        (
             "reported real-data queries (862)",
             len(pce) + len(gpe) + len(spe) + len(pse),
             862,
@@ -2622,12 +2602,6 @@ def main() -> None:
             pick(lpv, "improvement", p_values="1.0,1.5,2.0,3.0,5.0,inf"),
             35.7,
             0.05 / 35.7,
-        ),
-        (
-            "bs=1 growth per step of k over k=3..8 (3x)",
-            (cyc("cycle_8") / cyc("cycle_3")) ** (1 / 5),
-            3,
-            0.5 / 3,
         ),
         (
             "Hetionet suite bs2/bs1 collection cost, median (61x)",

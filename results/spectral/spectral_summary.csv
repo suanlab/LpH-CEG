@@ -1,0 +1,8 @@
+suite,n_vars,n,median_certified_over_poly,n_certified_below_poly,median_lanczos_over_poly,n_lanczos_below_poly,median_certified_gain_where_tighter,n_checked,median_poly_over_true,median_min_certified_poly_over_true,median_min_lanczos_poly_over_true,n_invalid_certified,n_invalid_lanczos
+hetionet,10,40,1.10873,14,0.636008,35,1.24337,35,2845.31,2664.92,1687.66,0,0
+hetionet,6,40,1.17605,13,0.829632,29,1.06138,40,47.2831,47.2831,45.4177,0,0
+hetionet,8,40,1.05627,18,0.629563,38,1.18829,40,276.837,248.005,145.345,0,0
+imdb,10,40,0.771909,27,0.187229,40,1.62211,28,14.876,11.1611,3.247,0,0
+imdb,6,40,1.37832,7,0.689978,38,1.18552,40,2.23923,2.23923,1.45634,0,0
+imdb,8,40,1.08381,17,0.340528,40,1.30591,33,6.44162,5.52507,2.24613,0,0
+all,all,240,1.11278,96,0.590971,220,1.25459,216,23.5617,17.7244,16.2314,0,0
