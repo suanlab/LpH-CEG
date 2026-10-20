@@ -62,8 +62,8 @@ level with the inference gap. The polymatroid program, valid for every $p$ and s
 $236$--$10{,}200\times$ and $9.7$--$87\times$, below LpBound on all $349$
 Hetionet and IMDb queries; our $\ell_p$ extension of Im et al.'s flow LP
 tracks it in polynomial time. On G-CARE ($241$ AIDS, $192$ of $366$ YAGO
-queries) the margin is $15$--$24\times$, but on AIDS the inference gap
-dominates. For a block of two binary relations all statistics but one
+queries) the margin is $15$--$24\times$, but under the cover LP the inference
+gap dominates on AIDS. For a block of two binary relations all statistics but one
 avoid the join. We prove an $\ell_p$ Composition Inequality for validity. Limits:
 statistics come from data slices, their cost grows faster than the data,
 and bound-guided join orders lose to DuckDB on IMDb.
@@ -127,7 +127,7 @@ per database, and the bound is far tighter
 point a synthetic cycle-$k$ query; $y$ is relative to the entropic
 optimum on single-relation statistics). Above $y{=}1$, the inference
 axis at $bs{=}1$: CEG$_M$/PANDA is cheap but up to $45\times$ loose,
-the cover LP within $1.3\times$ ($8$--$44$\,ms end to end), and the
+the cover LP within $1.43\times$ ($8$--$44$\,ms end to end), and the
 optimum itself $25$\,s at $k{=}12$ as a $2^{|V|}$ program but a
 $3$--$18$\,ms solve ($k{\le}14$) as LpBound's flow LP---that axis is
 closed. Below $y{=}1$, the statistics
@@ -511,7 +511,7 @@ LpBound solves. Its LPflow~\cite[Thm.~4.5]{zhang2025lpbound} rewrites
 every simple $\ell_p$ constraint (one conditioning attribute) as a flow
 bundle after Im et al.~\cite{im2025simple} and is polynomial; our
 reimplementation returns the entropic bound to $10^{-6}$ on every
-instance we compared (12 families, the sweep, the 240 long-suite queries) in $3$--$26$\,ms at $k{=}3$--$16$
+instance we compared ($12$ family--seed pairs, the sweep, the $240$ long-suite queries) in $3$--$26$\,ms at $k{=}3$--$16$
 (Figure~\ref{fig:crossover}). So at $bs{=}1$ the cover LP buys
 \emph{no} asymptotic advantage over LpBound: as a $bs{=}1$ bound it is
 dominated (looser, and both solve in milliseconds). The fixed hyperpath buys the per-step decomposition
@@ -1004,8 +1004,8 @@ molecular degrees make high norms very informative to the entropic
 program, against a $1.35\times$ statistics gain (block statistics beat
 LpBound on only $135/241$); on YAGO the two are comparable ($6.1\times$
 against $8.9\times$). On both
-graphs the bs$=2$ program gap ($12\times$, $2.7\times$) is below the
-bs$=1$ one. G-CARE is thus a regime where the program matters as much as
+graphs the $bs{=}2$ program gap ($12\times$, $2.7\times$) is below the
+$bs{=}1$ one. G-CARE is thus a regime where the program matters as much as
 the statistics.
 
 \begin{table}[t]
@@ -1052,7 +1052,7 @@ built from two copies of $R$ and of $S$: a sub-pattern count, where
 CorrBound's $\ell_1$ inner product counts paths $a$--$b$--$c$. Added to
 $bs{=}1$ alone it already reaches a median
 $1.03\times$ of the full bound ($53/120$ exact), so the attribution is
-order-dependent; added to the join-free seven it returns the full bound on $12/12$ families, $10/10$ sweep points,
+order-dependent; added to the join-free seven it returns the full bound on $12/12$ family--seed pairs, $10/10$ sweep points,
 $85/120$ Hetionet and $116/120$ IMDb queries (Hetionet median
 $1.00\times$, max $1.67\times$), while its
 $\ell_\infty$ does not ($1.70\times$) and its $\ell_1$ (the join size,
@@ -1063,7 +1063,7 @@ Hutchinson sketch lands within $0.91$--$1.78\times$ of the full bound in
 $0.32$\,s per block, but is an estimate, not a bound. It does pick which joins to pay for: ranking a
 $|V|{=}6$ query's six blocks by how much a sketch of their norm lowers the
 bound and joining the top three recovers the full $bs{\le}2$ bound on the
-median Hetionet query (top two on IMDb), against half for a random three.
+median Hetionet query (top two on IMDb), against half of that gain for a random three.
 
 \emph{A spectral reading.} For an even $k$-cycle of binary relations the
 count is a trace, $|\query|=\mathrm{Tr}(A_1\cdots A_k)$ for the incidence
@@ -1073,7 +1073,7 @@ $B=A_iA_{i+1}$. Hölder's inequality for Schatten norms gives, over $m=k/2$
 consecutive blocks, $|\query|\le\prod_j\|B_j\|_{S_m}$, and
 $\|B\|_{S_m}^m\le\sigma_{\max}(B)^{m-2}\|B\|_F^2$ with $\sigma_{\max}$
 bounded above by a Collatz--Wielandt certificate on $B^{\top}B$. Two
-numbers per block, both from the pair join (a statistic outside the
+numbers per block, both from the pair join ($\sigma_{\max}$ lies outside the
 polymatroid catalog), give a bound tighter than the polymatroid program on
 $96/240$ long-suite queries (by a median $1.25\times$ there, though $1.11\times$
 looser over all) and never below an exact count; with each block's top
@@ -1209,7 +1209,8 @@ keeps every constraint centered on the second class; no single order
 keeps them all, so we solve the flow LP over the $4|V|$ walk and
 alternating orders and keep the best bound. Over the full $bs{=}2$ catalog
 (every block, every interface) it equals the $2^{|V|}$ polymatroid bound
-on $12/12$ family--seed pairs (three norms; $7/12$ with ten) and on every synthetic even cycle up to $k{=}10$ (the largest at which we ran the $2^{|V|}$ program over that catalog, $0.7$\,s) and on the triangle,
+on $12/12$ family--seed pairs (three norms; $7/12$ with ten) and on every synthetic even cycle up to $k{=}14$ ($24$\,min for the $2^{|V|}$ program at $k{=}14$) and on
+the triangle,
 and loses a constant $1.56$--$1.59\times$ on cycle-$5$/$7$, where one
 wedge must remain lost;
 $34/40$ of the random shapes are exact (max gap $1.28\times$). Cost is
@@ -1219,7 +1220,7 @@ it costs: the cover LP, confined to one hyperpath, leaves most of the
 block statistics unused, and the flow LP over the same catalog is
 $1.5$--$3.8\times$ tighter on the small families (ten norms:
 $1.6$--$3.8\times$) and, with three norms, $2.2\times$ at $k{=}3$ growing
-to $288\times$ at $k{=}16$ on the sweep (below the $bs{=}1$ optimum by
+to $288\times$ at $k{=}16$ (uncertified) on the sweep (below the $bs{=}1$ optimum by
 $2$--$800\times$ where the cover LP manages $1$--$6\times$;
 Figure~\ref{fig:positioning}). On real data the $2^{|V|}$ program over
 the same catalog is cheap enough to solve directly (ten norms: median
@@ -1241,7 +1242,7 @@ super-exponentially ($25$\,s at $k{=}12$, $2{,}480$\,s at $k{=}14$), but
 LpBound's flow LP reaches the same bound (annotated gap to the cover LP)
 in $3$--$26$\,ms. On $bs{=}2$ block statistics the flow LP over $4k$
 orders takes $0.03$--$4.4$\,s and, with three norms, equals the $2^{|V|}$
-polymatroid bound at every even $k \le 10$.}
+polymatroid bound at every even $k \le 14$.}
 \label{fig:crossover}
 \end{figure}
 
@@ -1524,8 +1525,7 @@ every weighting valid on all databases
 on AIDS) above the entropic optimum, which LpBound's flow LP reaches in polynomial time. With ten norms
 on both sides, block statistics put the cover LP a median
 $46$--$920\times$ below LpBound on registered Hetionet cycles
-($|V|{=}6$--$10$), whether the data are sliced by prefix or by random
-sample, but on IMDb only $1.3$--$6.8\times$, level with the inference gap.
+($|V|{=}6$--$10$; at $|V|{=}6$ also on random-sample slices), but on IMDb only $1.3$--$6.8\times$, level with the inference gap.
 The polymatroid program over block statistics, valid for every $p$ and
 solved in seconds here, recovers $9.7$--$87\times$ there; on Hetionet and
 IMDb it beats the cover LP by $5.0$--$11.6\times$ on block statistics

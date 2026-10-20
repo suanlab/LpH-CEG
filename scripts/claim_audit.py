@@ -2507,6 +2507,12 @@ def main() -> None:
             0.05 / 3.2,
         ),
         (
+            "sweep: 2^|V| program at k=14 takes (24) min",
+            pick(swc, "poly_s", k="14") / 60.0,
+            24,
+            0.5 / 24,
+        ),
+        (
             "reported real-data queries (862)",
             len(pce) + len(gpe) + len(spe) + len(pse),
             862,
