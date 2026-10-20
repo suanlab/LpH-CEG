@@ -2,3 +2,4 @@ k,status,flow_bs2_bound,poly_bs2_bound,flow_over_poly,poly_s
 10,ok,1.672222e+10,1.672222e+10,1.000000,0.7
 12,ok,1.765659e+12,1.765659e+12,1.000000,20.1
 14,ok,1.994808e+14,1.994808e+14,1.000000,1424.7
+16,not finished in 21600 s,,,,
