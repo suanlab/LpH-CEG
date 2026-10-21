@@ -2122,16 +2122,16 @@ def main() -> None:
             40,
         ),
         (
-            "Fig.1 caption: cover LP end to end, min (8 ms)",
-            min(float(r["cover_ms"]) for r in fsc),
-            8,
-            0.5 / 8,
+            "Fig.1 caption: cover LP end to end, min (7 ms)",
+            min(float(r["cover_ms"]) for r in se),
+            7,
+            0.5 / 7,
         ),
         (
-            "Fig.1 caption: cover LP end to end, max (44 ms)",
-            max(float(r["cover_ms"]) for r in fsc),
-            44,
-            0.5 / 44,
+            "Fig.1 caption: cover LP end to end, max (43 ms)",
+            max(float(r["cover_ms"]) for r in se),
+            43,
+            0.5 / 43,
         ),
         (
             "certified: short queries checked (109)",
@@ -2200,6 +2200,24 @@ def main() -> None:
             max(float(r["tau_entropic_vs_true"]) for r in prk),
             0.94,
             0.005 / 0.94,
+        ),
+        (
+            "JOB-medium co-actor+co-keyword cycle-4 (1.94x)",
+            pick(jfu, "lp_ratio", name="JOB Co-actor+Co-keyword (full JOB-medium)"),
+            1.94,
+            0.005,
+        ),
+        (
+            "JOB-medium co-actor+co-company cycle-4 (2.80x)",
+            pick(jfu, "lp_ratio", name="JOB Co-actor+Co-company (full JOB-medium)"),
+            2.80,
+            0.005,
+        ),
+        (
+            "JOB-medium star control (1.00x)",
+            pick(jfu, "lp_ratio", name="JOB Star-3 control (no cycle)"),
+            1.00,
+            0.0005,
         ),
         (
             "no improvement: IMDb replicated/co-director cycle-4 rows (8)",
@@ -2712,6 +2730,18 @@ def main() -> None:
             1 / gc("aids", "median_cover_bs2_over_entropic_p11"),
             1.35,
             0.005,
+        ),
+        (
+            "G-CARE aids three-norm inference gap (3.4x)",
+            gc("aids", "median_cover_bs1_over_entropic_p3"),
+            3.4,
+            0.05,
+        ),
+        (
+            "G-CARE aids three-norm cover-LP statistics gain (21x)",
+            1 / gc("aids", "median_cover_bs2_over_entropic_p3"),
+            21,
+            0.5,
         ),
         (
             "G-CARE yago exact==gcare among evaluated (143/192)",

@@ -81,12 +81,15 @@ def exact_count(query: QueryHypergraph, data: dict, timeout_s: float) -> int | N
         )
     )
     out: list[int | None] = [None]
+    err: list[BaseException | None] = [None]
 
     def run() -> None:
         try:
             out[0] = int(con.execute(sql).fetchone()[0])
-        except Exception:
-            out[0] = None
+        except duckdb.InterruptException:
+            out[0] = None  # our own timeout below
+        except Exception as exc:  # anything else is not a timeout
+            err[0] = exc
 
     th = threading.Thread(target=run, daemon=True)
     th.start()
@@ -95,6 +98,8 @@ def exact_count(query: QueryHypergraph, data: dict, timeout_s: float) -> int | N
         con.interrupt()
         th.join()
         return None
+    if err[0] is not None:
+        raise err[0]
     return out[0]
 
 

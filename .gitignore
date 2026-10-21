@@ -44,3 +44,4 @@ docs/paper/main.bak*
 .env
 .coverage
 docs/submission/ICDE2027_R2/
+paper_audit/
