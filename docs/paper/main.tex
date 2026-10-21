@@ -225,8 +225,7 @@ A \emph{hyperpath} $P = (\joinstate_0{=}\emptyset, \block_1,
 \joinstate_1, \ldots, \block_m, \joinstate_m{=}\mathcal{E})$
 decomposes the query into sequential block extensions.
 The product $\prod_{j=1}^{m} \muFactor{\block_j}{\interface_j}$ is
-a valid cardinality upper bound (the unit-weight $\ell_\infty$ case of
-Theorem~\ref{thm:composition}; also~\cite{hceg2027}).
+a valid cardinality upper bound (the unit-weight $\ell_\infty$ case of Theorem~\ref{thm:composition}, so every result we use from~\cite{hceg2027} is restated and proved here).
 Our framework generalizes this product by replacing $\ell_\infty$
 norms with LP-optimized $\ell_p$-norms.
 
@@ -1414,7 +1413,7 @@ under which $\ell_p$-norm constraints are information inequalities, is
 what Theorem~\ref{thm:composition} applies to block-joined relations.
 
 \paragraph{Summaries and learned estimators}
-COLOR~\cite{deeds2025color} summarizes and GNCE~\cite{schwabe2024gnce}, SPACE~\cite{aytimur2025space} and FactorJoin~\cite{wu2023factorjoin} learn point estimates without a guarantee, for which pessimistic bounds are the safety fallback~\cite{hceg2027}; PathCE~\cite{wang2025pathce} keeps an upper bound over path summaries.
+COLOR~\cite{deeds2025color} summarizes and GNCE~\cite{schwabe2024gnce}, SPACE~\cite{aytimur2025space} and FactorJoin~\cite{wu2023factorjoin} learn point estimates without a guarantee, for which pessimistic bounds are the safety fallback~\cite{abokhamis2025pessimistic}; PathCE~\cite{wang2025pathce} keeps an upper bound over path summaries.
 
 \paragraph{Join evaluation algorithms}
 Yannakakis+~\cite{wang2025yannakakis} makes Yannakakis-style evaluation
@@ -1429,8 +1428,7 @@ they do not beat max-degree ordering in general.
 \label{sec:practical}
 
 \paragraph{When to use LpH-CEG}
-Use it on cyclic queries with $k \ge 4$ and moderately skewed data, with
-$\mathcal{P} = \{1,2,\infty\}$; without a cycle, skip the LP. Degree
+Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$: gains are rare on triangles and grow with cycle length; without a cycle, skip the LP. Degree
 sequences can come from catalog histograms
 ($\lpnorm{\mathbf{d}}{p} = (\sum_i c_i d_i^p)^{1/p}$ over buckets
 $(d_i, c_i)$) at \texttt{ANALYZE} time (not evaluated here).
