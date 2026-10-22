@@ -2,7 +2,7 @@
 
 ``slice_robustness.py`` reruns the |V|=6 Hetionet queries on two random
 20K-row samples per relation.  This recomputes, on the same samples, the
-ten-norm flow bound and the ``2**|V|`` polymatroid bound over the
+eleven-norm flow bound and the ``2**|V|`` polymatroid bound over the
 unrelaxed ``bs<=2`` catalog (``poly_certify.evaluate``), so that every flow
 bound the paper reports is certified.  The flow values must reproduce
 ``slice_robustness.csv``.

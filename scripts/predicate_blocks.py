@@ -15,7 +15,7 @@ IMDb |V|=6 cycles with a production-year predicate on every movie variable
   oracle    polymatroid bound on block statistics of the filtered
             relations (one block catalog per predicate)
 
-Ten norms on every side.  Each filtered query is counted exactly by DuckDB
+Eleven norms on every side.  Each filtered query is counted exactly by DuckDB
 (same SQL as the suites), so every bound with a count is checked.
 
 Output: results/imdb/predicate_blocks.csv and predicate_blocks_summary.csv

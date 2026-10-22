@@ -1,11 +1,11 @@
-"""Certify every real-data flow-LP bound with ten norms by the polymatroid bound.
+"""Certify every real-data flow-LP bound with eleven norms by the polymatroid bound.
 
 The flow LP over order-relaxed ``bs=2`` constraints is proved valid for
 l_inf constraints (Im et al., Thm 1.5(a)) but not for l_p ones.  The
 ``2**|V|`` polymatroid bound over the *unrelaxed* catalog is valid for any
 p (every l_p constraint holds on the entropy of the join's uniform
 distribution, LpBound), so ``flow >= poly`` on a query certifies that
-query's flow bound.  ``pset_fair.py`` gives the ten-norm (P11) flow bounds
+query's flow bound.  ``pset_fair.py`` gives the eleven-norm (P11) flow bounds
 of both long suites but not the polymatroid bound; this recomputes the
 statistics and adds it.  The flow values must reproduce ``pset_fair.csv``.
 

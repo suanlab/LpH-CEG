@@ -1490,7 +1490,7 @@ def main() -> None:
             11,
             0.02,
         ),
-        # -- ten norms on both sides (pset_fair) ---------------------------
+        # -- eleven norms on both sides (pset_fair) ---------------------------
         (
             "P11 both sides: hetionet gain |V|=6 (1.9)",
             pf("hetionet", "6", "median_entropic_p3_over_p11"),
@@ -1734,7 +1734,7 @@ def main() -> None:
             ),
             864,
         ),
-        # -- ten norms as the primary comparison (p11 reruns) --------------
+        # -- eleven norms as the primary comparison (p11 reruns) --------------
         (
             "short P11: stats gain cover bs1/bs2 (30x)",
             med_ratio(p11s, "cover_bs1_p11", "cover_bs2_p11"),

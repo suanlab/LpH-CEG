@@ -1,4 +1,4 @@
-"""Certify the G-CARE flow-LP bounds (ten norms) by the polymatroid bound.
+"""Certify the G-CARE flow-LP bounds (eleven norms) by the polymatroid bound.
 
 Companion of ``poly_certify.py`` for the G-CARE suite: for every query
 ``gcare_suite.py`` evaluated, rebuild its relations, recollect the P11

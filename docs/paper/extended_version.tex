@@ -134,8 +134,12 @@ apply Lemma~\ref{lem:obl}.
 it holds over the whole polymatroid cone and for every hyperpath, block
 size and $p\ge1$. It requires (C) exactly: an LP solver may return weights
 violating (C) by about $10^{-7}$; scaling $w$ by
-$1/\min_a(\text{coverage of }a)$ restores (C) and changes the bound by a
-factor $1+O(10^{-7})$, which the released code does not apply. It requires exact statistics of the
+$1/(1-\varepsilon)$, for a coverage shortfall $\varepsilon=1-\min_a(\text{coverage of }a)$,
+restores (C) and raises a bound $B$ by the factor $B^{\varepsilon/(1-\varepsilon)}$, which grows
+with $B$. At the solver's feasibility tolerance ($\varepsilon\le10^{-7}$) and the largest
+cover bound we report ($B<2^{100}$) the factor is below $1+10^{-5}$; the released
+code does not apply it, so reported bounds may sit below their rescaled values
+by at most that factor. It requires exact statistics of the
 database being bounded (or deterministic upper bounds on them, since the
 bound is monotone in each $\mu$); a sampled or sketched statistic, such as
 the Hutchinson estimate of the common-neighbour $\ell_2$ in the paper, is
@@ -145,9 +149,10 @@ weight zero, which only loosens the bound).
 
 \begin{proposition}[Necessity]
 If nonnegative weights $(w_{j,p})$ make the product above an upper bound on
-$|\query(D)|$ for every database $D$, they satisfy (C). Hence on a fixed
-hyperpath the cover LP is optimal over all weightings of its statistics
-that are valid on every database.
+$|\query(D)|$ for every database $D$ whose atoms' relations are
+independent (no two atoms are copies of one relation), they satisfy (C).
+Hence on a fixed hyperpath the cover LP is optimal over all weightings of
+its statistics that are valid on every such database.
 \end{proposition}
 \begin{proof}
 Fix $a\in V$ and $N\ge2$, and let $D_N$ give $a$ the domain $[N]$ and every
@@ -160,6 +165,16 @@ the left side of (C) at $a$, and $N^{c_a}\ge N$ forces $c_a\ge1$. (The
 entropy of $D_N$'s join is the modular polymatroid $h(S)=[a\in S]\log_2N$,
 so the proposition also holds over the polymatroid cone.)
 \end{proof}
+
+\paragraph{Self-joins.} The construction sets each atom's relation
+independently, which a self-join forbids: in $R(a,b)\bowtie R(b,c)\bowtie
+R(c,a)$ the three atoms share $R$, $D_N$ is not a database of that query,
+and indeed weight $3$ on the first step's $|R|$ and $0$ elsewhere gives the
+valid bound $|R|^3$ although $c$ is uncovered. Sufficiency (the
+Composition Inequality) is unaffected, since every self-join database is
+also a database of the independent query; necessity, and with it the
+reading that reweighting a fixed hyperpath's statistics is exhausted,
+holds for independent atoms only.
 
 \paragraph{Why the elementary argument does not suffice.} If $w_j\ge1$ for
 every step, Lemma~\ref{lem:obl} follows from (iii) alone. The LP's optima
@@ -231,6 +246,24 @@ returns weights $(1,0,1)$), so acyclicity alone does not force unit
 weights; what redundant coverage on cycles adds is the slack exploited
 above.
 
+\section{A spectral reading of the common-neighbour statistic (post hoc)}
+For an even $k$-cycle of binary relations the
+count is a trace, $|\query|=\mathrm{Tr}(A_1\cdots A_k)$ for the incidence
+matrices $A_i$ ($v_i\times v_{i+1}$), and the common-neighbour $\ell_2$
+norm is the Frobenius (Schatten-$2$) norm of the block product
+$B=A_iA_{i+1}$. Hölder's inequality for Schatten norms gives, over $m=k/2$
+consecutive blocks, $|\query|\le\prod_j\|B_j\|_{S_m}$, and
+$\|B\|_{S_m}^m\le\sigma_{\max}(B)^{m-2}\|B\|_F^2$ with $\sigma_{\max}$
+bounded above by a Collatz--Wielandt certificate on $B^{\top}B$. Two
+numbers per block, both from the pair join ($\sigma_{\max}$ lies outside the
+polymatroid catalog), give a bound tighter than the polymatroid program on
+$96/240$ long-suite queries (by a median $1.25\times$ there, though $1.11\times$
+looser over all) and never below an exact count; with each block's top
+$24$ singular values (Lanczos; uncertified, yet above every exact count)
+it is tighter on $220/240$ and takes IMDb at $|V|{=}10$ from
+$14.9\times$ to $3.2\times$ the truth. The next step on the statistics axis may thus be spectral order rather
+than block size.
+
 \section{Additional $bs=1$ experiments: JOB, TPC-H-like, data size and skew}
 
 On the JOB-medium subset (CI: 3K, MK: 2K, MC: 1K rows) the two co-actor
@@ -251,7 +284,10 @@ and checked by its claim audit.
 
 \section{Multi-way ordering by per-step residuals}
 The per-step residuals can order a
-worst-case-optimal join greedily: GenericJoin iterations drop $2.3\times$
+worst-case-optimal join greedily. As implemented, the residual of a variable
+prefix is the LP re-solved on the query with the prefix attributes projected
+out, which bounds the residual for every value of the prefix (and could be
+computed for LpBound in the same way): GenericJoin iterations drop $2.3\times$
 on the Hetionet cycle-4 in our simulator, but over $66$ synthetic queries
 the bound-guided order is $1.3\%$ worse at the median ($20$ wins, $43$
 losses; Wilcoxon $p{=}0.003$, indicative, as queries share shapes and

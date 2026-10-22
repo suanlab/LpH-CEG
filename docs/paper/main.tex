@@ -49,16 +49,15 @@
 \begin{abstract}
 Pessimistic cardinality bounds are usually improved by strengthening
 the \emph{program} combining degree statistics, from fractional edge covers to LpBound's Shannon-cone LP. We ask where the headroom lies for cyclic joins, using LpH-CEG, a fractional block-cover LP over $\ell_p$-norm degree
-sequences of multi-way blocks. On single-relation statistics little inference headroom is left on Hetionet and IMDb: on a fixed hyperpath the cover LP is provably optimal among
-weightings valid on every database, and LpBound's polynomial flow LP
+sequences of multi-way blocks. On single-relation statistics little inference headroom is left on Hetionet and IMDb: on a fixed hyperpath the cover LP is provably optimal among weightings valid on every self-join-free database, and LpBound's polynomial flow LP
 reaches the polymatroid optimum. Block statistics, degree sequences of
 two-relation joins conditioned on their interfaces, open the statistics
-axis. With ten norms on both sides they tighten LpBound by a median
+axis. With eleven norms on both sides they tighten LpBound by a median
 $46$--$920\times$ on $120$ rule-selected Hetionet cycles ($|V|{=}6$--$10$)
 under the cover LP, but only $1.3$--$6.8\times$ on $120$ IMDb cycles, at or below the inference gap. The polymatroid program, valid for every $p$ and solved within about a minute here, exploits them:
 $236$--$10{,}200\times$ and $9.7$--$87\times$, below LpBound on all $349$
 Hetionet and IMDb queries; our $\ell_p$ extension of Im et al.'s flow LP tracks it in polynomial time, certified per query. On G-CARE ($241$ AIDS, $192$ of $366$ YAGO
-queries) the margin is $15$--$24\times$, but under the cover LP with ten norms the inference gap dominates on AIDS. On binary blocks all statistics but one avoid the join. We prove validity constructively via an $\ell_p$ Composition Inequality, a Shannon-flow inequality. Limits:
+queries) the margin is $15$--$24\times$, but under the cover LP with eleven norms the inference gap dominates on AIDS. On binary blocks all statistics but one avoid the join. We prove validity constructively via an $\ell_p$ Composition Inequality, a Shannon-flow inequality. Limits:
 statistics come from data slices, their cost grows faster than the data,
 and bound-guided join orders lose to DuckDB on IMDb.
 \end{abstract}
@@ -101,8 +100,8 @@ $p{=}\infty$) dramatically. At $bs{=}1$ it sits $2.7$--$6.8\times$ above the ent
 (Figure~\ref{fig:positioning}), so the cover LP is not the point. What
 it exposes is that \emph{block statistics} move the bound far below that
 optimum, and that on them a stronger program pays off again. The
-estimator this leads to, block statistics with $\ell_p$ flow inference,
-costs more to collect, once per database, and is the tightest bound we
+estimator this leads to, block statistics with polymatroid inference (which our $\ell_p$ flow LP tracks in polynomial time, certified per query),
+costs more to collect, once per database snapshot, and is the tightest bound we
 measure (Section~\ref{sec:stats-vs-inference}).
 
 \begin{figure}[t]
@@ -137,7 +136,7 @@ bound.
 \item \textbf{The statistics axis is open
 (Section~\ref{sec:stats-vs-inference}).}
 Block statistics $\mu_p(\block \mid \interface)$, $|\block|\ge2$, put the
-cover LP a median $10.7\times$ below LpBound, with the same ten norms, on
+cover LP a median $10.7\times$ below LpBound, with the same eleven norms, on
 $109$ short Hetionet cycles and $46$--$920\times$ on $120/120$ longer ones
 ($|V|{=}6$--$10$), against $2.7$--$3.1\times$ of inference headroom. On
 $120$ IMDb cycles from JOB's snapshot its margin is only
@@ -148,7 +147,7 @@ YAGO queries run) $15$--$24\times$, while the cover LP's is far below the
 inference gap on AIDS ($1.35\times$ against $59\times$) and comparable on
 YAGO ($8.9\times$ against $6.1\times$).
 
-\item \textbf{The estimator: block statistics with $\ell_p$ flow inference
+\item \textbf{The estimator: block statistics with polymatroid inference
 (Sections~\ref{sec:stats-vs-inference},~\ref{sec:scalability}).}
 On the same block statistics the polymatroid optimum beats the cover LP
 by $1.6$--$3.8\times$ ($12/12$ synthetic) and a median $5.0$--$11.1\times$
@@ -294,9 +293,7 @@ attribute $a \in V$,
 \subsection{Why Cyclic Queries Benefit}\label{sec:whycyclic}
 
 \paragraph{Where the slack comes from}
-With binary extensions every attribute is new at exactly one step. On a
-star no attribute reappears in a later interface, so the LP returns
-$w_j{=}1$ and the max-degree bound. On a path an interior attribute is
+With binary extensions every attribute is new at exactly one step. On a star each leaf is new at one step and never re-covered, so its cover forces $w_j{=}1$ and the LP returns the max-degree bound. On a path an interior attribute is
 re-covered by the next interface at rate $1/p$, so the LP may trade an
 extension for an interface at $p{=}1$ (on a $4$-path it returns
 $(1,0,1)$, an AGM-style $N_1N_3$)---a gain from cardinalities, not from
@@ -335,8 +332,7 @@ Algorithm~\ref{alg:lph-ceg} summarizes the LpH-CEG estimation pipeline.
 The LP in line~10 has $O(m \cdot |\mathcal{P}|)$ variables
 ($m \le |\mathcal{E}|$ steps, $|\mathcal{P}| = 3$ in practice) and $|V|$
 constraints, solved by HiGHS~\cite{huangfu2018highs} in about $1$--$2$\,ms.
-Line~13 ensures LpH-CEG never produces a looser bound than the
-standard max-degree bound.
+Line~13 ensures LpH-CEG never produces a looser bound than the standard max-degree bound. Algorithm~\ref{alg:lph-ceg} is the cover-LP path; the estimator of Section~\ref{sec:stats-vs-inference} replaces lines~9--12 by the polymatroid program (or the certified flow LP) on the same statistics.
 
 %% ===================================================================
 \section{Theoretical Results}
@@ -450,8 +446,7 @@ No: the cover constraint is also necessary.
 \begin{proposition}[Necessity]
 \label{prop:necessity}
 If nonnegative weights $(w_{j,p})$ make the product of
-Theorem~\ref{thm:composition} an upper bound on $|\query(D)|$ for every
-database $D$, they satisfy~\eqref{eq:cover}. So on a fixed hyperpath the
+Theorem~\ref{thm:composition} an upper bound on $|\query(D)|$ for every database $D$ whose atoms' relations are independent (no self-joins), they satisfy~\eqref{eq:cover}. So on a fixed hyperpath the
 LP~\eqref{eq:lp}--\eqref{eq:cover} is optimal over all weightings of its
 statistics that are valid on every database.
 \end{proposition}
@@ -465,8 +460,7 @@ $N^{c_a}$, with $c_a$ the left side of~\eqref{eq:cover}, and
 $N^{c_a}\ge N$ forces $c_a\ge1$.
 \end{proof}
 
-\noindent (In entropy terms, $D_N$ is the modular polymatroid
-$h(S)=[a\in S]\log_2N$.) A cutting-plane search with the polymatroid LP
+\noindent (In entropy terms, $D_N$ is the modular polymatroid $h(S)=[a\in S]\log_2N$. With self-joins the copies' identity admits other valid weights, e.g.\ $|R|^3$ for a triangle on one relation $R$, which leaves an attribute uncovered.) A cutting-plane search with the polymatroid LP
 confirms this optimality on triangle, cycle-$4$/$5$/$6$ and $K_4$ (cycle-4: $15.335$
 in $\log_2$, against $14.858$ for the polymatroid optimum). The residual
 gap comes from \emph{statistics} the hyperpath leaves unused, which the
@@ -493,10 +487,10 @@ inference becomes non-trivial again (Section~\ref{sec:scalability}).
 What LpBound's single global program does not provide is structural:
 \begin{enumerate}
 \item \textbf{A per-step residual bound.} Because the LP is attached to
-  a hyperpath, it yields a bound \emph{per extension step}, and hence a
-  residual bound for any variable prefix. This is exactly the signal our
-  WCOJ variable ordering consumes (Section~\ref{sec:wcoj}); LpBound's
-  single global optimum exposes no such per-step decomposition.
+  a hyperpath, it yields a bound \emph{per extension step}; re-solved with a
+  variable prefix projected out, it bounds the residual for every prefix
+  value, the signal our WCOJ ordering consumes (Section~\ref{sec:wcoj}).
+  LpBound could be re-solved likewise but has no per-step decomposition.
 \item \textbf{Block-level statistics.} With multi-way blocks
   ($|\block_j| > 1$) the LP draws on $\ell_p$-norms of \emph{joined}
   block relations---statistics outside LpBound's single-relation
@@ -618,6 +612,7 @@ $M_j / \mu_p(\rel_j)^{p/(p+1)}$ at a common $p$.
 \label{sec:experiments}
 
 \subsection{Setup}
+All experiments run on one server (Intel Xeon Gold 5218R, $20$ cores, $251$\,GiB RAM; SciPy~1.15 with HiGHS, DuckDB~1.5.4); worker counts are stated where runs were concurrent.
 
 \paragraph{Datasets}
 We evaluate on five real-world datasets:
@@ -645,7 +640,7 @@ same $\mathcal{P}$, including our entropic LpBound. Because the entropic
 bound gains more from extra norms than the cover LP does, the comparisons
 against LpBound (the abstract, Table~\ref{tab:long-suite}'s
 upper block, the short suite, Tables~\ref{tab:stats-vs-inf} and~\ref{tab:gcare}) use
-$\mathcal{P}=\{1,\ldots,10,\infty\}$ on both sides; every other comparison
+the eleven norms $\mathcal{P}=\{1,\ldots,10,\infty\}$ on both sides; every other comparison
 with the entropic bound (the other synthetic tables and figures, the six
 hand-picked cycles, the CorrBound proxy, the $370$-query suite) uses three
 norms, $\{1,2,\infty\}$.
@@ -676,7 +671,7 @@ same single-relation $\ell_p$ statistics on these cycle-$3$--$6$ instances.
 \caption{Unified comparison of guaranteed upper bounds (synthetic
 power-law cycles, $100$V/$400$E, one instance). ``Cover'' is our $bs{=}1$ LP;
 ``Entropic'' is LpBound's bound (via the $2^{|V|}$ program). Lower is tighter.
-``$/$CEG'' and ``$/$Ent'' are Cover's ratio to CEG$_M$ and to the
+``$/$CEG'' is CEG$_M$'s ratio to Cover and ``$/$Ent'' Cover's ratio to the
 entropic optimum.}
 \label{tab:baselines}
 \begin{tabular}{@{}lrrrrrr@{}}
@@ -738,7 +733,7 @@ rather than assumed.
 \caption{Statistics $\times$ inference, $40$ vertices / $120$ edges,
 seed $101$ (12 family--seed pairs behave alike; see text). Both programs
 see the same catalog (every single relation, or every $bs{\le}2$
-block and interface) with the same ten norms. Every entry is a valid upper bound on the exact
+block and interface) with the same eleven norms. Every entry is a valid upper bound on the exact
 count.}
 \label{tab:stats-vs-inf}
 \begin{tabular}{@{}lrrrr@{}}
@@ -780,7 +775,7 @@ $654\times$ here and $614\times$ there) so the axes are in the same units:
 Axis & cycle-4 & cycle-6 & cycle-8 \\
 \midrule
 both: max-deg $\to$ cover LP & $8.8\times$ & $72.7\times$ & $654\times$ \\
-inference: cover LP $\to$ entropic & \multicolumn{3}{c}{$1.25$--$1.43\times$ (3 or 10 norms)} \\
+inference: cover LP $\to$ entropic & \multicolumn{3}{c}{$1.25$--$1.43\times$ (3 or 11 norms)} \\
 statistics: $bs{=}1 \to bs{=}2$ & $1.21\times$ & $1.87\times$ & $2.70\times$ \\
 \bottomrule
 \end{tabular}
@@ -793,7 +788,7 @@ regime-dependent: on these homogeneous synthetic cycles they are
 comparable ($1.2$--$2.7\times$ against $1.25$--$1.43\times$), and it is
 heterogeneous real data that separates them, where on the $109$-query
 short suite the statistics step (cover $bs{=}1\to bs{=}2$) is
-$30\times$ against an inference gap of $2.8\times$ with ten norms ($56\times$ against
+$30\times$ against an inference gap of $2.8\times$ with eleven norms ($56\times$ against
 $2.6\times$ with three).
 
 The diagonal comparison is the practical one. The \emph{cheap} LP on rich
@@ -816,7 +811,7 @@ cycles over distinct relations, the first $20$K rows of each relation in
 file order. IMDb (JOB snapshot): the $200$ most-voted feature films (a
 dense, popularity-biased slice), nine cast roles, two company types and
 keywords, one relation each. Medians over queries; ``polymatroid'' is the $2^{|V|}$ program and
-``flow'' our flow LP, both over the $bs{\le}2$ catalog. Upper block: every program with ten norms
+``flow'' our flow LP, both over the $bs{\le}2$ catalog. Upper block: every program with eleven norms
 ($\mathcal{P}=\{1,\ldots,10,\infty\}$), the comparison against LpBound;
 lower block: three ($\{1,2,\infty\}$, the cover LP's default). Exact counts
 by DuckDB ($60$\,s budget); queries that time out are unchecked, not
@@ -832,7 +827,7 @@ $|V|{=}6$ queries, run first, pay most of them.}
 \cmidrule(lr){2-4}\cmidrule(lr){5-7}
 $|V|$ & $6$ & $8$ & $10$ & $6$ & $8$ & $10$ \\
 \midrule
-\multicolumn{7}{@{}l}{\emph{Ten norms on both sides:}} \\
+\multicolumn{7}{@{}l}{\emph{Eleven norms on both sides:}} \\
 cover $bs{=}1$ / entropic & $2.66\times$ & $3.10\times$ & $3.00\times$ & $5.14\times$ & $6.75\times$ & $5.96\times$ \\
 cover $bs{=}2$ / entropic & $0.022\times$ & $0.0037\times$ & $0.0011\times$ & $0.79\times$ & $0.35\times$ & $0.15\times$ \\
 polymatroid $bs{=}2$ / entropic & $0.0042\times$ & $0.00058\times$ & $0.000098\times$ & $0.10\times$ & $0.034\times$ & $0.012\times$ \\
@@ -854,7 +849,7 @@ $bs{=}2$, cataloged & $0.56$ & $0.007$ & $0.010$ & --- & --- & --- \\
 \end{tabular}
 \end{table*}
 
-Table~\ref{tab:long-suite} extends the comparison to $|V|{=}6$--$10$ on two hash-pinned suites (Section~\ref{sec:suite}). With ten norms on both sides the two axes
+Table~\ref{tab:long-suite} extends the comparison to $|V|{=}6$--$10$ on two hash-pinned suites (Section~\ref{sec:suite}). With eleven norms on both sides the two axes
 diverge with $|V|$ on Hetionet: the inference gap stays at
 $2.7$--$3.1\times$, while $bs{=}2$ statistics are $46$/$270$/$920\times$
 tighter than the entropic bound at the median under the cover LP and
@@ -863,7 +858,7 @@ $120/120$ queries.
 With exact counts of $10^{4}$--$10^{9}$, this is not a small-count artifact. Nor is it a prefix artifact: with each relation
 replaced by a uniform $20$K-row sample of the full file (two fixed seeds)
 the $|V|{=}6$ medians are $46$/$46$/$49\times$ (cover) and
-$236$/$233$/$244\times$ (polymatroid) for prefix/seed\,1/seed\,2, all $40$ below LpBound in each. A $30$K-row prefix (a larger relation in $39$ of the $40$ queries) keeps the cover margin at $46\times$ ($40/40$). Query-level bootstrap $95\%$ intervals ($10{,}000$
+$236$/$233$/$244\times$ (polymatroid) for prefix/seed\,1/seed\,2, all $40$ below LpBound in each. A $30$K-row prefix (a larger relation in $39$ of the $40$ queries) keeps the cover margin at $46\times$ ($40/40$). Query-level bootstrap $95\%$ intervals (over the registered queries of these fixed databases; $10{,}000$
 resamples) keep every median ratio to LpBound in this table and in
 Table~\ref{tab:gcare} on one side of $1$, except the cover LP on block
 statistics on AIDS ($[0.42, 1.00]$). None of the $864$ bounds with an exact count
@@ -892,15 +887,14 @@ entropic LP at these sizes. The last row measures what a system would materializ
 table, orientation and interface holds $676$ entries from $91$ block
 builds, costs $527$\,s in total against the $11{,}765$\,s the per-query
 script spent, and returns the identical bound on $120/120$ queries. It
-saturates by the $68$th query, after which a $bs{=}2$ estimate costs
-$7$--$10$\,ms, $100$--$220\times$ below the entropic LP
+saturates by the $68$th query, after which a three-norm $bs{=}2$ cover estimate costs $7$--$10$\,ms, $100$--$220\times$ below the $2^{|V|}$ entropic program (not LpBound's millisecond flow LP)
 at $|V|{=}8$--$10$ and below it on $60/60$ of the second half. The
-$61\times$ collection overhead is paid once per database.
+$61\times$ collection overhead is paid once per database snapshot.
 
 \emph{IMDb.} The second suite is a different kind of graph (a star
 schema in which every relation joins movies to people, companies or
 keywords) and separates the axes only with a program that can use the
-statistics. With ten norms the inference gap is $5.1$--$6.8\times$, and
+statistics. With eleven norms the inference gap is $5.1$--$6.8\times$, and
 $bs{=}2$ statistics are only $1.3$/$2.9$/$6.8\times$ tighter than the
 entropic bound under the cover LP (level with or below that gap, and
 above the entropic bound on $8$ of the $40$ queries at $|V|{=}6$), but
@@ -934,7 +928,7 @@ sharing the machine.
 G-CARE benchmark~\cite{park2020gcare} on its AIDS and YAGO graphs ($241$
 and $366$; query sets fixed by G-CARE, size caps below ours), with
 labelled, directed edges as binary relations filtered by the query's
-vertex labels, homomorphism counts, and ten norms on both sides
+vertex labels, homomorphism counts, and eleven norms on both sides
 (Table~\ref{tab:gcare}). Our exact counts equal G-CARE's on $241/241$ AIDS
 queries; on YAGO they differ on $49$ of the $192$ we evaluate, in both
 directions and under every semantics we tried (directed or not, injective
@@ -942,8 +936,7 @@ or not; over all $364$ cyclic YAGO queries with a count, $80$ differ). A
 second implementation of the same semantics that reads G-CARE's raw files
 without DuckDB reproduces our count on all $49$, and $45$ of them lie in
 G-CARE's Petal families ($45$ of $100$ Petal queries, against $4$ of $92$
-others), which casts doubt on those published counts. We
-therefore check validity against our counts (one YAGO bound, $26$, lies
+others), so the gap is in semantics or preprocessing we could not reconstruct, not settled either way. We check validity against our counts (one YAGO bound, $26$, lies
 below G-CARE's $33$ but above our $17$). $174$ YAGO queries exceed the
 prototype (a relation over $300$K rows or a pair join over $20$M) and are
 reported, not run. Under the polymatroid program, block statistics are
@@ -960,7 +953,7 @@ the statistics.
 
 \begin{table}[t]
 \centering
-\caption{G-CARE cyclic queries, ten norms on both sides (medians). YAGO
+\caption{G-CARE cyclic queries, eleven norms on both sides (medians). YAGO
 queries with a relation over $300$K rows ($144$) or a pair join over
 $20$M ($30$) are not run. Exact counts by DuckDB; G-CARE's own counts
 agree on $241/241$ AIDS and $143/192$ YAGO queries.}
@@ -1014,22 +1007,7 @@ $0.32$\,s per block, but is an estimate, not a bound. Post hoc, it does pick whi
 $|V|{=}6$ query's six blocks by how much a sketch of their norm lowers the
 bound and joining the top three recovers the full $bs{\le}2$ bound on the median of $34$ Hetionet queries (top two on $32$ IMDb ones), against half of that gain for a random three. Timed end to end, that plan takes a median $0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper) but $1.39\times$ on IMDb, where the join-free statistics, sketches and ranking cost more than the three joins they skip.
 
-\emph{A spectral reading (post hoc).} For an even $k$-cycle of binary relations the
-count is a trace, $|\query|=\mathrm{Tr}(A_1\cdots A_k)$ for the incidence
-matrices $A_i$ ($v_i\times v_{i+1}$), and the common-neighbour $\ell_2$
-norm is the Frobenius (Schatten-$2$) norm of the block product
-$B=A_iA_{i+1}$. Hölder's inequality for Schatten norms gives, over $m=k/2$
-consecutive blocks, $|\query|\le\prod_j\|B_j\|_{S_m}$, and
-$\|B\|_{S_m}^m\le\sigma_{\max}(B)^{m-2}\|B\|_F^2$ with $\sigma_{\max}$
-bounded above by a Collatz--Wielandt certificate on $B^{\top}B$. Two
-numbers per block, both from the pair join ($\sigma_{\max}$ lies outside the
-polymatroid catalog), give a bound tighter than the polymatroid program on
-$96/240$ long-suite queries (by a median $1.25\times$ there, though $1.11\times$
-looser over all) and never below an exact count; with each block's top
-$24$ singular values (Lanczos; uncertified, yet above every exact count)
-it is tighter on $220/240$ and takes IMDb at $|V|{=}10$ from
-$14.9\times$ to $3.2\times$ the truth. The next step on the statistics axis may thus be spectral order rather
-than block size. On $22$ small random cycles, a search over databases with the same
+\emph{A spectral reading (post hoc).} On even cycles the common-neighbour $\ell_2$ is the Frobenius norm of a block product, and a trace--H\"older bound from it and a certified top singular value is tighter than the polymatroid program on $96/240$ long-suite queries (looser overall; $220/240$ with uncertified Lanczos estimates; extended version), so the next step on the statistics axis may be spectral order rather than block size. On $22$ small random cycles, a search over databases with the same
 $bs{\le}2$ statistics puts at most $1.5\times$ of the gap on the program and
 at least $2.5\times$ on the statistics (cycle-$4$ medians).
 
@@ -1137,8 +1115,8 @@ every order's flow bound is valid by their Theorem~1.5(a); for $\ell_p$
 we have no proof and certify each bound instead. The $2^{|V|}$
 polymatroid bound over the \emph{unrelaxed} constraints is valid for
 every $p$ (each $\ell_p$ constraint holds on the join's entropy, as in
-Theorem~\ref{thm:composition}), so a flow bound at or above it is valid.
-Every real-data flow bound passes (ten norms: $109/109$ short,
+Theorem~\ref{thm:composition}), so a flow bound at or above it is valid; a flow bound counts as a guarantee only with this certificate, and where it cannot be computed (the sweep's $k{=}16$) a guarantee falls back to the cover LP on the same statistics (Theorem~\ref{thm:composition}).
+Every real-data flow bound passes (eleven norms: $109/109$ short,
 $240/240$ long-suite, $433/433$ G-CARE and $80/80$ resampled slice
 queries, equal on $633$, to $10^{-6}$), as do the synthetic sweep's at
 $k{=}12$ and $14$ (equal; $k{=}16$, where the $2^{|V|}$ program does not
@@ -1153,7 +1131,7 @@ keeps every constraint centered on the second class; no single order
 keeps them all, so we solve the flow LP over the $4|V|$ walk and
 alternating orders and keep the best bound. Over the full $bs{=}2$ catalog
 (every block, every interface) it equals the $2^{|V|}$ polymatroid bound
-on $12/12$ family--seed pairs (three norms; $7/12$ with ten) and on every synthetic even cycle up to $k{=}14$ ($24$\,min for the $2^{|V|}$ program on this catalog at $k{=}14$) and on
+on $12/12$ family--seed pairs (three norms; $7/12$ with eleven) and on every synthetic even cycle up to $k{=}14$ ($24$\,min for the $2^{|V|}$ program on this catalog at $k{=}14$) and on
 the triangle,
 and loses a constant $1.56$--$1.59\times$ on cycle-$5$/$7$, where one
 wedge must remain lost;
@@ -1162,13 +1140,13 @@ $4$--$73$\,ms per order and $0.03$--$4.4$\,s in total at $k{=}3$--$16$
 (Figure~\ref{fig:crossover}). What it \emph{finds} matters more than what
 it costs: the cover LP, confined to one hyperpath, leaves most of the
 block statistics unused, and the flow LP over the same catalog is
-$1.5$--$3.8\times$ tighter on the small families (ten norms:
+$1.5$--$3.8\times$ tighter on the small families (eleven norms:
 $1.6$--$3.8\times$) and, with three norms, $2.2\times$ at $k{=}3$ growing
 to $288\times$ at $k{=}16$ (uncertified) on the sweep (below the $bs{=}1$ optimum by
 $2$--$800\times$ where the cover LP manages $1$--$6\times$;
 Figure~\ref{fig:positioning}). On real data the $2^{|V|}$ program over
-the same catalog is cheap enough to solve directly (ten norms: median
-$0.02$/$0.18$/$2.4$\,s at $|V|{=}6$/$8$/$10$ on Hetionet, and $63$\,s for the slowest, a $|V|{=}12$ G-CARE query), so the ten-norm real-data bounds we
+the same catalog is cheap enough to solve directly (eleven norms: median
+$0.02$/$0.18$/$2.4$\,s at $|V|{=}6$/$8$/$10$ on Hetionet, and $63$\,s for the slowest, a $|V|{=}12$ G-CARE query), so the eleven-norm real-data bounds we
 report are its optimum. The flow LP equals it on $633$ of the $862$ reported
 queries and is within $2.41\times$ on all; it is the route beyond
 $|V|{\approx}12$. On the $120$-query Hetionet long suite the median gain
@@ -1199,8 +1177,8 @@ $\ell_1$, variance $\ell_2$, worst case $\ell_\infty$); repeating the
 sweep on four families (cycle-4/6, $K_4$, chordal-5; Figure~\ref{fig:pvalue}) confirms this is not
 cycle-specific---$\ell_2$ helps in every family and $p$ beyond
 $\{1,2,\infty\}$ adds $<2.4\%$ to the cover LP. This does not hold for
-the entropic bound, which gains a median $1.9$--$6.7\times$ from ten norms
-on the real suites; comparisons against it therefore use ten norms on
+the entropic bound, which gains a median $1.9$--$6.7\times$ from eleven norms
+on the real suites; comparisons against it therefore use eleven norms on
 both sides (Section~\ref{sec:experiments}).
 
 \begin{figure}[t]
@@ -1216,14 +1194,12 @@ additional norms add ${<}2.4\%$.}
 \subsection{Bound-Guided Join Ordering}
 \label{sec:robustness}\label{sec:wcoj}
 
-\emph{Binary ordering in an engine.} (Greedy WCOJ ordering by the per-step residuals is $1.3\%$ worse at the median over $66$ queries; extended version.) Can the cover bound guide
-\emph{binary} join ordering inside a modern engine, and how does that compare to the
-engine's own optimizer? We load each query into DuckDB, compute a
+\emph{Binary ordering in an engine.} (Greedy WCOJ ordering by the per-step residuals is $1.3\%$ worse at the median over $66$ queries; extended version.) We load each query into DuckDB, compute a
 left-deep order by minimizing the classic $C_{\mathrm{out}}$
 cost~\cite{cluet1995complexity} (sum of the bound's estimated intermediate
 cardinalities), inject it by disabling DuckDB's join-order optimizer, and
 time real execution. As a reference we also run DuckDB's own optimizer
-(v1.5.4; its cardinality estimates come from table statistics such as
+(its cardinality estimates come from table statistics such as
 HyperLogLog distinct counts).
 
 Two findings frame the result. A cardinality \emph{upper bound} is a
@@ -1231,7 +1207,7 @@ conservative cost model, so ranking plans by it need not match an engine
 optimizer on average (over all left-deep orders the cover LP also
 correlates less with true intermediate cost than the entropic bound:
 Kendall $\tau$ $0.27$--$0.87$ against $0.33$--$0.94$); and on a single
-cycle every proper sub-query is acyclic, where the LP has no slack
+cycle every proper sub-query is acyclic, where the LP has no cyclic slack
 (Section~\ref{sec:whycyclic}), so the bound changes the ranking only when
 an \emph{intermediate} sub-query is itself cyclic (cliques, chordal cycles).
 
@@ -1248,7 +1224,7 @@ $5.9\times$ heavier tail for the engine's optimizer.
 
 \begin{table}[t]
 \centering
-\caption{End-to-end robustness: slowdown over the best evaluated plan
+\caption{Execution robustness (execution time only): slowdown over the best evaluated plan
 (DuckDB, forced left-deep order vs.\ the engine's own optimizer).
 Lower is better; the \emph{tail} row is the worst case over all queries.}
 \label{tab:robust}
@@ -1273,17 +1249,16 @@ Hetionet $\triangle$ (real)& $3.56\times$ & $1.11\times$ \\
 
 \paragraph{The tail, over a broader distribution}
 Of six shapes at two sizes and three seeds, $24$ queries survive
-(cycle-3/4, $K_4$, diamond; cycle-5 and chordal-5 censored entirely).
-Medians are close ($1.03\times$ vs.\ $0.93\times$) while the tails
-diverge: the bound-guided P95/max are $1.21\times$/$1.31\times$ against
-DuckDB's $5.82\times$/$8.17\times$ (with $n{=}24$, P95 is the
-second-largest value). Censoring uses the AGM bound, which
-depends only on relation sizes---censoring by our own bound would drop
-exactly the queries where it is loose. One caveat: the reference is the
-best \emph{forced left-deep} order, so bound-guided is ${\ge}1$ by
-construction while DuckDB, free to go bushy, scores below $1$ on median.
-This shows a bound-guided choice avoids a plan space's tail, not that it
-beats the engine.
+(cycle-3/4, $K_4$, diamond; cycle-5 and chordal-5 censored entirely, by
+the AGM bound, which depends only on relation sizes, so that our own
+bound cannot select its favorable cases). Medians are close
+($1.03\times$ vs.\ $0.93\times$) while the tails diverge: the
+bound-guided P95/max are $1.21\times$/$1.31\times$ against DuckDB's
+$5.82\times$/$8.17\times$ (with $n{=}24$, P95 is the third-largest
+value). The reference is the best \emph{forced left-deep} order, so
+bound-guided is ${\ge}1$ by construction while DuckDB, free to go bushy,
+scores below $1$ on median: a bound-guided choice avoids a plan space's
+tail; it does not beat the engine.
 
 \paragraph{Real data, block statistics} The same protocol on the $40$
 IMDb cycles at $|V|{=}6$, with four estimators behind $C_{\mathrm{out}}$,
@@ -1338,8 +1313,7 @@ max-degree constraints ($\ell_\infty$-norms).
 LpBound~\cite{zhang2025lpbound} generalizes to all $\ell_p$-norms,
 showing that intermediate norms capture degree skew that max-degree
 misses.
-Two results since then bear directly on our reading. Im et
-al.~\cite{im2025simple} compute the polymatroid bound for simple degree
+Since then, Im et al.~\cite{im2025simple} compute the polymatroid bound for simple degree
 constraints by a polynomial flow LP and show the non-simple case
 ($|X|{\le}2$, $|Y|{\le}3$, the shape of a $bs{=}2$ block constraint)
 as hard as the general polymatroid bound, which is why our flow bound over blocks fixes an attribute order;
@@ -1362,9 +1336,7 @@ predicates on relational workloads, following pessimistic
 CE~\cite{cai2019pessimistic}; we target graph patterns and a per-step
 decomposition.
 
-The entropy framework of Abo Khamis et al.~\cite{abokhamis2024lpnorm},
-under which $\ell_p$-norm constraints are information inequalities, is
-what Theorem~\ref{thm:composition} applies to block-joined relations.
+Theorem~\ref{thm:composition} applies the entropy framework of Abo Khamis et al.~\cite{abokhamis2024lpnorm} ($\ell_p$ constraints as information inequalities) to block-joined relations.
 
 \paragraph{Summaries and learned estimators}
 COLOR~\cite{deeds2025color} summarizes and GNCE~\cite{schwabe2024gnce}, SPACE~\cite{aytimur2025space} and FactorJoin~\cite{wu2023factorjoin} learn point estimates without a guarantee, for which pessimistic bounds are the safety fallback~\cite{abokhamis2025pessimistic}; PathCE~\cite{wang2025pathce} keeps an upper bound over path summaries.
@@ -1382,7 +1354,7 @@ they do not beat max-degree ordering in general.
 \label{sec:practical}
 
 \paragraph{When to use LpH-CEG}
-Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$: gains are rare on triangles and grow with cycle length; without a cycle, skip the LP. Degree
+Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$ for the cover LP (the entropic and polymatroid programs gain from more norms): gains are rare on triangles and grow with cycle length; without a cycle, skip the LP. Degree
 sequences can come from catalog histograms
 ($\lpnorm{\mathbf{d}}{p} = (\sum_i c_i d_i^p)^{1/p}$ over buckets
 $(d_i, c_i)$) at \texttt{ANALYZE} time (not evaluated here).
@@ -1397,7 +1369,7 @@ Use $bs{=}1$ when the bound is re-solved many times per statistics build
 and $bs{\ge}2$ when the pair joins can be materialized ahead of the
 workload.
 
-\paragraph{Under predicates} Block statistics of unfiltered relations stay valid under a selection (degrees only shrink) but loosen. With a production-year predicate on every movie variable of the $40$ IMDb $|V|{=}6$ cycles, exact filtered single-relation statistics plus a predicate-free block catalog (ten norms) put the polymatroid bound a median $1.9\times$ below LpBound on $40/40$ queries when $46\%$ of rows pass ($\text{year}{\ge}2005$), but only $1.03\times$ ($22/40$) at $18\%$ ($\text{year}{<}1995$); per-predicate block statistics stay $4.2$--$5.3\times$ below, and no bound falls below the exact count ($240$ checks). Selective predicates thus need costly per-predicate block statistics, the main obstacle to $bs{\ge}2$ under general predicates, not the program.
+\paragraph{Under predicates} Block statistics of unfiltered relations stay valid under a selection (degrees only shrink) but loosen. With a production-year predicate on every movie variable of the $40$ IMDb $|V|{=}6$ cycles, exact filtered single-relation statistics plus a predicate-free block catalog (eleven norms) put the polymatroid bound a median $1.9\times$ below LpBound on $40/40$ queries when $46\%$ of rows pass ($\text{year}{\ge}2005$), but only $1.03\times$ ($22/40$) at $18\%$ ($\text{year}{<}1995$); per-predicate block statistics stay $4.2$--$5.3\times$ below, and no bound falls below the exact count ($240$ checks). Selective predicates thus need costly per-predicate block statistics, the main obstacle to $bs{\ge}2$ under general predicates, not the program.
 
 %% ===================================================================
 \section{Conclusion}
@@ -1405,17 +1377,17 @@ workload.
 
 Replacing a max-degree product with a fractional cover LP is worth a
 great deal ($614\times$ at synthetic cycle-8), but on single-relation statistics
-little is left after it: the cover LP is optimal among fixed-hyperpath weightings valid on every database (Proposition~\ref{prop:necessity}) yet sits
+little is left after it: the cover LP is optimal among fixed-hyperpath weightings valid on every database without self-joins (Proposition~\ref{prop:necessity}) yet sits
 $1.25$--$1.43\times$ (synthetic) and a median $2.7$--$6.8\times$ on
 Hetionet and IMDb ($59\times$ on AIDS) above the entropic optimum, which
-LpBound's flow LP reaches in polynomial time. With ten norms on both
+LpBound's flow LP reaches in polynomial time. With eleven norms on both
 sides, block statistics put the cover LP a median $46$--$920\times$ below
 LpBound on rule-selected Hetionet cycles ($|V|{=}6$--$10$), but only $1.3$--$6.8\times$ on
 IMDb, at or below the inference gap. The polymatroid program over block
 statistics, valid for every $p$, recovers $9.7$--$87\times$ there and
 beats the cover LP by $5.0$--$11.6\times$ against $2.7$--$6.8\times$ on
 single-relation statistics, so richer statistics reopen the program. On
-G-CARE it gains $15$--$24\times$, while under the cover LP with ten norms
+G-CARE it gains $15$--$24\times$, while under the cover LP with eleven norms
 the inference gap dominates on AIDS. Our $\ell_p$ flow LP tracks the
 polymatroid optimum in polynomial time (equal on $633$ of $862$ queries),
 is certified per query rather than proved valid for $\ell_p$, and scales

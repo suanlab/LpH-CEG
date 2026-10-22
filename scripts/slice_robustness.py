@@ -3,7 +3,7 @@
 The long suite caps each relation at its first 20K rows in file order
 (``evaluate_query_suite.MAX_ROWS``).  This reruns the |V|=6 queries with
 each relation replaced by a uniform random sample of 20K rows of the full
-file (two seeds, fixed in advance) and recomputes, with ten norms on both
+file (two seeds, fixed in advance) and recomputes, with eleven norms on both
 sides as in ``pset_fair.py``, the entropic bound and the cover and flow
 LPs.  The question is whether the block-statistics margins over LpBound
 (``cover_bs2 / entropic``, ``flow_bs2 / entropic``) move with the slice.

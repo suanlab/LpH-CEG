@@ -1,4 +1,4 @@
-"""Query-level bootstrap intervals for the headline medians (ten norms).
+"""Query-level bootstrap intervals for the headline medians (eleven norms).
 
 The real-data results are medians of per-query ratios over 40-241 queries.
 This resamples queries with replacement (10,000 draws, fixed seed) and

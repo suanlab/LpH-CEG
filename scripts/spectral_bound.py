@@ -17,7 +17,7 @@ rest by the remaining Frobenius mass,
 
 inflated by a relative 1e-6 against Lanczos error.  This is a valid upper
 bound on the true count whenever the singular values are accurate, and it
-is compared with the bs<=2 polymatroid bound (ten norms) of
+is compared with the bs<=2 polymatroid bound (eleven norms) of
 ``poly_certify.csv``, the entropic LpBound and the exact count.
 
 Exploratory: the statistic (top singular values of block products) is

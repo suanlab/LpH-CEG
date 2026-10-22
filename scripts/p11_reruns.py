@@ -1,4 +1,4 @@
-"""Rerun the remaining P3-only comparisons with ten norms on both sides.
+"""Rerun the remaining P3-only comparisons with eleven norms on both sides.
 
 After `pset_fair.py` (long suites), three comparisons still used only
 P3 = {1, 2, inf}: the 109-query short Hetionet suite (3K-row prefixes),

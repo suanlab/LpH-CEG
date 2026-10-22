@@ -140,7 +140,7 @@ run_experiments() {
     python scripts/stats_catalogue.py         # amortised statistics catalogue, same suite
     python scripts/lpbound_pset_check.py      # entropic baseline with p in {1..10, inf}
     python scripts/pset_fair.py               # both sides with p in {1..10, inf} (~2 h)
-    python scripts/p11_reruns.py              # short suite, 2x2 and sweep with ten norms
+    python scripts/p11_reruns.py              # short suite, 2x2 and sweep with eleven norms
     python scripts/poly_certify.py            # flow >= polymatroid on every long-suite query (P11; ~5 h)
     python scripts/poly_certify.py --short    # ... and on the 109-query short suite
     python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)

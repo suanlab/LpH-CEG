@@ -3,9 +3,9 @@
 The long suite caps each relation at its first 20K rows in file order
 (``evaluate_query_suite.MAX_ROWS``).  This reruns the |V|=6 queries with the
 same file-order rule at 20K (the reference, through this same code path)
-and at 30K rows, with ten norms on both sides as in ``pset_fair.py``, and
+and at 30K rows, with eleven norms on both sides as in ``pset_fair.py``, and
 reports the headline ratio of Table long-suite: the bs<=2 cover LP over the
-entropic bound (LpBound).  The flow LP is left out: at 20K its ten-norm run
+entropic bound (LpBound).  The flow LP is left out: at 20K its eleven-norm run
 already takes a median 403 s per query, and block-statistics collection
 grows faster than the data (a 50K-row trial did not finish one query's
 statistics in 20 min), which is the limit this experiment probes.

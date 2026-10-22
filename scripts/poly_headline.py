@@ -3,7 +3,7 @@
 The ``2**|V|`` polymatroid bound over the unrelaxed bs<=2 catalog is valid
 for every p without further argument, at least as tight as the flow LP,
 and fast at the real-data sizes (|V| <= 12).  This joins the stored
-ten-norm values -- the polymatroid and flow bounds (``poly_certify*.csv``,
+eleven-norm values -- the polymatroid and flow bounds (``poly_certify*.csv``,
 ``gcare_poly_certify.csv``, ``slice_poly_certify.csv``), the entropic and
 cover bounds (``pset_fair.csv``, ``p11_short.csv``, ``gcare_eval.csv``,
 ``slice_robustness.csv``) and the exact counts -- and reports, per suite
