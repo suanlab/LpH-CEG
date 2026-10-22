@@ -30,7 +30,7 @@ bounds remain far from the truth in absolute terms -- true counts here are
 0-70 while bs=2 returns 291-827 -- so what moved is the ordering, not the
 arrival at exactness.
 
-Output: results/ablation/real_frontier.csv
+Output: results/ablation/real_frontier.csv (and real_frontier_skipped.csv)
 """
 
 from __future__ import annotations
@@ -149,9 +149,11 @@ def main() -> None:
     print(f"  {len(qs)} queries with n_vars <= {MAX_VARS} (rule fixed in advance)\n")
 
     out: list[dict[str, object]] = []
+    skipped: list[dict[str, object]] = []
     for i, q in enumerate(qs):
         built = build(q)
         if built is None:
+            skipped.append({"query_id": q["query_id"], "reason": "no_data"})
             continue
         query, data = built
         try:
@@ -164,6 +166,7 @@ def main() -> None:
             ent = estimate_lpbound_entropic(query, data, p_values=P_VALUES)
         except Exception as exc:
             print(f"  {q['query_id']}: skipped ({type(exc).__name__})")
+            skipped.append({"query_id": q["query_id"], "reason": type(exc).__name__})
             continue
         out.append(
             {
@@ -186,7 +189,7 @@ def main() -> None:
     r1 = [float(r["bs1_over_entropic"]) for r in out]
     r2 = [float(r["bs2_over_entropic"]) for r in out]
     beat = sum(1 for r in out if r["bs2_beats_entropic"])
-    print(f"\n  evaluated {len(out)} queries")
+    print(f"\n  evaluated {len(out)} queries, skipped {len(skipped)}")
     print(f"  bs=1 / entropic : median {st.median(r1):.3f}x   (>1 = looser)")
     print(f"  bs=2 / entropic : median {st.median(r2):.3f}x   min {min(r2):.3f}x")
     print(
@@ -217,7 +220,11 @@ def main() -> None:
         w = csv.DictWriter(f, fieldnames=list(out[0].keys()))
         w.writeheader()
         w.writerows(out)
-    print(f"\nWrote {d / 'real_frontier.csv'}")
+    with open(d / "real_frontier_skipped.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["query_id", "reason"])
+        w.writeheader()
+        w.writerows(skipped)
+    print(f"\nWrote {d / 'real_frontier.csv'} and real_frontier_skipped.csv")
 
 
 if __name__ == "__main__":

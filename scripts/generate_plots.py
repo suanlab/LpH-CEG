@@ -708,7 +708,7 @@ def plot_positioning() -> None:
         color=COLORS["lph"],
     )
     ax.annotate(
-        "$k{=}12$",
+        f"$k{{=}}{ks[-1]}$",
         (cover_ms[-1], gap[-1]),
         textcoords="offset points",
         xytext=(4, 4),
@@ -723,7 +723,7 @@ def plot_positioning() -> None:
         "^--",
         color=COLORS["ceg"],
         markersize=6,
-        label="CEG$_M$ / PANDA ($\\ell_\\infty$)",
+        label="CEG$_M$ / MOLP ($\\ell_\\infty$)",
     )
 
     # Statistics axis: the same two programs on bs=2 block statistics.
@@ -749,7 +749,7 @@ def plot_positioning() -> None:
             f"$k{{=}}{fl_k[-1]}$",
             (fl_x2[-1], fl_y2[-1]),
             textcoords="offset points",
-            xytext=(-22, 2),
+            xytext=(6, -3),
             fontsize=7,
             color="tab:purple",
         )

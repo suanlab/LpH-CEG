@@ -76,6 +76,9 @@ def _tex_forms(claim: str, printed: float) -> list[str]:
             forms.append(plain.rstrip("0").rstrip("."))
         elif len(plain) > 3:
             forms.append(f"{int(plain):,}".replace(",", "{,}"))
+            # tables print large numbers as m{\cdot}10^{e}
+            e = len(plain) - 1
+            forms.append(f"{int(plain) / 10**e:g}{{\\cdot}}10^{{{e}}}")
     return forms
 
 
@@ -84,6 +87,8 @@ def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-a
 
     Non-fatal: a number can legitimately appear only in a figure or in a
     derived form; the list exists to catch pins that outlived their text.
+    Pins labelled "internal: ..." guard a CSV fact the paper relies on
+    without printing it, and are not expected in main.tex.
     """
     import re
 
@@ -91,6 +96,8 @@ def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-a
     out = []
     for entry in checks:
         claim, printed = entry[0], float(entry[2])
+        if claim.startswith("internal: "):
+            continue
         forms = _tex_forms(claim, printed)
         if not any(re.search(rf"(?<![\d.]){re.escape(f)}(?![\d])", tex) for f in forms):
             out.append(f"{claim} [{forms[-1]}]")
@@ -332,12 +339,16 @@ def main() -> None:
         ),
         # -- ablations ------------------------------------------------------
         (
-            "p beyond {1,2,inf} adds <2.4%",
-            max(
-                (float(r["{1,1.5,2,3,5,inf}"]) / float(r["{1,2,inf}"]) - 1) * 100
-                for r in pv
-            ),
-            2.3615,
+            "p beyond {1,2,inf} adds (<2.4%), rounded up to 0.1%",
+            math.ceil(
+                max(
+                    (float(r["{1,1.5,2,3,5,inf}"]) / float(r["{1,2,inf}"]) - 1) * 100
+                    for r in pv
+                )
+                * 10
+            )
+            / 10,
+            2.4,
         ),
         (
             "LP complementary on cycle-6 (1.57x)",
@@ -387,7 +398,7 @@ def main() -> None:
         ),
         # -- Step-5 obligation over the Shannon cone ------------------------
         (
-            "Shannon-cone checks all certified",
+            "internal: Shannon-cone checks all certified",
             sum(1 for r in shannon if r["shannon_provable"] == "True"),
             len(shannon),
         ),
@@ -518,25 +529,25 @@ def main() -> None:
         ),
         # -- AGM + pair-join sizes: the "known trick" baseline --------------
         (
-            "AGM+pairjoins/entropic median |V|=6 (0.067)",
-            pick(apj, "median_agm_pairjoins_over_entropic", n_vars="6"),
-            0.067,
-            0.01,
+            "AGM over pair-join sizes below entropic, smallest median (7x)",
+            min(1 / float(r["median_agm_pairjoins_over_entropic"]) for r in apj),
+            7,
+            0.5 / 7,
         ),
         (
-            "AGM+pairjoins/entropic median |V|=10 (0.085)",
-            pick(apj, "median_agm_pairjoins_over_entropic", n_vars="10"),
-            0.085,
-            0.01,
+            "AGM over pair-join sizes below entropic, largest median (15x)",
+            max(1 / float(r["median_agm_pairjoins_over_entropic"]) for r in apj),
+            15,
+            0.5 / 15,
         ),
         (
-            "bs2/AGM+pairjoins median |V|=6 (0.22)",
+            "internal: bs2/AGM+pairjoins median |V|=6 (0.22)",
             pick(apj, "median_bs2_over_agm_pairjoins", n_vars="6"),
             0.22,
             0.01,
         ),
         (
-            "bs2/AGM+pairjoins median |V|=10 (0.0047)",
+            "internal: bs2/AGM+pairjoins median |V|=10 (0.0047)",
             pick(apj, "median_bs2_over_agm_pairjoins", n_vars="10"),
             0.0047,
             0.02,
@@ -1025,7 +1036,7 @@ def main() -> None:
             0.01,
         ),
         (
-            "IMDb: median_flow_bs2_over_entropic |V|=8 (0.019)",
+            "internal: IMDb: median_flow_bs2_over_entropic |V|=8 (0.019)",
             pick(ims, "median_flow_bs2_over_entropic", n_vars="8"),
             0.019,
             0.03,
@@ -1600,19 +1611,19 @@ def main() -> None:
             0.05,
         ),
         (
-            "P11 both sides: imdb f2 |V|=6 (0.11)",
+            "internal: P11 both sides: imdb f2 |V|=6 (0.11)",
             pf("imdb", "6", "median_flow_bs2_over_entropic_p11"),
             0.11,
             0.05,
         ),
         (
-            "P11 both sides: imdb f2 |V|=8 (0.034)",
+            "internal: P11 both sides: imdb f2 |V|=8 (0.034)",
             pf("imdb", "8", "median_flow_bs2_over_entropic_p11"),
             0.034,
             0.05,
         ),
         (
-            "P11 both sides: imdb f2 |V|=10 (0.012)",
+            "internal: P11 both sides: imdb f2 |V|=10 (0.012)",
             pf("imdb", "10", "median_flow_bs2_over_entropic_p11"),
             0.012,
             0.05,
@@ -2283,6 +2294,42 @@ def main() -> None:
             0.5 / 87,
         ),
         (
+            "Table long-suite polymatroid/entropic: hetionet |V|=6 (0.0042)",
+            ph("hetionet", "6", "median_poly_over_entropic"),
+            0.0042,
+            5e-05 / 0.0042,
+        ),
+        (
+            "Table long-suite polymatroid/entropic: hetionet |V|=8 (0.00058)",
+            ph("hetionet", "8", "median_poly_over_entropic"),
+            0.00058,
+            5e-06 / 0.00058,
+        ),
+        (
+            "Table long-suite polymatroid/entropic: hetionet |V|=10 (0.000098)",
+            ph("hetionet", "10", "median_poly_over_entropic"),
+            0.000098,
+            5e-07 / 0.000098,
+        ),
+        (
+            "Table long-suite polymatroid/entropic: imdb |V|=6 (0.10)",
+            ph("imdb", "6", "median_poly_over_entropic"),
+            0.10,
+            0.005 / 0.10,
+        ),
+        (
+            "Table long-suite polymatroid/entropic: imdb |V|=8 (0.034)",
+            ph("imdb", "8", "median_poly_over_entropic"),
+            0.034,
+            0.0005 / 0.034,
+        ),
+        (
+            "Table long-suite polymatroid/entropic: imdb |V|=10 (0.012)",
+            ph("imdb", "10", "median_poly_over_entropic"),
+            0.012,
+            0.0005 / 0.012,
+        ),
+        (
             "poly headline: G-CARE aids below LpBound (15x)",
             1 / ph("gcare_aids", "all", "median_poly_over_entropic"),
             15,
@@ -2402,16 +2449,17 @@ def main() -> None:
             4,
         ),
         (
-            "flow within (2.41x) of polymatroid on every reported query (upper bound)",
-            float(
+            "flow within (2.41x) of polymatroid on every reported query, rounded up",
+            math.ceil(
                 max(
                     float(r["flow_over_poly_p11"])
                     for rs in (pce, gpe, spe, pse)
                     for r in rs
                 )
-                <= 2.41
-            ),
-            1,
+                * 100
+            )
+            / 100,
+            2.41,
         ),
         (
             "flow == polymatroid on (633) of the reported queries",

@@ -55,17 +55,23 @@ def count_join(
     query: QueryHypergraph,
     data: dict[str, tuple[tuple[str, ...], list[tuple[str, ...]]]],
 ) -> int:
-    """Brute-force join to get true cardinality."""
+    """Brute-force join under set semantics (the bounds' semantics).
+
+    The projected relations here contain duplicate rows; counting them as
+    a bag would put the "true" count above every set-semantics bound.
+    """
     rels = list(query.relations)
     if not rels:
         return 0
 
     first = rels[0]
     attrs_0, tuples_0 = data[first.name]
+    tuples_0 = list(dict.fromkeys(tuples_0))
     current = [dict(zip(attrs_0, t, strict=False)) for t in tuples_0]
 
     for rel in rels[1:]:
         attrs_r, tuples_r = data[rel.name]
+        tuples_r = list(dict.fromkeys(tuples_r))
         shared = set(current[0].keys()) & set(attrs_r) if current else set()
         shared_sorted = sorted(shared)
 
