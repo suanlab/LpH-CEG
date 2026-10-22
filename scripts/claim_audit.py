@@ -92,7 +92,11 @@ def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-a
     """
     import re
 
-    tex = (ROOT / "docs" / "paper" / "main.tex").read_text()
+    paper = ROOT / "docs" / "paper"
+    # numbers moved to the extended version still count as printed
+    tex = (paper / "main.tex").read_text() + (
+        paper / "extended_version.tex"
+    ).read_text()
     out = []
     for entry in checks:
         claim, printed = entry[0], float(entry[2])
@@ -173,6 +177,12 @@ def main() -> None:
         return pick(phl, col, suite=suite, group=group)
 
     jfu = load("results/large_scale/job_full.csv")
+    pbs = load("results/imdb/predicate_blocks_summary.csv")
+    vcs = load("results/characterization/voi_cost_summary.csv")
+    ssc = load("results/suite/slice_scale_summary.csv")
+    ssr = load("results/suite/slice_scale.csv")
+    vcr = load("results/characterization/voi_cost.csv")
+    pbr = load("results/imdb/predicate_blocks.csv")
     prk = load("results/cost/plan_ranking.csv")
 
     def gc(ds: str, col: str) -> float:
@@ -2213,6 +2223,118 @@ def main() -> None:
             0.005 / 0.94,
         ),
         (
+            "30K-row prefix: cover bs2 below LpBound at |V|=6 (46x)",
+            pick(ssc, "median_entropic_over_cover_bs2_p11", cap="30000"),
+            46,
+            0.5 / 46,
+        ),
+        (
+            "30K-row prefix: cover bs2 below LpBound on (40)/40",
+            pick(ssc, "n_cover_bs2_below_entropic_p11", cap="30000"),
+            40,
+        ),
+        (
+            "30K-row prefix: queries with a relation over 20K rows (39)",
+            sum(
+                int(r["max_relation_rows"]) > 20000 for r in ssr if r["cap"] == "30000"
+            ),
+            39,
+        ),
+        (
+            "internal: 30K-row prefix: invalid bounds",
+            sum(int(r["n_invalid"]) for r in ssc),
+            0,
+        ),
+        (
+            "internal: 30K-row prefix: 20K reference reproduces Table long-suite",
+            pick(ssc, "median_entropic_over_cover_bs2_p11", cap="20000"),
+            1 / ph("hetionet", "6", "median_cover2_over_entropic"),
+            0.005,
+        ),
+        (
+            "VOI plan time over joining every block: hetionet (0.67x)",
+            pick(vcs, "median_selected_over_full_time", suite="hetionet"),
+            0.67,
+            0.005 / 0.67,
+        ),
+        (
+            "VOI plan cheaper than joining every block: hetionet (33)/40",
+            sum(
+                float(r["selected_over_full_time"]) < 1
+                for r in vcr
+                if r["suite"] == "hetionet"
+            ),
+            33,
+        ),
+        (
+            "VOI plan time over joining every block: imdb (1.39x)",
+            pick(vcs, "median_selected_over_full_time", suite="imdb"),
+            1.39,
+            0.005 / 1.39,
+        ),
+        (
+            "predicates: rows passing year>=2005, median (46%)",
+            100
+            * statistics.median(
+                float(r["rows_filtered_over_unfiltered"])
+                for r in pbr
+                if r["predicate"] == "year>=2005"
+            ),
+            46,
+            0.5 / 46,
+        ),
+        (
+            "predicates: rows passing year<1995, median (18%)",
+            100
+            * statistics.median(
+                float(r["rows_filtered_over_unfiltered"])
+                for r in pbr
+                if r["predicate"] == "year<1995"
+            ),
+            18,
+            0.5 / 18,
+        ),
+        (
+            "predicates: year>=2005 catalog below LpBound (1.9x)",
+            1 / pick(pbs, "median_catalog_over_lpbound", predicate="year>=2005"),
+            1.9,
+            0.05 / 1.9,
+        ),
+        (
+            "predicates: year>=2005 catalog below LpBound on (40)/40",
+            pick(pbs, "n_catalog_below_lpbound", predicate="year>=2005"),
+            40,
+        ),
+        (
+            "predicates: year<1995 catalog below LpBound (1.03x)",
+            1 / pick(pbs, "median_catalog_over_lpbound", predicate="year<1995"),
+            1.03,
+            0.005 / 1.03,
+        ),
+        (
+            "predicates: year<1995 catalog below LpBound on (22)/40",
+            pick(pbs, "n_catalog_below_lpbound", predicate="year<1995"),
+            22,
+        ),
+        (
+            "predicates: per-predicate block stats below LpBound, low (4.2x)",
+            min(1 / float(r["median_oracle_over_lpbound"]) for r in pbs),
+            4.2,
+            0.05 / 4.2,
+        ),
+        (
+            "predicates: per-predicate block stats below LpBound, high (5.3x)",
+            max(1 / float(r["median_oracle_over_lpbound"]) for r in pbs),
+            5.3,
+            0.05 / 5.3,
+        ),
+        (
+            "predicates: bounds checked against exact counts (240)",
+            3 * sum(int(r["n_checked"]) for r in pbs),
+            240,
+        ),
+        ("predicates: invalid bounds (0)", sum(int(r["n_invalid"]) for r in pbs), 0),
+        (
             "JOB-medium co-actor+co-keyword cycle-4 (1.94x)",
             pick(jfu, "lp_ratio", name="JOB Co-actor+Co-keyword (full JOB-medium)"),
             1.94,
@@ -3021,9 +3143,10 @@ def main() -> None:
     absent = missing_from_paper(checks)
     print(
         f"  {len(checks) - len(absent)}/{len(checks)} pinned values occur in main.tex"
+        " or the extended version"
     )
     for m in absent:
-        print(f"    not in main.tex: {m}")
+        print(f"    not in the paper: {m}")
 
     if failures:
         print("\nDRIFTED CLAIMS (paper text must be updated or CSV regenerated):")

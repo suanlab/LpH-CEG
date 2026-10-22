@@ -1,0 +1,13 @@
+suite,plan,n,n_guard_fired,median,p95,max
+synthetic,duckdb,24,,0.973,6.188,8.172
+synthetic,bound,24,,1.040,1.283,1.313
+synthetic,guard_tau1,24,17,1.095,6.188,8.172
+synthetic,guard_tau10,24,0,0.973,6.188,8.172
+synthetic,guard_tau100,24,0,0.973,6.188,8.172
+synthetic,guard_tau1000,24,0,0.973,6.188,8.172
+imdb,duckdb,33,,0.434,1.178,1.981
+imdb,bound,33,,1.186,2.187,3.627
+imdb,guard_tau1,33,33,1.186,2.187,3.627
+imdb,guard_tau10,33,11,0.544,2.187,3.627
+imdb,guard_tau100,33,0,0.434,1.178,1.981
+imdb,guard_tau1000,33,0,0.434,1.178,1.981

@@ -1,0 +1,3 @@
+predicate,films_kept,n,n_empty,median_catalog_over_lpbound,median_oracle_over_lpbound,median_catalog_over_oracle,n_catalog_below_lpbound,n_checked,n_invalid
+year>=2005,81,40,0,0.5285,0.188,2.692,40,40,0
+year<1995,42,40,0,0.9689,0.24,3.618,22,40,0

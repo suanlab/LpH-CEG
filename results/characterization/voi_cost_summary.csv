@@ -1,0 +1,3 @@
+suite,n,n_gainful,median_t_full_s,median_t_selected_s,median_selected_over_full_time,median_selected_frac_of_gain_gainful
+hetionet,40,34,27.86,9.304,0.6676,1
+imdb,40,32,3.377,3.996,1.391,1

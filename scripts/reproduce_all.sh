@@ -176,6 +176,13 @@ run_experiments() {
     python scripts/gcare_suite.py             # 607 cyclic queries, ten and three norms
     python scripts/gcare_poly_certify.py      # flow >= polymatroid on every evaluated query (~8 h)
     python scripts/gcare_recount.py           # independent recount of the 49 disputed YAGO counts
+
+    section "20m. Cost, Scale, Predicates and a Plan Guard (~1.5 h)"
+    python scripts/voi_cost.py                # time of the sketch-guided plan vs joining every block (~30 min)
+    python scripts/slice_scale.py             # |V|=6 long suite at a 30K-row prefix, cover vs LpBound (~40 min)
+    # predicates need JOB's title.csv (production_year): set LPH_JOB_DIR as for prepare_imdb_cycles.py
+    python scripts/predicate_blocks.py        # year predicates on IMDb |V|=6: predicate-free block catalog (~10 min)
+    python scripts/guard_ordering.py          # bound-vs-engine-estimate plan guard (negative result; not in the paper)
 }
 
 run_figures() {

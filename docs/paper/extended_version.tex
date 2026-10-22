@@ -15,7 +15,7 @@
 \newtheorem{proposition}{Proposition}
 
 \title{Where the Headroom Lies: Block $\ell_p$-Norm Statistics for Cyclic Join Bounds\\[4pt]
-\large Extended version: full proofs}
+\large Extended version: full proofs and additional experiments}
 \author{Suan Lee\\ Semyung University\\ \texttt{suanlee@semyung.ac.kr}}
 \date{}
 
@@ -25,7 +25,8 @@
 \noindent This note accompanies the ICDE 2027 submission and gives the
 proofs that the paper states in condensed form: the $\ell_p$ Composition
 Inequality (the validity of every LpH-CEG bound) and the Cyclic
-Improvement theorem. Notation follows the paper.
+Improvement theorem, and the $bs=1$ experiments on JOB, a TPC-H-like
+schema, data size and skew. Notation follows the paper.
 
 \section{The $\ell_p$ Composition Inequality}
 
@@ -229,6 +230,32 @@ LP can use an interface at $p=1$ in place of an extension (on a 4-path it
 returns weights $(1,0,1)$), so acyclicity alone does not force unit
 weights; what redundant coverage on cycles adds is the slack exploited
 above.
+
+\section{Additional $bs=1$ experiments: JOB, TPC-H-like, data size and skew}
+
+On the JOB-medium subset (CI: 3K, MK: 2K, MC: 1K rows) the two co-actor
+4-cycles improve $1.94\times$ (with keywords) and $2.80\times$ (with
+companies) at $bs=1$ with weights $w{=}0.5$, and a star query by
+exactly $1.00\times$; the IMDb suite of the paper is the
+systematic version. On a small TPC-H-like synthetic schema (SF${=}0.01$; not \texttt{dbgen} data) every cyclic query we built yields $1.00\times$; LpH-CEG needs \emph{cyclic structure} together with \emph{degree skew} in a middle relation. On synthetic cycle-4 (10 seeds) the improvement grows
+with data size, from $5.9{\pm}0.7\times$ at $100$ vertices to
+$33.9{\pm}1.5\times$ at $2$K (relative std ${<}12\%$; a single-run sweep
+reaches $57\times$ at $5$K), and peaks at moderate skew: $2.3{\pm}0.5\times$
+at $\alpha{=}0.5$, $16.1{\pm}0.8\times$ at $\alpha{=}2.0$,
+$6.6{\pm}0.4\times$ at $\alpha{=}3.0$. At low skew all $\ell_p$-norms
+nearly coincide, at extreme skew $\ell_\infty$ is already near-tight, and
+in between $\ell_2$ captures the heavy tail.
+
+Every number in this section is produced by the scripts in the repository
+and checked by its claim audit.
+
+\section{Multi-way ordering by per-step residuals}
+The per-step residuals can order a
+worst-case-optimal join greedily: GenericJoin iterations drop $2.3\times$
+on the Hetionet cycle-4 in our simulator, but over $66$ synthetic queries
+the bound-guided order is $1.3\%$ worse at the median ($20$ wins, $43$
+losses; Wilcoxon $p{=}0.003$, indicative, as queries share shapes and
+seeds), so it is a targeted heuristic.
 
 \section{Complexity}
 Collecting $\muLp{p}{\block}{\interface}$ for a single relation is one
