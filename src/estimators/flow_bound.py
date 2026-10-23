@@ -472,6 +472,73 @@ def cycle_candidate_orders(
     return out
 
 
+@dataclass(frozen=True)
+class GuaranteedBound:
+    """A cardinality bound together with the reason it is a guarantee.
+
+    Attributes:
+        log_bound: The returned bound in ``log2`` units.
+        method: ``"polymatroid"`` (the ``2**|V|`` program over the unrelaxed
+            constraints, valid for every p) or ``"cover_fallback"`` (the
+            cover-LP bound supplied by the caller, valid by the Composition
+            Inequality) when the polymatroid program is not attempted.
+        flow_log_bound: The order-relaxed flow-LP value, kept as a candidate.
+        flow_certified: Whether that candidate is at or above the polymatroid
+            optimum (``None`` when the optimum was not computed).
+    """
+
+    log_bound: float
+    method: str
+    flow_log_bound: float
+    flow_certified: bool | None
+
+    @property
+    def bound(self) -> float:
+        """Cardinality upper bound ``2 ** log_bound``."""
+        return float(2.0**self.log_bound)
+
+
+def guaranteed_block_bound(
+    attributes: Iterable[AttributeName],
+    constraints: Sequence[DegreeConstraint],
+    orders: Iterable[Sequence[AttributeName]],
+    cover_log_bound: float,
+    *,
+    max_polymatroid_vars: int = 12,
+    tol: float = 1e-6,
+) -> GuaranteedBound:
+    """Return only a guaranteed bound, and say which guarantee applies.
+
+    The flow LP over order-relaxed l_p block constraints has no general
+    validity proof.  Its value is therefore never returned as the bound: up
+    to ``max_polymatroid_vars`` attributes the polymatroid optimum over the
+    same (unrelaxed) constraints is returned, and the flow value is reported
+    as certified when it is at or above that optimum; beyond, the caller's
+    cover-LP bound is returned and the flow value stays an uncertified
+    candidate.  ``min(cover, flow)`` would not be a guarantee.
+
+    Args:
+        attributes: The query attributes.
+        constraints: Degree constraints from exact statistics (or proved
+            upper bounds on them).
+        orders: Candidate attribute orders for the flow relaxation.
+        cover_log_bound: The cover-LP bound on the same statistics, ``log2``.
+        max_polymatroid_vars: Largest ``|V|`` for which the ``2**|V|``
+            program is solved.
+        tol: Relative tolerance of the certification comparison.
+
+    Returns:
+        The guaranteed bound with its method and the flow candidate.
+    """
+    attrs = sorted(attributes)
+    flow_log = flow_bound_over_orders(attrs, constraints, orders)[0].log_bound
+    if len(attrs) <= max_polymatroid_vars:
+        poly = polymatroid_bound(attrs, constraints)
+        certified = flow_log >= poly - math.log2(1.0 + tol)
+        return GuaranteedBound(poly, "polymatroid", flow_log, certified)
+    return GuaranteedBound(cover_log_bound, "cover_fallback", flow_log, None)
+
+
 def flow_bound_over_orders(
     attributes: Iterable[AttributeName],
     constraints: Sequence[DegreeConstraint],

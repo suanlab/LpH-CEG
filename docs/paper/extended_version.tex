@@ -2,6 +2,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{hyperref}
+\usepackage{booktabs}
 
 \newcommand{\query}{\mathcal{Q}}
 \newcommand{\block}{F}
@@ -138,8 +139,8 @@ $1/(1-\varepsilon)$, for a coverage shortfall $\varepsilon=1-\min_a(\text{covera
 restores (C) and raises a bound $B$ by the factor $B^{\varepsilon/(1-\varepsilon)}$, which grows
 with $B$. At the solver's feasibility tolerance ($\varepsilon\le10^{-7}$) and the largest
 cover bound we report ($B<2^{100}$) the factor is below $1+10^{-5}$; the released
-code does not apply it, so reported bounds may sit below their rescaled values
-by at most that factor. It requires exact statistics of the
+code applies it; the bounds reported in the paper were computed before it did
+and sit below their rescaled values by at most that factor. It requires exact statistics of the
 database being bounded (or deterministic upper bounds on them, since the
 bound is monotone in each $\mu$); a sampled or sketched statistic, such as
 the Hutchinson estimate of the common-neighbour $\ell_2$ in the paper, is
@@ -263,6 +264,77 @@ $24$ singular values (Lanczos; uncertified, yet above every exact count)
 it is tighter on $220/240$ and takes IMDb at $|V|{=}10$ from
 $14.9\times$ to $3.2\times$ the truth. The next step on the statistics axis may thus be spectral order rather
 than block size.
+
+\section{Which statistics are new: a vocabulary table and a separation}
+
+For a binary block $R(a,b)\bowtie S(b,c)$ the statistics the paper uses or
+compares against are the following ($\deg_R(b)$ is the number of $a$ with
+$(a,b)\in R$, and $N_R(a)$ the set of $b$ with $(a,b)\in R$).
+
+\begin{center}
+\small
+\begin{tabular}{@{}llll@{}}
+\toprule
+Statistic & Definition & Pair join? & Used by \\
+\midrule
+single-relation norms & $\|\deg_R(\cdot\mid a)\|_p$, $\|\deg_R(\cdot\mid b)\|_p$ & no & LpBound, all programs \\
+pair-join size & $\sum_b\deg_R(b)\deg_S(b)$ & no & CorrBound ($\ell_1$ inner product) \\
+shared-attribute products & $\sum_b\deg_R(b)^{p}\deg_S(b)^{q}$ & no & CorrBound's generalized \\
+ & & & inner products (per its authors) \\
+one-side interface norms & $\big\|\big(\sum_{b\in N_R(a)}\deg_S(b)\big)_a\big\|_p$ & no & this paper (join-free) \\
+common-neighbour norms & $\big\|\big(|N_R(a)\cap N_S(c)|\big)_{a,c}\big\|_p$ & yes & this paper \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{proposition}[Separation]
+The common-neighbour $\ell_2$ norm is not determined by the other rows of
+the table: there are two databases that agree on every single-relation
+degree sequence, on the pair-join size, on every shared-attribute product
+$\sum_b\deg_R(b)^p\deg_S(b)^q$ ($p,q\ge0$) and on every one-side interface
+norm, yet differ in the squared common-neighbour $\ell_2$ norm ($32$
+against $24$), and so in the number of $4$-cycles they close.
+\end{proposition}
+\begin{proof}
+Take $R$ with the $4\times4$ incidence matrix $M$ and $S$ with $M^{\top}$,
+for $M=A$, two disjoint copies of $K_{2,2}$, and $M=B$, the bipartite
+$8$-cycle (row $i$ adjacent to columns $i$ and $i{+}1 \bmod 4$). Both are
+$2$-regular, so every degree in $R$ and $S$ is $2$, every shared-attribute
+product is $4\cdot2^{p+q}$, the pair-join size is $16$, and every one-side
+interface degree is $4$. The common-neighbour matrix is $MM^{\top}$: for
+$A$ it has eight entries equal to $2$ (squared norm $32$); for $B$, four
+diagonal entries $2$ and eight entries $1$ (squared norm $24$); the largest
+common-neighbour count is $2$ in both. For the $4$-cycle
+$R(a,b)\bowtie S(b,c)\bowtie R'(c,d)\bowtie S'(d,a)$ with $R'=R$, $S'=S$
+as separate atoms, the count is $\mathrm{tr}((MM^{\top})^2)=\|MM^{\top}\|_F^2$,
+again $32$ against $24$.
+\end{proof}
+
+The separation is limited to the statistics listed: it does not claim that
+no multi-relation term of CorrBound, or any other statistic, determines the
+common-neighbour norm, and it says nothing about the size of the gain on
+real data (the paper's ablations measure that).
+
+\section{Unified comparison on synthetic cycles}
+\begin{table}[h]
+\centering
+\caption{Unified comparison of guaranteed upper bounds (synthetic
+power-law cycles, $100$V/$400$E, one instance). ``Cover'' is our $bs{=}1$ LP;
+``Entropic'' is LpBound's bound (via the $2^{|V|}$ program). Lower is tighter.
+``$/$CEG'' is CEG$_M$'s ratio to Cover and ``$/$Ent'' Cover's ratio to the
+entropic optimum.}
+
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Query & AGM & CEG$_M$ & Cover & Entropic & $/$CEG & $/$Ent \\
+\midrule
+Cycle-3 & 8.0K & 15.6K & 6.8K & 5.0K & $2.3\times$ & $1.36\times$ \\
+Cycle-4 & 160K & 655K & 116K & 87K & $5.7\times$ & $1.32\times$ \\
+Cycle-5 & 3.2M & 25.5M & 1.97M & 1.45M & $13.0\times$ & $1.36\times$ \\
+Cycle-6 & 64M & 1.12B & 31.5M & 25.2M & $35.7\times$ & $1.25\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Additional $bs=1$ experiments: JOB, TPC-H-like, data size and skew}
 

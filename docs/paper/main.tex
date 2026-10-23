@@ -164,10 +164,8 @@ Under the same program (the order-relaxed flow LP, so a lower bound on
 the gain), block statistics carry
 a further median $63\times$ on the Hetionet long suite beyond pair-join sizes (three
 norms; $19$--$154\times$ by $|V|$), a proxy for the two-relation statistic CorrBound adds (itself
-worth $31\times$ there; on IMDb, where half the pairs are self-joins, sizes add almost nothing). For a block of two binary relations all but one of them come from
-single-relation degree tables without the pair join; the exception, the $\ell_2$ norm of the
-common-neighbour counts, restores the full bound on $85/120$ Hetionet and
-$116/120$ IMDb queries.
+worth $31\times$ there; on IMDb, where half the pairs are self-joins, sizes add almost nothing). For a block of two binary relations all interfaces but one come from
+single-relation degree tables without the pair join, and in the headline setting (eleven norms, polymatroid) they carry a median $88\%$ (Hetionet) and $86\%$ (IMDb) of the log-gain over LpBound; the exception, the common-neighbour sequence, carries the rest, and its $\ell_2$ is determined by none of the others (extended version).
 
 \item \textbf{Validity, cost and limits
 (Sections~\ref{sec:theory},~\ref{sec:experiments},~\ref{sec:wcoj}).}
@@ -195,7 +193,7 @@ A conjunctive query $\query$ over relations $\rel_1, \ldots, \rel_m$
 with attributes $V = \{a_1, \ldots, a_n\}$ is represented as a
 hypergraph $H = (V, \mathcal{E})$ where each hyperedge $e_i \in
 \mathcal{E}$ corresponds to the attribute set of relation $\rel_i$.
-The full natural join is $\query = \bowtie_{i=1}^{m} \rel_i$.
+The full natural join is $\query = \bowtie_{i=1}^{m} \rel_i$, under set semantics (relations are sets of tuples).
 
 \subsection{CEG and MOLP}
 
@@ -320,7 +318,7 @@ Algorithm~\ref{alg:lph-ceg} summarizes the LpH-CEG estimation pipeline.
   \STATE Compute $\muLp{p}{F}{I}$ for each $p \in \mathcal{P}$
 \ENDFOR
 \STATE Build block-extension DAG with $\ell_\infty$ weights
-\STATE Find $K$ shortest hyperpaths $P_1, \ldots, P_K$ \COMMENT{$K{=}1$: default}
+\STATE Find candidate hyperpaths $P_1, \ldots, P_K$ (shortest, then a bounded search) \COMMENT{$K{=}1$: default}
 \FOR{each hyperpath $P_i = (F_1, \ldots, F_m)$}
   \STATE Solve LP~\eqref{eq:lp}--\eqref{eq:cover} for weights $(w^*_{j,p})$
   \STATE $\hat{C}_i \gets \prod_{j,p} \muLp{p}{F_j}{I_j}^{\,w^*_{j,p}}$
@@ -658,33 +656,14 @@ entropic program with cross-relation statistics, is compared through a
 proxy in Section~\ref{sec:stats-vs-inference}.
 
 \paragraph{Unified bound comparison}
-Table~\ref{tab:baselines} places all four guaranteed-bound methods on one
-suite. The ordering is as predicted: CEG$_M$, AGM $\ge$ Cover-LP $\ge$ Entropic
+On one synthetic suite (table in the extended version) the four guaranteed-bound methods order as predicted: CEG$_M$, AGM $\ge$ Cover-LP $\ge$ Entropic
 (Theorem~\ref{thm:subsumption}), with AGM and CEG$_M$ incomparable. Our cover-LP is
 $2.3$--$35.7\times$ tighter than CEG$_M$ on synthetic cycles, is also
 consistently tighter than AGM (e.g.\ $2.0\times$ on cycle-6), and stays
 within $1.25$--$1.36\times$ of the entropic (polymatroid) optimum on the
-same single-relation $\ell_p$ statistics on these cycle-$3$--$6$ instances.
+same single-relation $\ell_p$ statistics on these cycle-$3$--$6$ instances (one instance per cycle).
 
-\begin{table}[t]
-\centering
-\caption{Unified comparison of guaranteed upper bounds (synthetic
-power-law cycles, $100$V/$400$E, one instance). ``Cover'' is our $bs{=}1$ LP;
-``Entropic'' is LpBound's bound (via the $2^{|V|}$ program). Lower is tighter.
-``$/$CEG'' is CEG$_M$'s ratio to Cover and ``$/$Ent'' Cover's ratio to the
-entropic optimum.}
-\label{tab:baselines}
-\begin{tabular}{@{}lrrrrrr@{}}
-\toprule
-Query & AGM & CEG$_M$ & Cover & Entropic & $/$CEG & $/$Ent \\
-\midrule
-Cycle-3 & 8.0K & 15.6K & 6.8K & 5.0K & $2.3\times$ & $1.36\times$ \\
-Cycle-4 & 160K & 655K & 116K & 87K & $5.7\times$ & $1.32\times$ \\
-Cycle-5 & 3.2M & 25.5M & 1.97M & 1.45M & $13.0\times$ & $1.36\times$ \\
-Cycle-6 & 64M & 1.12B & 31.5M & 25.2M & $35.7\times$ & $1.25\times$ \\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \subsection{Main Results: Cyclic Query Bounds}
 
@@ -710,7 +689,7 @@ Cycle-8 & 97T$\pm$14T  & 158B$\pm$10B & $\mathbf{614{\pm}71\times}$ & --- \\
 \end{tabular}
 \end{table}
 
-Table~\ref{tab:synthetic} shows the core result: LpH-CEG achieves
+Table~\ref{tab:synthetic} shows the $bs{=}1$ cover LP against CEG$_M$: LpH-CEG achieves
 $2.8\times$ to $614\times$ tighter bounds than CEG$_M$ on cyclic
 queries, with tight standard deviations (relative std $< 12\%$)
 confirming stability across random graph instances.
@@ -940,8 +919,7 @@ others), so the gap is in semantics or preprocessing we could not reconstruct, n
 below G-CARE's $33$ but above our $17$). $174$ YAGO queries exceed the
 prototype (a relation over $300$K rows or a pair join over $20$M) and are
 reported, not run. Under the polymatroid program, block statistics are
-$15\times$ (AIDS) and $24\times$ (YAGO) tighter than LpBound and never
-looser. Under
+$15\times$ (AIDS) and $24\times$ (YAGO) tighter than LpBound and never looser; the YAGO median mixes $12\times$ on the $143$ queries whose counts agree with G-CARE's and $311\times$ on the $49$ that do not. Under
 the cover LP the inference gap dominates on AIDS: $59\times$, plausibly as bounded
 molecular degrees make high norms very informative to the entropic
 program, against a $1.35\times$ statistics gain (block statistics beat
@@ -979,33 +957,32 @@ invalid bounds & $0$ & $0$ \\
 \paragraph{Which statistic needs the join}
 Of the eight interfaces of a block of binary relations $R(a,b),S(b,c)$,
 seven (five non-trivial) are functions of single-relation degree tables
-and need only an aggregate join of one relation with the other's degree
-table, never the pair join: the degree of $a$ is
-$\sum_{b\in N_R(a)}\deg_S(b)$ and that of $b$ is $\deg_R(b)\deg_S(b)$; only $\{a,c\}$, the common-neighbour
-count $|N_R(a)\cap N_S(c)|$, needs the join. We compute the seven without
-it (identical to the materialized statistics on $120/120$ Hetionet queries;
-$0.49$\,s against $4.6$\,s per block in our Python prototype). Added first, they close most of the log-gap to
-the full bound but not the last factor: a median $2.3\times$ (max $18.7\times$) above the
-full $bs{=}2$ bound on the Hetionet long suite, $1.5$--$2.9\times$ on the families,
-$1.9$--$57\times$ on the sweep. What closes it is one number per block,
-the $\ell_2$ norm of the common-neighbour sequence,
-$\|A_R^{\top}A_S\|_F$ for the $b{\times}a$ and $b{\times}c$ incidence
-matrices, whose square counts the closed walks $a$--$b$--$c$--$b'$--$a$
-built from two copies of $R$ and of $S$: a sub-pattern count, where
-CorrBound's $\ell_1$ inner product counts paths $a$--$b$--$c$. Added to
-$bs{=}1$ alone it already reaches a median
-$1.03\times$ of the full bound ($53/120$ exact), so the attribution is
-order-dependent; added to the join-free seven it returns the full bound on $12/12$ family--seed pairs, $10/10$ sweep points,
+(the degree of $a$ is $\sum_{b\in N_R(a)}\deg_S(b)$, that of $b$ is
+$\deg_R(b)\deg_S(b)$); only $\{a,c\}$, the common-neighbour count
+$|N_R(a)\cap N_S(c)|$, needs the pair join; its $\ell_2$ is determined neither by the other interfaces nor by shared-attribute inner products (extended version), while its $\ell_1$ is the join size. We compute the seven without the join (identical to
+the materialized statistics on $120/120$ Hetionet queries; $0.49$\,s
+against $4.6$\,s per block). With three norms and the flow LP they stop a
+median $2.3\times$ (max $18.7\times$) above the full $bs{=}2$ bound on the
+Hetionet long suite ($1.5$--$2.9\times$ on the families, $1.9$--$57\times$
+on the sweep), and the common-neighbour $\ell_2$, $\|A_R^{\top}A_S\|_F$,
+closes the gap on $12/12$ family--seed pairs, $10/10$ sweep points,
 $85/120$ Hetionet and $116/120$ IMDb queries (Hetionet median
-$1.00\times$, max $1.67\times$), while its
-$\ell_\infty$ does not ($1.70\times$) and its $\ell_1$ (the join size,
-CorrBound's inner product~\cite{mayer2026corrbound}) is already
-join-free. The one-pass upper bound on that norm from the triangle
-inequality recovers nothing on Hetionet ($2.2\times$); a $64$-probe
-Hutchinson sketch lands within $0.91$--$1.78\times$ of the full bound in
-$0.32$\,s per block, but is an estimate, not a bound. Post hoc, it does pick which joins to pay for: ranking a
-$|V|{=}6$ query's six blocks by how much a sketch of their norm lowers the
-bound and joining the top three recovers the full $bs{\le}2$ bound on the median of $34$ Hetionet queries (top two on $32$ IMDb ones), against half of that gain for a random three. Timed end to end, that plan takes a median $0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper) but $1.39\times$ on IMDb, where the join-free statistics, sketches and ranking cost more than the three joins they skip.
+$1.00\times$, max $1.67\times$); its $\ell_\infty$ does not ($1.70\times$),
+and added to $bs{=}1$ alone it reaches $1.03\times$ ($53/120$ exact), so
+the attribution is order-dependent. In the headline setting (eleven norms,
+polymatroid) the join-free seven carry a median $88\%$ and $86\%$ of the
+log-gain on Hetionet and IMDb, the $\ell_2$ leaves $1.47\times$ and
+$1.39\times$ (full on $1/120$ each), and the other common-neighbour norms (with the join-free $\ell_1$) close the rest. A one-pass triangle-inequality bound on the $\ell_2$
+recovers nothing on Hetionet ($2.2\times$); a $64$-probe Hutchinson sketch
+lands within $0.91$--$1.78\times$ of the full bound in $0.32$\,s per block
+but is an estimate, not a bound. Post hoc, it picks which joins to pay
+for: joining the three of a $|V|{=}6$ query's six blocks whose sketched
+norm lowers the bound most recovers the full $bs{\le}2$ bound on the median
+of $34$ Hetionet queries (top two on $32$ IMDb ones), against half that
+gain for a random three; timed end to end, this plan takes a median
+$0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper)
+but $1.39\times$ on IMDb, where join-free statistics, sketches and ranking
+cost more than the three joins they skip.
 
 \emph{A spectral reading (post hoc).} On even cycles the common-neighbour $\ell_2$ is the Frobenius norm of a block product, and a trace--H\"older bound from it and a certified top singular value is tighter than the polymatroid program on $96/240$ long-suite queries (looser overall; $220/240$ with uncertified Lanczos estimates; extended version), so the next step on the statistics axis may be spectral order rather than block size. On $22$ small random cycles, a search over databases with the same
 $bs{\le}2$ statistics puts at most $1.5\times$ of the gap on the program and
@@ -1115,7 +1092,7 @@ every order's flow bound is valid by their Theorem~1.5(a); for $\ell_p$
 we have no proof and certify each bound instead. The $2^{|V|}$
 polymatroid bound over the \emph{unrelaxed} constraints is valid for
 every $p$ (each $\ell_p$ constraint holds on the join's entropy, as in
-Theorem~\ref{thm:composition}), so a flow bound at or above it is valid; a flow bound counts as a guarantee only with this certificate, and where it cannot be computed (the sweep's $k{=}16$) a guarantee falls back to the cover LP on the same statistics (Theorem~\ref{thm:composition}).
+Theorem~\ref{thm:composition}), so a flow bound at or above it is valid; a flow bound counts as a guarantee only with this certificate. The released \texttt{guaranteed\_block\_bound} therefore returns the polymatroid optimum up to $|V|{=}12$ and the cover LP on the same statistics beyond (Theorem~\ref{thm:composition}; the sweep's $k{=}16$), keeping the flow value only as a candidate.
 Every real-data flow bound passes (eleven norms: $109/109$ short,
 $240/240$ long-suite, $433/433$ G-CARE and $80/80$ resampled slice
 queries, equal on $633$, to $10^{-6}$), as do the synthetic sweep's at
@@ -1168,7 +1145,7 @@ polymatroid bound at every even $k \le 14$.}
 \end{figure}
 
 \paragraph{Choice of $p$-values}
-On the cycle-6 of Table~\ref{tab:baselines}, $\mathcal{P} = \{1,\infty\}$ (2 values) already
+On that suite's cycle-6, $\mathcal{P} = \{1,\infty\}$ (2 values) already
 achieves $17.6\times$ improvement; adding $\ell_2$ ($\mathcal{P} =
 \{1,2,\infty\}$) reaches $35.7\times$; further values ($\ell_3$,
 $\ell_5$) yield no additional gain.
@@ -1256,9 +1233,7 @@ bound cannot select its favorable cases). Medians are close
 bound-guided P95/max are $1.21\times$/$1.31\times$ against DuckDB's
 $5.82\times$/$8.17\times$ (with $n{=}24$, P95 is the third-largest
 value). The reference is the best \emph{forced left-deep} order, so
-bound-guided is ${\ge}1$ by construction while DuckDB, free to go bushy,
-scores below $1$ on median: a bound-guided choice avoids a plan space's
-tail; it does not beat the engine.
+bound-guided is ${\ge}1$ by construction while DuckDB, free to go bushy, scores below $1$ on median in this single-run measurement: a bound-guided choice avoids a plan space's tail; it does not beat the engine. Five shuffled repetitions per plan keep the tail (P95/max $1.18$/$1.21\times$ against $5.51$/$6.77\times$; per repetition P95 ${\le}1.65\times$ against ${\ge}5.07\times$; medians $1.03$ and $1.18\times$).
 
 \paragraph{Real data, block statistics} The same protocol on the $40$
 IMDb cycles at $|V|{=}6$, with four estimators behind $C_{\mathrm{out}}$,
@@ -1324,9 +1299,7 @@ statistics, the second enriches statistics at fixed inference. The
 $\ell_1$-norm of a $bs{=}2$ block sequence \emph{is} CorrBound's inner
 product (the join size). In a proxy that adds exactly those sizes to the entropic program (optimistic, without sketches or CorrBound's multi-relation terms, so not comparable to its reported gains) they are worth a median $31\times$ over LpBound on our Hetionet long suite, and the interface-conditioned block statistics a further $63\times$. The shared-interface block norms
 $\sum_b \deg_R(b)^p\deg_S(b)^p$ are $\ell_p$-weighted inner products and
-may fall within CorrBound's vocabulary; the one-side and common-neighbour
-statistics do not, since they depend on \emph{which} values co-occur,
-not only how often---and the latter needs the join that CorrBound's
+may fall within CorrBound's vocabulary; the one-side and common-neighbour statistics need not, since they depend on \emph{which} values co-occur, not only how often (for the common-neighbour $\ell_2$ we give a separating example in the extended version)---and the latter needs the join that CorrBound's
 sketches avoid (Section~\ref{sec:stats-vs-inference}).
 Lin and Wang~\cite{lin2025ambidextrous} likewise tighten degree-sequence
 bounds by counting claw \emph{pairs}, a richer statistic again.
@@ -1354,7 +1327,7 @@ they do not beat max-degree ordering in general.
 \label{sec:practical}
 
 \paragraph{When to use LpH-CEG}
-Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$ for the cover LP (the entropic and polymatroid programs gain from more norms): gains are rare on triangles and grow with cycle length; without a cycle, skip the LP. Degree
+Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$ for the cover LP (the entropic and polymatroid programs gain from more norms): gains are rare on triangles and grow with cycle length; without a cycle the LP gains only from cardinalities (Section~\ref{sec:whycyclic}). Degree
 sequences can come from catalog histograms
 ($\lpnorm{\mathbf{d}}{p} = (\sum_i c_i d_i^p)^{1/p}$ over buckets
 $(d_i, c_i)$) at \texttt{ANALYZE} time (not evaluated here).

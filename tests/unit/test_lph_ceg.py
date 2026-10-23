@@ -190,3 +190,53 @@ class TestLpBoundBaseline:
         ceg = estimate_pessimistic(q, star_data, max_block_size=1)
         lpbound = estimate_lpbound(q, star_data)
         assert lpbound.estimate == pytest.approx(ceg.estimate, rel=1e-6)
+
+
+def test_lp_weights_cover_every_attribute_exactly() -> None:
+    """After rescaling, the LP weights satisfy the cover constraints exactly."""
+    from src.estimators.lp_bound import _attribute_coverage, _collect_step_info
+
+    q = triangle_query()
+    blocks = [Block(frozenset({r})) for r in ("R", "S", "T")]
+    lp_stats = compute_all_lp_block_extensions(q, blocks, _TRIANGLE_DATA)
+    hp = estimate_pessimistic(q, _TRIANGLE_DATA, max_block_size=1).hyperpath
+    p_values = (1.0, 2.0, float("inf"))
+    result = optimize_hyperpath_weights(q, hp, lp_stats, p_values=p_values)
+    steps = _collect_step_info(q, hp)
+    for attr in q.all_attributes:
+        cov = sum(
+            result.weights[(j, p)] * _attribute_coverage(attr, step, p)
+            for j, step in enumerate(steps)
+            for p in p_values
+        )
+        assert cov >= 1.0 - 1e-12
+
+
+def test_under_covering_solver_output_is_rescaled(monkeypatch) -> None:  # type: ignore[no-untyped-def]
+    """A solver answer that misses the cover by a little is scaled back up."""
+    import src.estimators.lp_bound as lb
+
+    real = lb.linprog
+
+    def short(*args, **kwargs):  # type: ignore[no-untyped-def]
+        res = real(*args, **kwargs)
+        res.x = res.x * (1 - 1e-3)  # under-cover every attribute by 0.1%
+        return res
+
+    monkeypatch.setattr(lb, "linprog", short)
+    q = triangle_query()
+    blocks = [Block(frozenset({r})) for r in ("R", "S", "T")]
+    lp_stats = compute_all_lp_block_extensions(q, blocks, _TRIANGLE_DATA)
+    hp = estimate_pessimistic(q, _TRIANGLE_DATA, max_block_size=1).hyperpath
+    p_values = (1.0, 2.0, float("inf"))
+    result = lb.optimize_hyperpath_weights(q, hp, lp_stats, p_values=p_values)
+    steps = lb._collect_step_info(q, hp)
+    covs = [
+        sum(
+            result.weights[(j, p)] * lb._attribute_coverage(attr, step, p)
+            for j, step in enumerate(steps)
+            for p in p_values
+        )
+        for attr in q.all_attributes
+    ]
+    assert min(covs) == pytest.approx(1.0, abs=1e-9)

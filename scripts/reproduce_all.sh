@@ -99,6 +99,7 @@ run_experiments() {
 
     section "18. Broad Tail-Robustness Distribution (C4)"
     python scripts/robustness_broad.py
+    python scripts/robustness_repeat.py      # same 24 queries, 5 shuffled timings per plan (run alone)
     python scripts/plan_ranking_study.py     # Kendall tau of bound rankings vs true cost
 
     section "19. p-value Sufficiency Ablation across Families"
@@ -133,34 +134,8 @@ run_experiments() {
     section "20g. Headline Cycle Table with the Statistics Axis"
     python scripts/headline_bs2.py
 
-    section "20h. Long-Cycle Suite, |V| in {6,8,10} (register, then evaluate; ~1.5 h)"
-    python scripts/register_long_suite.py
-    python scripts/evaluate_long_suite.py
-    python scripts/agm_pairjoin_baseline.py   # AGM over pair-join sizes, same suite
-    python scripts/stats_catalogue.py         # amortised statistics catalogue, same suite
-    python scripts/lpbound_pset_check.py      # entropic baseline with p in {1..10, inf}
-    python scripts/pset_fair.py               # both sides with p in {1..10, inf} (~2 h)
-    python scripts/p11_reruns.py              # short suite, 2x2 and sweep with eleven norms
-    python scripts/poly_certify.py            # flow >= polymatroid on every long-suite query (P11; ~5 h)
-    python scripts/poly_certify.py --short    # ... and on the 109-query short suite
-    python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)
-    python scripts/slice_poly_certify.py      # ... and certify those flow bounds by the polymatroid bound
-    python scripts/poly_headline.py           # headline medians with the bs<=2 polymatroid bound as the program
-    python scripts/bootstrap_ci.py            # query-level bootstrap intervals of the headline medians
-    python scripts/sweep_poly_certify.py      # certify the k=12..16 sweep flow bounds (long)
-    python scripts/spectral_bound.py          # trace-Holder spectral bounds on the long suites
-    python scripts/spectral_summary.py        # ... against the polymatroid bound and the truth
-    python scripts/opt_stats_gap.py           # program vs information gap on small cycles (OPT_S lower bounds)
-    python scripts/voi_selection.py           # which pair joins to materialize: sketch-guided vs oracle vs random
-
-    section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
-    python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)
-    python scripts/flow_bound_blocks.py       # 2x2 grid, long suite, cycle sweep
-
-    section "20j. Join-Free Block Statistics and the Codegree l2 (B4; ~30 min)"
-    python scripts/pushdown_stats_experiment.py   # families, sweep, long suite
-    python scripts/corrbound_proxy.py             # entropic + pair-join sizes (~10 min)
-
+    # IMDb and G-CARE first: the long-suite scripts below (pset_fair, voi_selection, ...)
+    # read the IMDb registry and data.
     section "20k. Second Real Dataset: IMDb Cycle Suite (needs JOB's IMDb CSVs; ~45 min)"
     python scripts/prepare_imdb_cycles.py     # derive typed relations from JOB's IMDb
     python scripts/register_imdb_suite.py     # pre-register 120 cycles (no bounds)
@@ -177,12 +152,44 @@ run_experiments() {
     python scripts/gcare_poly_certify.py      # flow >= polymatroid on every evaluated query (~8 h)
     python scripts/gcare_recount.py           # independent recount of the 49 disputed YAGO counts
 
+    section "20h. Long-Cycle Suite, |V| in {6,8,10} (register, then evaluate; ~1.5 h)"
+    python scripts/register_long_suite.py
+    python scripts/evaluate_long_suite.py
+    python scripts/agm_pairjoin_baseline.py   # AGM over pair-join sizes, same suite
+    python scripts/stats_catalogue.py         # amortised statistics catalogue, same suite
+    python scripts/lpbound_pset_check.py      # entropic baseline with p in {1..10, inf}
+    python scripts/pset_fair.py               # both sides with p in {1..10, inf} (~2 h)
+    python scripts/p11_reruns.py              # short suite, 2x2 and sweep with eleven norms
+    python scripts/poly_certify.py            # flow >= polymatroid on every long-suite query (P11; ~5 h)
+    python scripts/poly_certify.py --short    # ... and on the 109-query short suite
+    python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)
+    python scripts/slice_poly_certify.py      # ... and certify those flow bounds by the polymatroid bound
+    python scripts/spectral_bound.py          # trace-Holder spectral bounds on the long suites
+    python scripts/opt_stats_gap.py           # program vs information gap on small cycles (OPT_S lower bounds)
+    python scripts/voi_selection.py           # which pair joins to materialize: sketch-guided vs oracle vs random
+
+    section "20i. Flow-LP Inference over Block Statistics (B3; ~1 h, suite part dominates)"
+    python scripts/flow_validity_search.py    # 40 random shapes, all orders (~7 min)
+    python scripts/flow_bound_blocks.py       # 2x2 grid, long suite, cycle sweep
+    python scripts/sweep_poly_certify.py      # certify the k=12..16 sweep flow bounds (reads flow_scale.csv; long)
+
+    section "20j. Join-Free Block Statistics and the Codegree l2 (B4; ~30 min)"
+    python scripts/pushdown_stats_experiment.py   # families, sweep, long suite
+    python scripts/corrbound_proxy.py             # entropic + pair-join sizes (~10 min)
+
     section "20m. Cost, Scale, Predicates and a Plan Guard (~1.5 h)"
     python scripts/voi_cost.py                # time of the sketch-guided plan vs joining every block (~30 min)
     python scripts/slice_scale.py             # |V|=6 long suite at a 30K-row prefix, cover vs LpBound (~40 min)
     # predicates need JOB's title.csv (production_year): set LPH_JOB_DIR as for prepare_imdb_cycles.py
     python scripts/predicate_blocks.py        # year predicates on IMDb |V|=6: predicate-free block catalog (~10 min)
     python scripts/guard_ordering.py          # bound-vs-engine-estimate plan guard (negative result; not in the paper)
+    python scripts/ablation_p11_poly.py       # l2 ablation in the headline setting: eleven norms, polymatroid (~1 h)
+
+    # Aggregates last: they read the long-suite, IMDb and G-CARE results above.
+    section "20n. Aggregates over Every Suite"
+    python scripts/poly_headline.py           # headline medians with the bs<=2 polymatroid bound as the program
+    python scripts/bootstrap_ci.py            # query-level bootstrap intervals of the headline medians
+    python scripts/spectral_summary.py        # spectral bounds against the polymatroid bound and the truth
 }
 
 run_figures() {

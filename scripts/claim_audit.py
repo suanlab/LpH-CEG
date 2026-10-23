@@ -178,6 +178,8 @@ def main() -> None:
 
     jfu = load("results/large_scale/job_full.csv")
     pbs = load("results/imdb/predicate_blocks_summary.csv")
+    rrs = load("results/e2e/robustness_repeat_summary.csv")
+    apx = load("results/pushdown/ablation_p11_poly_summary.csv")
     vcs = load("results/characterization/voi_cost_summary.csv")
     ssc = load("results/suite/slice_scale_summary.csv")
     ssr = load("results/suite/slice_scale.csv")
@@ -2250,6 +2252,114 @@ def main() -> None:
             pick(ssc, "median_entropic_over_cover_bs2_p11", cap="20000"),
             1 / ph("hetionet", "6", "median_cover2_over_entropic"),
             0.005,
+        ),
+        (
+            "tail repeat: bound-guided P95 (1.18x)",
+            pick(rrs, "bound_p95", scope="median-of-5 timings"),
+            1.18,
+            0.005 / 1.18,
+        ),
+        (
+            "tail repeat: bound-guided max (1.21x)",
+            pick(rrs, "bound_max", scope="median-of-5 timings"),
+            1.21,
+            0.005 / 1.21,
+        ),
+        (
+            "tail repeat: DuckDB P95 (5.51x)",
+            pick(rrs, "duckdb_p95", scope="median-of-5 timings"),
+            5.51,
+            0.005 / 5.51,
+        ),
+        (
+            "tail repeat: DuckDB max (6.77x)",
+            pick(rrs, "duckdb_max", scope="median-of-5 timings"),
+            6.77,
+            0.005 / 6.77,
+        ),
+        (
+            "tail repeat: medians bound/DuckDB (1.03x)",
+            pick(rrs, "bound_median", scope="median-of-5 timings"),
+            1.03,
+            0.005 / 1.03,
+        ),
+        (
+            "tail repeat: DuckDB median (1.18x) [same value as bound P95]",
+            pick(rrs, "duckdb_median", scope="median-of-5 timings"),
+            1.18,
+            0.005 / 1.18,
+        ),
+        (
+            "tail repeat: worst per-rep bound-guided P95 (1.65x)",
+            max(float(r["bound_p95"]) for r in rrs if r["scope"].startswith("rep")),
+            1.65,
+            0.005 / 1.65,
+        ),
+        (
+            "tail repeat: best per-rep DuckDB P95 (5.07x)",
+            min(float(r["duckdb_p95"]) for r in rrs if r["scope"].startswith("rep")),
+            5.07,
+            0.005 / 5.07,
+        ),
+        (
+            "headline ablation: join-free share of log-gain, hetionet (88%)",
+            100 * pick(apx, "median_free_gain_share", suite="hetionet", n_vars="all"),
+            88,
+            0.5 / 88,
+        ),
+        (
+            "headline ablation: join-free share of log-gain, imdb (86%)",
+            100 * pick(apx, "median_free_gain_share", suite="imdb", n_vars="all"),
+            86,
+            0.5 / 86,
+        ),
+        (
+            "headline ablation: free+l2 over full, hetionet (1.47x)",
+            pick(apx, "median_free_l2_over_full", suite="hetionet", n_vars="all"),
+            1.47,
+            0.005 / 1.47,
+        ),
+        (
+            "headline ablation: free+l2 over full, imdb (1.39x)",
+            pick(apx, "median_free_l2_over_full", suite="imdb", n_vars="all"),
+            1.39,
+            0.005 / 1.39,
+        ),
+        (
+            "headline ablation: free+l2 recovers full, hetionet (1)/120",
+            pick(apx, "n_free_l2_eq_full", suite="hetionet", n_vars="all"),
+            1,
+        ),
+        (
+            "headline ablation: free+l2 recovers full, imdb (1)/120",
+            pick(apx, "n_free_l2_eq_full", suite="imdb", n_vars="all"),
+            1,
+        ),
+        (
+            "G-CARE yago: LpBound/poly median where counts agree (12x)",
+            statistics.median(
+                float(r["entropic_p11"])
+                / float(next(x for x in gpe if x["path"] == r["path"])["poly_bs2_p11"])
+                for r in gce
+                if r["dataset"] == "yago"
+                and r.get("cover_bs1_p11") not in ("", None)
+                and r["gcare_true"] == r["exact"]
+            ),
+            12,
+            0.5 / 12,
+        ),
+        (
+            "G-CARE yago: LpBound/poly median where counts differ (311x)",
+            statistics.median(
+                float(r["entropic_p11"])
+                / float(next(x for x in gpe if x["path"] == r["path"])["poly_bs2_p11"])
+                for r in gce
+                if r["dataset"] == "yago"
+                and r.get("cover_bs1_p11") not in ("", None)
+                and r["gcare_true"] != r["exact"]
+            ),
+            311,
+            0.5 / 311,
         ),
         (
             "VOI plan time over joining every block: hetionet (0.67x)",

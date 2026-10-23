@@ -150,6 +150,15 @@ def optimize_hyperpath_weights(
         LOGGER.warning("LP infeasible for hyperpath, falling back to uniform weights")
         return _uniform_fallback(hyperpath, lp_stats, steps, p_values)
 
+    # The solver meets the cover constraints only to its feasibility tolerance
+    # (about 1e-7).  Scale the weights so every attribute is covered exactly,
+    # as the Composition Inequality requires; this raises the bound by the
+    # factor B^(eps/(1-eps)) for a shortfall eps (extended version).
+    x = np.maximum(np.asarray(result.x, dtype=float), 0.0)
+    min_cov = float(np.min(-(a_ub @ x))) if n_constraints else 1.0
+    if 0.0 < min_cov < 1.0:
+        x = x / min_cov
+
     # Extract results
     weights: dict[tuple[int, float], float] = {}
     weights_per_step_list: list[float] = []
@@ -160,7 +169,7 @@ def optimize_hyperpath_weights(
         best_p = p_values[0]
         best_w = 0.0
         for pi, p in enumerate(p_values):
-            w = float(result.x[j * n_p + pi])
+            w = float(x[j * n_p + pi])
             weights[(j, p)] = w
             step_total += w
             if w > best_w:
@@ -169,7 +178,7 @@ def optimize_hyperpath_weights(
         weights_per_step_list.append(step_total)
         p_used_list.append(best_p)
 
-    log_bound = float(result.fun)
+    log_bound = float(c @ x)
 
     return LpWeightResult(
         log_bound=log_bound,

@@ -144,3 +144,29 @@ def test_empty_block_join_gives_zero_bound() -> None:
     cons1 = block_constraints(q, data, max_block_size=1)
     assert all(c.log_norm > float("-inf") for c in cons1)
     assert flow_bound(["a", "b", "c"], cons1).bound > 0.0
+
+
+def test_guaranteed_bound_returns_the_polymatroid_optimum() -> None:
+    """Small queries get the polymatroid value; the flow value is only a candidate."""
+    from src.estimators.flow_bound import guaranteed_block_bound
+
+    cons = _path_constraints(100, 80, 3)
+    attrs = ("a", "b", "c")
+    res = guaranteed_block_bound(attrs, cons, cyclic_orders(attrs), 99.0)
+    assert res.method == "polymatroid"
+    assert res.log_bound == pytest.approx(polymatroid_bound(attrs, cons))
+    assert res.flow_certified is True  # simple constraints: flow is exact
+
+
+def test_guaranteed_bound_falls_back_to_the_cover_bound() -> None:
+    """Beyond the polymatroid size limit the caller's cover bound is returned."""
+    from src.estimators.flow_bound import guaranteed_block_bound
+
+    cons = _path_constraints(100, 80, 3)
+    attrs = ("a", "b", "c")
+    res = guaranteed_block_bound(
+        attrs, cons, cyclic_orders(attrs), 42.0, max_polymatroid_vars=2
+    )
+    assert res.method == "cover_fallback"
+    assert res.log_bound == 42.0
+    assert res.flow_certified is None
