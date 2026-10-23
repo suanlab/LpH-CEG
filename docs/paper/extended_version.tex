@@ -287,7 +287,7 @@ common-neighbour norms & $\big\|\big(|N_R(a)\cap N_S(c)|\big)_{a,c}\big\|_p$ & y
 \end{tabular}
 \end{center}
 
-\begin{proposition}[Separation]
+\begin{proposition}[Separation]\label{prop:separation}
 The common-neighbour $\ell_2$ norm is not determined by the other rows of
 the table: there are two databases that agree on every single-relation
 degree sequence, on the pair-join size, on every shared-attribute product
@@ -356,6 +356,86 @@ Use $bs{=}1$ when the bound is re-solved many times per statistics build
 and $bs{\ge}2$ when the pair joins can be materialized ahead of the
 workload.
 
+
+\section{IMDb at five times the films, and the YAGO count gap}
+\emph{IMDb at $1{,}000$ films.} At five times the films of the paper's slice ($1{,}000$; the $40$ queries at
+$|V|{=}6$, bounds only, three norms; exploratory) every tightness ratio
+grows: the inference gap from $3.8$ to $4.8\times$, block statistics from
+$4.0$ to $7.0\times$ under the cover LP and from $17$ to $48\times$ under
+the flow LP, $40/40$ below entropic, the program gap from $4.2$ to
+$6.8\times$. Collecting the statistics grows faster than the data:
+$4.2\times$ the rows cost $48$\,s per query at the median (from
+$4.4$\,s), up to $25$\,min and $16$\,GiB, measured with $10$ workers
+sharing the machine.
+
+\emph{YAGO counts.} Our exact counts differ from G-CARE's on $49$ of the $192$ YAGO queries we evaluate. A
+second implementation of the same semantics that reads G-CARE's raw files
+without DuckDB reproduces our count on all $49$ of them, and $45$ of them lie in
+G-CARE's Petal families ($45$ of $100$ Petal queries, against $4$ of $92$
+others), so the gap is in semantics or preprocessing we could not reconstruct, not settled either way.
+
+\section{Degree sequences from catalog histograms}
+Degree sequences can come from catalog histograms at \texttt{ANALYZE} time: over buckets $(d_i, c_i)$ (degree $d_i$ held by $c_i$ values), $\|\mathbf{d}\|_p = (\sum_i c_i d_i^p)^{1/p}$. We have not evaluated this.
+
+\section{CorrBound's cyclic workload}
+CorrBound's public artifact (\url{https://github.com/christophmayerm/CorrBound}, MIT) ships the
+workload of its cyclic experiment: $400$ labelled subgraph-matching queries
+with $8$ vertices ($200$ dense, $200$ sparse; $11$--$28$ edges) on DBLP
+($317$K vertices, $2.1$M directed edge rows, symmetric), its estimates for
+CorrBound-e (exact degree vectors) and LpBound (flow bound), and true
+cardinalities. Each edge atom becomes a binary relation over its two query
+vertices holding the edges whose endpoints carry the query's labels; the
+vertex atoms are key lookups with a label predicate, and CorrBound's own LP
+drops them too. CorrBound-e's and the artifact LpBound's estimates are
+taken from the artifact's result files, not recomputed.
+
+\emph{Same norms, same baseline.} CorrBound's LpBound statistics use
+$p\in\{1,\dots,30,\infty\}$, and so do we. Our single-relation polymatroid
+bound reproduces the artifact's LpBound estimate on $400/400$ queries
+(ratio $1.000000$ at both extremes; the artifact computes it with the
+flow LP and we with the polymatroid program, which coincide for
+single-relation degree constraints), so both sides start from the same
+statistics and the same baseline.
+
+\emph{Results.} Block statistics ($bs{\le}2$, every interface) under the
+polymatroid program sit a median $1.99\times$ above the exact count (P95
+$3.9\times$), against $6.1\times$ (P95 $20\times$) for CorrBound-e and
+$64.6\times$ (P95 $190\times$) for LpBound. They are tighter than CorrBound-e
+on $382/400$ queries ($191$ of each kind), a median $3.0\times$, and at most
+$1.51\times$ looser on the other $18$. No bound of any method falls below the
+exact count.
+
+\emph{The counts.} The artifact's true cardinalities sit below the count its
+own SQL returns on its own data on all $400$ queries (a median $0.6\%$, at
+most $39\%$); we checked three queries by running the artifact's SQL
+verbatim, and requiring distinct images for same-label vertices does not
+reproduce them. We therefore check validity against a recount with DuckDB
+over the same relations; against the artifact's counts no bound falls below
+either.
+
+\emph{What each side has.} CorrBound-e adds, for every query vertex with $k$
+incident edges, the $k$-way generalized inner products of their degree
+vectors ($p=1,2,3$) and intra-relation correlation norms; our $bs{\le}2$
+catalog has neither. It has the interface-conditioned norms of every pair
+block, which CorrBound's vocabulary lacks for the one-side and
+common-neighbour interfaces (Proposition~\ref{prop:separation}). The two
+are complementary, and the $18$ queries where CorrBound-e is tighter
+suggest that combining them would help. CorrBound's statistics are computed
+once per dataset; ours cost a median $25$\,s per query in our Python
+prototype (all pair blocks, $31$ norms), and the solve $0.38$\,s.
+
+\section{Condensed in the main text}
+Three passages are shortened in the paper. \emph{Pair-join sizes on IMDb} (the paper's IMDb paragraph keeps the self-join explanation): where half the
+pairs are self-joins, sizes add almost nothing over LpBound, while the
+interface-conditioned statistics add $17$--$171\times$. \emph{Collection cost:} the
+$61\times$ overhead of blocks, growing faster than the data, calls for
+cataloging inside the system rather than per-query collection.
+\emph{Join evaluation:} Yannakakis+ makes Yannakakis-style evaluation of
+acyclic queries practical in DuckDB and PostgreSQL, the complement of our
+cyclic setting; CompactLTJ shrinks Leapfrog Triejoin; Capelli et al.'s
+sampling variant takes tree-superadditive prefix upper bounds, which our
+residuals could supply if they qualify, though in our $66$-query study they
+do not beat max-degree ordering in general.
 
 \section{Unified comparison on synthetic cycles}
 \begin{table}[h]

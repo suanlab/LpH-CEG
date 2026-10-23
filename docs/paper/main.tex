@@ -164,7 +164,7 @@ Under the same program (the order-relaxed flow LP, so a lower bound on
 the gain), block statistics carry
 a further median $63\times$ on the Hetionet long suite beyond pair-join sizes (three
 norms; $19$--$154\times$ by $|V|$), a proxy for the two-relation statistic CorrBound adds (itself
-worth $31\times$ there; on IMDb, where half the pairs are self-joins, sizes add almost nothing). For a block of two binary relations all interfaces but one come from
+worth $31\times$ there). On CorrBound's own cyclic workload ($400$ subgraph-matching queries, its norm set) block statistics (polymatroid) are a median $3.0\times$ tighter than CorrBound-e's published estimates. For a block of two binary relations all interfaces but one come from
 single-relation degree tables without the pair join, and in the headline setting (eleven norms, polymatroid) they carry a median $88\%$ (Hetionet) and $86\%$ (IMDb) of the log-gain over LpBound; the exception, the common-neighbour sequence, carries the rest, and its $\ell_2$ is determined by none of the others (extended version).
 
 \item \textbf{Validity, cost and limits
@@ -652,8 +652,7 @@ $2.7$--$6.8\times$ on Hetionet and IMDb).
 Learned and summary estimators (FactorJoin, GNCE,
 COLOR~\cite{wu2023factorjoin,schwabe2024gnce,deeds2025color}) produce \emph{point}
 estimates without guaranteed upper bounds; CorrBound, which enriches the
-entropic program with cross-relation statistics, is compared through a
-proxy in Section~\ref{sec:stats-vs-inference}.
+entropic program with cross-relation statistics, is compared on its own workload and through a proxy (Section~\ref{sec:stats-vs-inference}).
 
 \paragraph{Unified bound comparison}
 On one synthetic suite (table in the extended version) the four guaranteed-bound methods order as predicted: CEG$_M$, AGM $\ge$ Cover-LP $\ge$ Entropic
@@ -893,15 +892,7 @@ size $\sum_x \deg(x)^2$, that relation's $\ell_2^2$, which LpBound already
 has; the movie-sharing pairs are genuine inner products but rarely bind.
 The interface-conditioned statistics still add $17$--$171\times$. (IMDb
 has no catalog run; the $61\times$ overhead and the $10$\,ms cataloged
-estimate are Hetionet's.) At five times the films ($1{,}000$; the $40$ queries at
-$|V|{=}6$, bounds only, three norms; exploratory) every tightness ratio
-grows: the inference gap from $3.8$ to $4.8\times$, block statistics from
-$4.0$ to $7.0\times$ under the cover LP and from $17$ to $48\times$ under
-the flow LP, $40/40$ below entropic, the program gap from $4.2$ to
-$6.8\times$. Collecting the statistics grows faster than the data:
-$4.2\times$ the rows cost $48$\,s per query at the median (from
-$4.4$\,s), up to $25$\,min and $16$\,GiB, measured with $10$ workers
-sharing the machine.
+estimate are Hetionet's.) At five times the films (exploratory, bounds only) every tightness ratio grows and collection grows faster than the data: $48$\,s median per query, up to $25$\,min and $16$\,GiB, on a shared machine (extended version).
 
 \emph{G-CARE.} As an external check we run every cyclic query of the
 G-CARE benchmark~\cite{park2020gcare} on its AIDS and YAGO graphs ($241$
@@ -911,11 +902,7 @@ vertex labels, homomorphism counts, and eleven norms on both sides
 (Table~\ref{tab:gcare}). Our exact counts equal G-CARE's on $241/241$ AIDS
 queries; on YAGO they differ on $49$ of the $192$ we evaluate, in both
 directions and under every semantics we tried (directed or not, injective
-or not; over all $364$ cyclic YAGO queries with a count, $80$ differ). A
-second implementation of the same semantics that reads G-CARE's raw files
-without DuckDB reproduces our count on all $49$, and $45$ of them lie in
-G-CARE's Petal families ($45$ of $100$ Petal queries, against $4$ of $92$
-others), so the gap is in semantics or preprocessing we could not reconstruct, not settled either way. We check validity against our counts (one YAGO bound, $26$, lies
+or not; over all $364$ cyclic YAGO queries with a count, $80$ differ). A DuckDB-free reimplementation reproduces our count on all $49$, so the gap is in semantics or preprocessing we could not reconstruct and is unsettled (extended version). We check validity against our counts (one YAGO bound, $26$, lies
 below G-CARE's $33$ but above our $17$). $174$ YAGO queries exceed the
 prototype (a relation over $300$K rows or a pair join over $20$M) and are
 reported, not run. Under the polymatroid program, block statistics are
@@ -926,8 +913,18 @@ program, against a $1.35\times$ statistics gain (block statistics beat
 LpBound on only $135/241$); on YAGO the two are comparable ($6.1\times$
 against $8.9\times$). With three norms the AIDS order flips ($3.4\times$ against $21\times$). On both
 graphs the $bs{=}2$ program gap ($12\times$, $2.7\times$) is below the
-$bs{=}1$ one. G-CARE is thus a regime where the program matters as much as
-the statistics.
+$bs{=}1$ one. G-CARE is thus a regime where the program matters as much as the statistics.
+
+\emph{CorrBound's workload.} CorrBound's artifact~\cite{mayer2026corrbound}
+ships its $400$ labelled $8$-vertex subgraph-matching queries on DBLP with
+its published estimates, used as given. With its norms ($p{=}1,\dots,30,\infty$) our LpBound
+reproduces the artifact's on $400/400$ queries; block statistics under the
+polymatroid program sit a median $1.99\times$ above the exact count,
+against $6.1\times$ for CorrBound-e and $64.6\times$ for LpBound, and are
+tighter than CorrBound-e on $382/400$ (median $3.0\times$, at most
+$1.51\times$ looser), with no bound below a recount (the artifact's own counts are a median $0.6\%$ lower; extended version). Our statistics cost a
+median $25$\,s per query against CorrBound's per-dataset ones, and lack its
+$k$-way inner products (extended version).
 
 \begin{table}[t]
 \centering
@@ -1311,45 +1308,35 @@ constraints by a polynomial flow LP and show the non-simple case
 as hard as the general polymatroid bound, which is why our flow bound over blocks fixes an attribute order;
 CorrBound~\cite{mayer2026corrbound} adds inner products of degree
 vectors across join columns (a two-relation statistic in our
-terms) to the entropic program and reports $6.7$--$16.3\times$ lower error than LpBound on cyclic subgraph-matching queries. The first tightens inference at fixed
-statistics, the second enriches statistics at fixed inference. The
+terms) to the entropic program and reports $6.7$--$16.3\times$ lower error than LpBound on cyclic subgraph-matching queries; there, block statistics are a median $3.0\times$ tighter than its published estimates, and on our suites they add $63\times$ over a proxy with exact pair-join sizes (Section~\ref{sec:stats-vs-inference}).  The
 $\ell_1$-norm of a $bs{=}2$ block sequence \emph{is} CorrBound's inner
-product (the join size). In a proxy that adds exactly those sizes to the entropic program (optimistic, without sketches or CorrBound's multi-relation terms, so not comparable to its reported gains) they are worth a median $31\times$ over LpBound on our Hetionet long suite, and the interface-conditioned block statistics a further $63\times$. The shared-interface block norms
+product (the join size).  The shared-interface block norms
 $\sum_b \deg_R(b)^p\deg_S(b)^p$ are $\ell_p$-weighted inner products and
 may fall within CorrBound's vocabulary; the one-side and common-neighbour statistics need not, since they depend on \emph{which} values co-occur, not only how often (for the common-neighbour $\ell_2$ we give a separating example in the extended version)---and the latter needs the join that CorrBound's
 sketches avoid (Section~\ref{sec:stats-vs-inference}).
-Lin and Wang~\cite{lin2025ambidextrous} likewise tighten degree-sequence
-bounds by counting claw \emph{pairs}, a richer statistic again.
+Lin and Wang~\cite{lin2025ambidextrous} count claw \emph{pairs}, a richer statistic again.
 SafeBound~\cite{deeds2023safebound} deploys degree-sequence
 bounds~\cite{deeds2023dsb} with
 predicates on relational workloads, following pessimistic
 CE~\cite{cai2019pessimistic}; we target graph patterns and a per-step
 decomposition.
 
-Theorem~\ref{thm:composition} applies the entropy framework of Abo Khamis et al.~\cite{abokhamis2024lpnorm} ($\ell_p$ constraints as information inequalities) to block-joined relations.
+Theorem~\ref{thm:composition} applies Abo Khamis et al.'s entropy framework~\cite{abokhamis2024lpnorm} to block joins.
 
 \paragraph{Summaries and learned estimators}
 COLOR~\cite{deeds2025color} summarizes and GNCE~\cite{schwabe2024gnce}, SPACE~\cite{aytimur2025space} and FactorJoin~\cite{wu2023factorjoin} learn point estimates without a guarantee, for which pessimistic bounds are the safety fallback~\cite{abokhamis2025pessimistic}; PathCE~\cite{wang2025pathce} keeps an upper bound over path summaries.
 
 \paragraph{Join evaluation algorithms}
-Yannakakis+~\cite{wang2025yannakakis} makes Yannakakis-style evaluation
-of \emph{acyclic} queries practical in DuckDB and PostgreSQL, the
-complement of our cyclic setting;
-CompactLTJ~\cite{arroyuelo2025compactltj} shrinks Leapfrog Triejoin;
-Capelli et al.'s sampling variant~\cite{capelli2025simple} takes tree-superadditive prefix upper bounds, which our residuals could supply if they qualify---though our 66-query study shows
-they do not beat max-degree ordering in general.
+Yannakakis+~\cite{wang2025yannakakis} (acyclic queries, the complement of our setting) and CompactLTJ~\cite{arroyuelo2025compactltj} evaluate joins; Capelli et al.'s sampling variant~\cite{capelli2025simple} takes tree-superadditive prefix bounds, which our residuals could supply if they qualify, though they do not generally beat max-degree ordering in our $66$-query study.
 
 %% ===================================================================
 \section{Practical Considerations}
 \label{sec:practical}
 
 \paragraph{When to use LpH-CEG}
-Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$ for the cover LP (the entropic and polymatroid programs gain from more norms): gains are rare on triangles and grow with cycle length; without a cycle the LP gains only from cardinalities (Section~\ref{sec:whycyclic}). Degree
-sequences can come from catalog histograms
-($\lpnorm{\mathbf{d}}{p} = (\sum_i c_i d_i^p)^{1/p}$ over buckets
-$(d_i, c_i)$) at \texttt{ANALYZE} time (not evaluated here).
+Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,\infty\}$ for the cover LP (the entropic and polymatroid programs gain from more norms): gains are rare on triangles and grow with cycle length; without a cycle the LP gains only from cardinalities (Section~\ref{sec:whycyclic}); catalog histograms could supply the degree sequences (not evaluated; extended version).
 
-\paragraph{Under predicates} Block statistics of unfiltered relations stay valid under a selection (degrees only shrink) but loosen. With a production-year predicate on every movie variable of the $40$ IMDb $|V|{=}6$ cycles, exact filtered single-relation statistics plus a predicate-free block catalog (eleven norms) put the polymatroid bound a median $1.9\times$ below LpBound on $40/40$ queries when $46\%$ of rows pass ($\text{year}{\ge}2005$), but only $1.03\times$ ($22/40$) at $18\%$ ($\text{year}{<}1995$); per-predicate block statistics stay $4.2$--$5.3\times$ below, and no bound falls below the exact count ($240$ checks). Selective predicates thus need costly per-predicate block statistics, the main obstacle to $bs{\ge}2$ under general predicates, not the program.
+\paragraph{Under predicates} Block statistics of unfiltered relations stay valid under a selection (degrees only shrink) but loosen. With a production-year predicate on every movie variable of the $40$ IMDb $|V|{=}6$ cycles, exact filtered single-relation statistics plus a predicate-free block catalog (eleven norms) put the polymatroid bound a median $1.9\times$ below LpBound on $40/40$ queries when $46\%$ of rows pass ($\text{year}{\ge}2005$), but only $1.03\times$ ($22/40$) at $18\%$ ($\text{year}{<}1995$); per-predicate block statistics stay $4.2$--$5.3\times$ below, and no bound falls below the exact count ($240$ checks). Selective predicates thus need per-predicate block statistics, the main obstacle to $bs{\ge}2$ under predicates, not the program.
 
 %% ===================================================================
 \section{Conclusion}
@@ -1366,22 +1353,20 @@ LpBound on rule-selected Hetionet cycles ($|V|{=}6$--$10$), but only $1.3$--$6.8
 IMDb, at or below the inference gap. The polymatroid program over block
 statistics, valid for every $p$, recovers $9.7$--$87\times$ there and
 beats the cover LP by $5.0$--$11.6\times$ against $2.7$--$6.8\times$ on
-single-relation statistics, so richer statistics reopen the program. On
-G-CARE it gains $15$--$24\times$, while under the cover LP with eleven norms
+single-relation statistics, so richer statistics reopen the program. On G-CARE
+it gains $15$--$24\times$, on CorrBound's own workload a median $3.0\times$ over CorrBound-e, while under the cover LP with eleven norms
 the inference gap dominates on AIDS. Our $\ell_p$ flow LP tracks the
 polymatroid optimum in polynomial time (equal on $633$ of $862$ queries),
 is certified per query rather than proved valid for $\ell_p$, and scales
 past $|V|{\approx}12$.
 
-\emph{Limits.} Our evidence is binary graph patterns on Hetionet and IMDb
-slices ($3$--$20$K rows, $200$--$1{,}000$ films) and on G-CARE's AIDS and
-YAGO, where $174$ YAGO queries exceed our Python prototype and validity is
-checked against our own counts, which differ from G-CARE's on $49$ of
-$192$. Our LpBound is a reimplementation without its predicate support,
-and our block statistics are collected without predicates , so STATS-CEB~\cite{han2021stats} and JOB's own queries are out of scope.
-Blocks cost a median $61\times$ more to collect, a cost that grows faster
-than the data and calls for cataloging inside the system. Bound-guided join orders lose to DuckDB on IMDb: this maps where bound
-headroom lies; it is not an optimizer.
+\emph{Limits.} Our evidence is binary graph patterns: Hetionet and IMDb
+slices ($3$--$20$K rows, $200$--$1{,}000$ films), G-CARE's AIDS and YAGO
+($174$ YAGO queries exceed our prototype; validity uses our counts) and
+CorrBound's DBLP queries. Our LpBound reimplementation lacks its predicate support and our block statistics handle predicates only as in Section~\ref{sec:practical}, so
+STATS-CEB~\cite{han2021stats} and JOB's own queries are out of scope.
+Blocks cost a median $61\times$ more to collect, growing faster than the
+data. Bound-guided join orders lose to DuckDB on IMDb: we map bound headroom rather than build an optimizer.
 
 %% ===================================================================
 % ICDE 2027 requires disclosure of AI-generated content in the

@@ -181,6 +181,7 @@ def main() -> None:
     rrs = load("results/e2e/robustness_repeat_summary.csv")
     apx = load("results/pushdown/ablation_p11_poly_summary.csv")
     cac = load("results/cost/cost_accuracy_summary.csv")
+    cbs = load("results/corrbound/sm_compare_summary.csv")
     vcs = load("results/characterization/voi_cost_summary.csv")
     ssc = load("results/suite/slice_scale_summary.csv")
     ssr = load("results/suite/slice_scale.csv")
@@ -2541,6 +2542,148 @@ def main() -> None:
             "cost table: imdb checked queries (101)",
             pick(cac, "n_checked", suite="imdb", catalogue="full"),
             101,
+        ),
+        (
+            "CorrBound workload: queries (400)",
+            pick(cbs, "n", method="pairwise"),
+            400,
+        ),
+        (
+            "CorrBound workload: our LpBound / artifact, min (1.0)",
+            pick(cbs, "lpbound_ours_over_artifact_min", method="pairwise"),
+            1.0,
+            1e-06 / 1.0,
+        ),
+        (
+            "CorrBound workload: our LpBound / artifact, max (1.0)",
+            pick(cbs, "lpbound_ours_over_artifact_max", method="pairwise"),
+            1.0,
+            1e-06 / 1.0,
+        ),
+        (
+            "CorrBound workload: block median over exact (1.99)",
+            pick(cbs, "median_over_truth", method="block_poly"),
+            1.99,
+            0.005 / 1.99,
+        ),
+        (
+            "CorrBound workload: CorrBound-e median over exact (6.1)",
+            pick(cbs, "median_over_truth", method="corrbound_e"),
+            6.1,
+            0.05 / 6.1,
+        ),
+        (
+            "CorrBound workload: LpBound median over exact (64.6)",
+            pick(cbs, "median_over_truth", method="lpbound_artifact"),
+            64.6,
+            0.05 / 64.6,
+        ),
+        (
+            "CorrBound workload: block P95 over exact (3.9)",
+            pick(cbs, "p95_over_truth", method="block_poly"),
+            3.9,
+            0.05 / 3.9,
+        ),
+        (
+            "CorrBound workload: CorrBound-e P95 over exact (20)",
+            pick(cbs, "p95_over_truth", method="corrbound_e"),
+            20,
+            0.5 / 20,
+        ),
+        (
+            "CorrBound workload: LpBound P95 over exact (190)",
+            pick(cbs, "p95_over_truth", method="lpbound_artifact"),
+            190,
+            0.5 / 190,
+        ),
+        (
+            "CorrBound workload: block tighter than CorrBound-e (382)",
+            pick(cbs, "n_block_poly_tighter", method="pairwise"),
+            382,
+        ),
+        (
+            "CorrBound workload: CorrBound-e tighter (18)",
+            pick(cbs, "n_corrbound_e_tighter", method="pairwise"),
+            18,
+        ),
+        (
+            "CorrBound workload: median CorrBound-e / block (3.0)",
+            pick(cbs, "median_corrbound_e_over_block_poly", method="pairwise"),
+            3.0,
+            0.05 / 3.0,
+        ),
+        (
+            "CorrBound workload: max block / CorrBound-e (1.51)",
+            pick(cbs, "max_block_poly_over_corrbound_e", method="pairwise"),
+            1.51,
+            0.005 / 1.51,
+        ),
+        (
+            "CorrBound workload: block below exact (0)",
+            pick(cbs, "n_below_truth", method="block_poly"),
+            0,
+        ),
+        (
+            "CorrBound workload: artifact counts below recount, median % (0.6)",
+            100
+            * (pick(cbs, "median_recount_over_artifact_truth", method="pairwise") - 1),
+            0.6,
+            0.05 / 0.6,
+        ),
+        (
+            "CorrBound workload: artifact counts below recount, max % (39)",
+            100 * (pick(cbs, "max_recount_over_artifact_truth", method="pairwise") - 1),
+            39,
+            0.5 / 39,
+        ),
+        (
+            "CorrBound workload: stats seconds per query (25)",
+            pick(cbs, "median_stats_s", method="pairwise"),
+            25,
+            0.5 / 25,
+        ),
+        (
+            "CorrBound workload: solve seconds per query (0.38)",
+            pick(cbs, "median_solve_s", method="pairwise"),
+            0.38,
+            0.005 / 0.38,
+        ),
+        (
+            "CorrBound workload: dense queries (200)",
+            pick(cbs, "n_dense", method="pairwise"),
+            200,
+        ),
+        (
+            "CorrBound workload: block tighter, dense (191)",
+            pick(cbs, "n_block_poly_tighter_dense", method="pairwise"),
+            191,
+        ),
+        (
+            "CorrBound workload: block tighter, sparse (191)",
+            pick(cbs, "n_block_poly_tighter_sparse", method="pairwise"),
+            191,
+        ),
+        (
+            "CorrBound workload: min edges (11)",
+            pick(cbs, "min_edges", method="pairwise"),
+            11,
+        ),
+        (
+            "CorrBound workload: max edges (28)",
+            pick(cbs, "max_edges", method="pairwise"),
+            28,
+        ),
+        (
+            "CorrBound workload: DBLP vertices, thousands (317)",
+            pick(cbs, "dblp_vertices", method="pairwise") / 1000,
+            317,
+            0.5 / 317,
+        ),
+        (
+            "CorrBound workload: DBLP edge rows, millions (2.1)",
+            pick(cbs, "dblp_edge_rows", method="pairwise") / 1e6,
+            2.1,
+            0.05 / 2.1,
         ),
         (
             "G-CARE yago: LpBound/poly median where counts agree (12x)",

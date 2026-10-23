@@ -1,0 +1,6 @@
+method,n,median_over_truth,p95_over_truth,geomean_over_truth,n_below_truth,n_below_artifact_truth,lpbound_ours_over_artifact_min,lpbound_ours_over_artifact_max,median_lpbound_over_corrbound_e,median_lpbound_over_block_poly,median_corrbound_e_over_block_poly,n_block_poly_tighter,n_corrbound_e_tighter,max_block_poly_over_corrbound_e,median_recount_over_artifact_truth,max_recount_over_artifact_truth,n_dense,n_block_poly_tighter_dense,n_block_poly_tighter_sparse,min_edges,max_edges,dblp_vertices,dblp_edge_rows,median_stats_s,median_solve_s,n_truth_differs_from_artifact,n_rows,n_not_ok
+lpbound_artifact,400,64.63,189.5,62.07,0,0,,,,,,,,,,,,,,,,,,,,,,
+lpbound_ours,400,64.63,189.5,62.07,0,0,,,,,,,,,,,,,,,,,,,,,,
+corrbound_e,400,6.145,20.13,6.139,0,0,,,,,,,,,,,,,,,,,,,,,,
+block_poly,400,1.987,3.911,2.117,0,0,,,,,,,,,,,,,,,,,,,,,,
+pairwise,400,,,,,,1.000000,1.000000,9.785,29.86,2.975,382,18,1.506,1.006,1.394,200,191,191,11,28,317080,2099732,25.3,0.38,400,400,0
