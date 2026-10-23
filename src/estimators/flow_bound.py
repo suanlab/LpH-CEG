@@ -481,16 +481,22 @@ class GuaranteedBound:
         method: ``"polymatroid"`` (the ``2**|V|`` program over the unrelaxed
             constraints, valid for every p) or ``"cover_fallback"`` (the
             cover-LP bound supplied by the caller, valid by the Composition
-            Inequality) when the polymatroid program is not attempted.
-        flow_log_bound: The order-relaxed flow-LP value, kept as a candidate.
+            Inequality).
+        flow_log_bound: The order-relaxed flow-LP value, kept as a candidate
+            (``None`` when no orders were given).
         flow_certified: Whether that candidate is at or above the polymatroid
-            optimum (``None`` when the optimum was not computed).
+            optimum up to the relative tolerance (a floating-point check, not
+            exact arithmetic); ``None`` when either value is missing.
+        fallback_reason: ``"size"`` (more attributes than the polymatroid
+            limit) or ``"solver"`` (the polymatroid LP failed); ``None`` for
+            the polymatroid method.
     """
 
     log_bound: float
     method: str
-    flow_log_bound: float
+    flow_log_bound: float | None
     flow_certified: bool | None
+    fallback_reason: str | None = None
 
     @property
     def bound(self) -> float:
@@ -501,7 +507,7 @@ class GuaranteedBound:
 def guaranteed_block_bound(
     attributes: Iterable[AttributeName],
     constraints: Sequence[DegreeConstraint],
-    orders: Iterable[Sequence[AttributeName]],
+    orders: Iterable[Sequence[AttributeName]] | None,
     cover_log_bound: float,
     *,
     max_polymatroid_vars: int = 12,
@@ -509,34 +515,49 @@ def guaranteed_block_bound(
 ) -> GuaranteedBound:
     """Return only a guaranteed bound, and say which guarantee applies.
 
-    The flow LP over order-relaxed l_p block constraints has no general
-    validity proof.  Its value is therefore never returned as the bound: up
-    to ``max_polymatroid_vars`` attributes the polymatroid optimum over the
-    same (unrelaxed) constraints is returned, and the flow value is reported
-    as certified when it is at or above that optimum; beyond, the caller's
-    cover-LP bound is returned and the flow value stays an uncertified
-    candidate.  ``min(cover, flow)`` would not be a guarantee.
+        The flow LP over order-relaxed l_p block constraints has no general
+        validity proof.  Its value is therefore never returned as the bound: up
+        to ``max_polymatroid_vars`` attributes the polymatroid optimum over the
+        same (unrelaxed) constraints is returned; beyond, or if that LP fails,
+        the caller's cover-LP bound is returned.  ``min(cover, flow)`` would not
+        be a guarantee.  The flow value is computed only when ``orders`` is
+        given, as a diagnostic: skip it (``orders=None``) when its time matters,
+    and a failed flow LP leaves it ``None`` without affecting the return.
 
-    Args:
-        attributes: The query attributes.
-        constraints: Degree constraints from exact statistics (or proved
-            upper bounds on them).
-        orders: Candidate attribute orders for the flow relaxation.
-        cover_log_bound: The cover-LP bound on the same statistics, ``log2``.
-        max_polymatroid_vars: Largest ``|V|`` for which the ``2**|V|``
-            program is solved.
-        tol: Relative tolerance of the certification comparison.
+        Args:
+            attributes: The query attributes.
+            constraints: Degree constraints from exact statistics (or proved
+                upper bounds on them).
+            orders: Candidate attribute orders for the flow relaxation, or
+                ``None`` to skip the flow candidate.
+            cover_log_bound: The cover-LP bound on the same statistics, ``log2``.
+                Its validity is the caller's precondition.
+            max_polymatroid_vars: Largest ``|V|`` for which the ``2**|V|``
+                program is solved.
+            tol: Relative tolerance of the certification comparison.
 
-    Returns:
-        The guaranteed bound with its method and the flow candidate.
+        Returns:
+            The guaranteed bound with its method and the flow candidate.
     """
     attrs = sorted(attributes)
-    flow_log = flow_bound_over_orders(attrs, constraints, orders)[0].log_bound
-    if len(attrs) <= max_polymatroid_vars:
+    flow_log: float | None = None
+    if orders is not None:
+        try:
+            flow_log = flow_bound_over_orders(attrs, constraints, orders)[0].log_bound
+        except ValueError:  # a failed candidate must not block the return
+            flow_log = None
+    if len(attrs) > max_polymatroid_vars:
+        return GuaranteedBound(
+            cover_log_bound, "cover_fallback", flow_log, None, "size"
+        )
+    try:
         poly = polymatroid_bound(attrs, constraints)
-        certified = flow_log >= poly - math.log2(1.0 + tol)
-        return GuaranteedBound(poly, "polymatroid", flow_log, certified)
-    return GuaranteedBound(cover_log_bound, "cover_fallback", flow_log, None)
+    except (ValueError, MemoryError):
+        return GuaranteedBound(
+            cover_log_bound, "cover_fallback", flow_log, None, "solver"
+        )
+    certified = None if flow_log is None else flow_log >= poly - math.log2(1.0 + tol)
+    return GuaranteedBound(poly, "polymatroid", flow_log, certified)
 
 
 def flow_bound_over_orders(

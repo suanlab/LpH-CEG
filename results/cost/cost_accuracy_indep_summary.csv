@@ -1,0 +1,13 @@
+suite,catalogue,n,median_collect_s,median_collect_over_lpbound,median_total_s,median_constraints_s,median_solve_s,median_peak_over_loaded_mb,max_peak_mb,median_gain_over_lpbound,median_share_of_full_log_gain,n_checked,median_bound_over_truth,n_invalid,max_abs_log2_sparse_full_minus_full,median_lpbound_flow_s,max_abs_log2_flow_minus_poly_bs1,n_tasks_not_ok
+hetionet,lpbound,120,0.8928,1,0.9944,0.0005,0.0847,20,119,1,0,115,2.126e+05,0,,,,
+hetionet,free,120,5.374,5.964,5.554,0.0014,0.0954,29,132,608.4,0.8789,115,771.7,0,,,,
+hetionet,free_l2,120,6.478,6.8,7.08,0.0015,0.0875,58,430,1297,0.9492,115,340,0,,,,
+hetionet,sparse_full,120,7.525,8.238,8.202,0.0019,0.0861,60,429,1724,1,115,210.8,0,,,,
+hetionet,full,120,38.51,54.04,39.2,0.00195,0.08725,626,6351,1724,1,115,210.8,0,,,,
+hetionet,checks,120,,,,,,,,,,,,,0.00e+00,0.0123,0.00e+00,0
+imdb,lpbound,120,0.5176,1,0.7956,0.0005,0.08445,20,113,1,0,101,127,0,,,,
+imdb,free,120,3.41,6.923,4.206,0.0014,0.09355,34,128,18.43,0.859,101,7.732,0,,,,
+imdb,free_l2,120,3.63,7.564,4.387,0.0015,0.0949,41,304,20.86,0.8964,101,7.271,0,,,,
+imdb,sparse_full,120,4.211,8.345,4.566,0.0016,0.09745,44,341,29.44,1,101,4.623,0,,,,
+imdb,full,120,13.31,25.24,13.36,0.00195,0.09835,262,4149,29.44,1,101,4.623,0,,,,
+imdb,checks,120,,,,,,,,,,,,,0.00e+00,0.0138,0.00e+00,0

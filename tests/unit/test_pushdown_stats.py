@@ -12,9 +12,11 @@ from src.core.block import enumerate_blocks
 from src.estimators.flow_bound import block_constraints, flow_bound_over_orders
 from src.statistics.lp_stats import compute_all_lp_block_extensions
 from src.statistics.pushdown_stats import (
+    codegree_block_extension,
     codegree_interface,
     codegree_l2_upper_bound,
     compute_pushdown_block_extensions,
+    compute_sparse_block_extensions,
     join_free_interfaces,
     sketch_codegree_l2,
 )
@@ -78,6 +80,32 @@ class TestEquality:
         # one-side interfaces also reproduce the degree sequence itself
         a_stats = pushed[(block, frozenset("a"))]
         assert a_stats.degree_sequence == full[(block, frozenset("a"))].degree_sequence
+
+    @pytest.mark.parametrize("seed", [4, 5, 6])
+    def test_sparse_product_gives_every_interface(self, seed: int) -> None:
+        rng = random.Random(seed)
+        q = _query(("R", "ab"), ("S", "bc"))
+        rows_r = _rows(rng, 400, 12, 10) + [("0", "0")] * 3  # duplicates
+        rows_s = _rows(rng, 400, 14, 18)
+        data = {"R": (("a", "b"), rows_r), "S": (("b", "c"), rows_s)}
+        block = Block(frozenset({"R", "S"}))
+        ps = (*(float(p) for p in range(1, 11)), math.inf)
+        full = compute_all_lp_block_extensions(q, [block], data, p_values=ps)
+        sparse = compute_sparse_block_extensions(q, block, data, p_values=ps)
+        assert sparse.keys() == full.keys()
+        for key, st in sparse.items():
+            assert st.count == full[key].count, sorted(key[1])
+            assert st.max_extension == full[key].max_extension
+            for p in ps:
+                assert st.norm(p) == pytest.approx(full[key].norm(p), rel=1e-12)
+        ac = codegree_block_extension(q, block, data, p_values=ps)
+        assert ac.degree_sequence == full[(block, frozenset("ac"))].degree_sequence
+
+    def test_codegree_of_disjoint_relations_is_empty(self) -> None:
+        q = _query(("R", "ab"), ("S", "bc"))
+        data = {"R": (("a", "b"), [("1", "x")]), "S": (("b", "c"), [("y", "2")])}
+        st = codegree_block_extension(q, Block(frozenset({"R", "S"})), data, p_values=P)
+        assert st.count == 0 and st.norm(2.0) == 0.0
 
     def test_ternary_relations_with_two_shared_attributes(self) -> None:
         rng = random.Random(9)

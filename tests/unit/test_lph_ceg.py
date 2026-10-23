@@ -11,6 +11,8 @@ Covers:
 
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from src.estimators.lp_bound import optimize_hyperpath_weights
@@ -18,7 +20,7 @@ from src.estimators.lph_ceg import estimate_lph_ceg
 from src.estimators.pessimistic import estimate_pessimistic
 from src.statistics.lp_stats import compute_all_lp_block_extensions
 from src.utils.query import triangle_query
-from src.utils.types import Block
+from src.utils.types import Block, QueryHypergraph, Relation
 
 _TRIANGLE_DATA: dict[str, tuple[tuple[str, ...], list[tuple[str, ...]]]] = {
     "R": (("a", "b"), [("1", "10"), ("1", "11"), ("2", "20")]),
@@ -240,3 +242,30 @@ def test_under_covering_solver_output_is_rescaled(monkeypatch) -> None:  # type:
         for attr in q.all_attributes
     ]
     assert min(covs) == pytest.approx(1.0, abs=1e-9)
+
+
+def test_intermediate_norm_tightens_an_acyclic_path() -> None:
+    """Theorem 4 is sufficient, not necessary: l2 helps on a 3-path."""
+    q = QueryHypergraph(
+        relations=(
+            Relation("R", frozenset({"a", "b"}), 1),
+            Relation("S", frozenset({"b", "c"}), 10),
+            Relation("T", frozenset({"c", "d"}), 1000),
+        )
+    )
+    t_rows = [("c0", f"d{j}") for j in range(100)]
+    t_rows += [(f"c{i}", "d0") for i in range(1, 901)]
+    data: dict[str, tuple[tuple[str, ...], list[tuple[str, ...]]]] = {
+        "R": (("a", "b"), [("a0", "b0")]),
+        "S": (("b", "c"), [("b0", f"c{i}") for i in range(10)]),
+        "T": (("c", "d"), t_rows),
+    }
+    without_l2 = estimate_lph_ceg(
+        q, data, max_block_size=1, p_values=(1.0, float("inf"))
+    ).estimate
+    with_l2 = estimate_lph_ceg(
+        q, data, max_block_size=1, p_values=(1.0, 2.0, float("inf"))
+    ).estimate
+    assert without_l2 == pytest.approx(1000.0, rel=1e-6)
+    assert with_l2 == pytest.approx(math.sqrt(10 * 10900), rel=1e-6)
+    assert with_l2 >= 109

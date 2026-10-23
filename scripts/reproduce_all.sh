@@ -100,6 +100,7 @@ run_experiments() {
     section "18. Broad Tail-Robustness Distribution (C4)"
     python scripts/robustness_broad.py
     python scripts/robustness_repeat.py      # same 24 queries, 5 shuffled timings per plan (run alone)
+    python scripts/robustness_repeat_raw.py  # replication keeping every timing; reference chosen and measured on disjoint runs (run alone)
     python scripts/plan_ranking_study.py     # Kendall tau of bound rankings vs true cost
 
     section "19. p-value Sufficiency Ablation across Families"
@@ -144,12 +145,14 @@ run_experiments() {
     python scripts/prepare_imdb_cycles.py --n-movies 1000 --out data/imdb_cycles_n1000
     python scripts/evaluate_imdb_suite.py --data-dir data/imdb_cycles_n1000 \
         --tag imdb_scale_n1000 --no-exact --lengths 6
+    python scripts/imdb_scale_sparse.py       # the same 40 queries at 200 and 1,000 films through the sparse-product path (~5 min)
     python scripts/imdb_plan_injection.py     # bound-guided join order in DuckDB (~2 h)
 
     section "20l. External Benchmark: G-CARE Cyclic Queries (needs G-CARE data; ~2 h)"
     python scripts/gcare_prepare.py           # AIDS + YAGO into data/gcare/gcare.duckdb
     python scripts/gcare_suite.py             # 607 cyclic queries, ten and three norms
     python scripts/gcare_poly_certify.py      # flow >= polymatroid on every evaluated query (~8 h)
+    python scripts/gcare_topology.py          # G-CARE inclusion, agreement and gain by topology (extended version)
     python scripts/gcare_recount.py           # independent recount of the 49 disputed YAGO counts
 
     section "20h. Long-Cycle Suite, |V| in {6,8,10} (register, then evaluate; ~1.5 h)"
@@ -184,7 +187,9 @@ run_experiments() {
     python scripts/predicate_blocks.py        # year predicates on IMDb |V|=6: predicate-free block catalog (~10 min)
     python scripts/guard_ordering.py          # bound-vs-engine-estimate plan guard (negative result; not in the paper)
     python scripts/ablation_p11_poly.py       # l2 ablation in the headline setting: eleven norms, polymatroid (~1 h)
-    python scripts/cost_accuracy.py           # cost against tightness of four catalogs, one setting (Table V; ~45 min)
+    python scripts/cost_accuracy.py           # earlier cost run: four catalogs in one process (extended version; ~45 min)
+    python scripts/cost_accuracy_indep.py     # cost against tightness, one process per catalog, sparse and materialized full (Table V; ~1 h, run alone)
+    python scripts/ablation_overlap.py        # gain inside and outside CorrBound's pairwise vocabulary (~10 min)
     # CorrBound's cyclic workload: needs a clone of https://github.com/christophmayerm/CorrBound
     # (set LPH_CORRBOUND_DIR; default ../external/CorrBound)
     python scripts/corrbound_sm_recount.py    # recount its 400 subgraph-matching queries with DuckDB (~5 min)

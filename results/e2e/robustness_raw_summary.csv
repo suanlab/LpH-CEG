@@ -1,0 +1,6 @@
+scope,n,bound_slowdown_median,bound_slowdown_p95,bound_slowdown_max,duckdb_slowdown_median,duckdb_slowdown_p95,duckdb_slowdown_max,bound_slowdown_split_median,bound_slowdown_split_p95,bound_slowdown_split_max,duckdb_slowdown_split_median,duckdb_slowdown_split_p95,duckdb_slowdown_split_max,bound_over_duckdb_median,bound_over_duckdb_p95,bound_over_duckdb_max
+all,24,1.0516,1.1246,1.5209,1.0640,5.1835,6.1407,1.0000,1.1138,1.7478,0.8776,5.2562,5.9159,1.0067,1.8073,2.4594
+cycle3,6,1.0681,1.0784,1.1282,0.9452,1.0060,1.1221,0.8323,0.9458,1.1179,0.7849,0.8088,0.9366,1.1325,1.1637,1.1707
+cycle4,6,1.0618,1.1178,1.1246,0.6022,0.6804,0.6954,1.0229,1.0854,1.0988,0.5859,0.6263,0.6954,1.7759,1.9110,2.4594
+diamond,6,1.0471,1.0918,1.5209,2.3441,2.7470,3.0829,1.0447,1.1138,1.7478,2.3862,2.7286,2.8061,0.5337,0.6165,1.1622
+k4,6,1.0214,1.0864,1.1037,4.2096,5.8885,6.1407,1.0000,1.0023,1.0533,4.2542,5.8637,5.9159,0.2534,0.4019,0.4225

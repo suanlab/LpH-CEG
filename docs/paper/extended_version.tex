@@ -317,7 +317,7 @@ real data (the paper's ablations measure that).
 
 \section{Which statistic needs the join: three-norm details, sketch and selection}
 Of the eight interfaces of a block of binary relations $R(a,b),S(b,c)$,
-seven (five non-trivial) are functions of single-relation degree tables
+seven (five non-trivial) come from a scan of one relation with degree lookups in the other
 (the degree of $a$ is $\sum_{b\in N_R(a)}\deg_S(b)$, that of $b$ is
 $\deg_R(b)\deg_S(b)$); only $\{a,c\}$, the common-neighbour count
 $|N_R(a)\cap N_S(c)|$, needs the pair join; its $\ell_2$ is determined neither by the other interfaces nor by shared-attribute inner products (Section on the separating example), while its $\ell_1$ is the join size. We compute the seven without the join (identical to
@@ -344,6 +344,10 @@ gain for a random three; timed end to end, this plan takes a median
 $0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper)
 but $1.39\times$ on IMDb, where join-free statistics, sketches and ranking
 cost more than the three joins they skip.
+These times are against materialized pair joins. The sparse-product path
+of the paper's Table~V computes every common-neighbour norm without join
+tuples, for $8.2\times$ and $8.3\times$ LpBound's collection, so choosing
+which blocks to join matters only where the joins are materialized.
 
 
 \section{Which block size to pay for: cost-study details}
@@ -437,6 +441,186 @@ sampling variant takes tree-superadditive prefix upper bounds, which our
 residuals could supply if they qualify, though in our $66$-query study they
 do not beat max-degree ordering in general.
 
+\section{Intermediate norms on an acyclic path}
+Theorem~4 (cyclic improvement) is a sufficient condition. Intermediate norms
+can also tighten the cover bound on a path. Take
+$Q = R(a,b)\bowtie S(b,c)\bowtie T(c,d)$ with $R=\{(a_0,b_0)\}$,
+$S=\{(b_0,c_i) : 0\le i<10\}$ and
+$T=\{(c_0,d_j) : 0\le j<100\}\cup\{(c_i,d_0) : 1\le i\le 900\}$, so
+$|R|,|S|,|T| = 1, 10, 1{,}000$ and $|Q| = 109$. On the hyperpath
+$R,S,T$ with $bs{=}1$, the cover LP gives $1{,}000$ with
+$\mathcal{P}=\{1,\infty\}$ and $\sqrt{10}\cdot\sqrt{10{,}900}\approx 330.15$
+with $\mathcal{P}=\{1,2,\infty\}$: weights $(1,\tfrac12,1)$ with exponents
+$(1,1,2)$ cover the attributes $(a,b,c,d)$ at $(1,1.5,1,1)$, and the
+$\ell_2$ of $T$'s $c$-degrees ($\sqrt{100^2+900}$) replaces part of $S$'s
+extension. The cardinalities are the same on both sides; only $\ell_2$ is
+added. A second instance (with $|S|=22$, $|T|=100$) goes from $100$ to
+$\sqrt{20\cdot 190}\approx 61.64$. Both values are what the released
+estimator returns, and LpBound's entropic bound on the same statistics
+equals them. Our experiments do not measure how often this happens on
+acyclic workloads, and the stars we ran gain nothing (each leaf is covered
+by one step only).
+
+\section{G-CARE YAGO by topology}
+The YAGO set we evaluate is the part of G-CARE's cyclic queries that fits
+the prototype's size caps, so it is not a random subset, and our counts
+differ from G-CARE's on part of it. Table~\ref{tab:yago-topo} breaks it
+down (\texttt{scripts/gcare\_topology.py}); gain is LpBound's entropic
+bound over the polymatroid bound on block statistics, eleven norms. The
+$143$ agreeing queries are the external check proper; the $49$ others are
+our reconstruction of G-CARE's semantics. Inclusion depends on topology
+(Cycle\_6: $25$ of $90$; Petal\_6: $50$ of $78$), and so does the gain, so
+the overall median describes this subset, not YAGO's cyclic workload. On
+AIDS all $241$ queries run and agree (median $15.2\times$).
+
+\begin{table}[h]
+\centering
+\caption{YAGO cyclic queries by topology: G-CARE's set, evaluated, count
+equal to G-CARE's, and median gain (all / agreeing / not).}
+\label{tab:yago-topo}
+\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Topology & cyclic & run & agree & gain & agree & not \\
+\midrule
+Clique\_10 & $8$ & $8$ & $7$ & $2.84\times$ & $2.84\times$ & $71.2\times$ \\
+Clique\_6 & $1$ & $1$ & $1$ & $1.54\times$ & $1.54\times$ & -- \\
+Cycle\_3 & $57$ & $41$ & $41$ & $2.92\times$ & $2.92\times$ & -- \\
+Cycle\_6 & $90$ & $25$ & $25$ & $68.9\times$ & $68.9\times$ & -- \\
+Cycle\_9 & $12$ & $3$ & $3$ & $5{,}930\times$ & $5{,}930\times$ & -- \\
+Flower\_6 & $12$ & $10$ & $10$ & $8.67\times$ & $8.67\times$ & -- \\
+Graph\_12 & $2$ & $0$ & $0$ & -- & -- & -- \\
+Graph\_3 & $2$ & $2$ & $0$ & $168\times$ & -- & $168\times$ \\
+Graph\_6 & $10$ & $2$ & $1$ & $161\times$ & $316\times$ & $6.69\times$ \\
+Graph\_9 & $10$ & $0$ & $0$ & -- & -- & -- \\
+Petal\_12 & $22$ & $13$ & $1$ & $1{,}213\times$ & $1{,}213\times$ & $1{,}427\times$ \\
+Petal\_6 & $78$ & $50$ & $50$ & $31.3\times$ & $31.3\times$ & -- \\
+Petal\_9 & $62$ & $37$ & $4$ & $87.5\times$ & $39.0\times$ & $93.2\times$ \\
+\midrule
+all & $366$ & $192$ & $143$ & $24.4\times$ & $12.1\times$ & $311\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Bootstrap intervals of the gains}
+The paper reports that query-level bootstrap intervals keep each median
+ratio to LpBound on one side of $1$. For the polymatroid program on block
+statistics that side is guaranteed by construction (its constraints contain
+LpBound's), so the informative quantity is the size of the gain.
+Table~\ref{tab:boot} gives it: median gain over LpBound (eleven norms) with
+its $95\%$ interval, from $10{,}000$ resamples of the registered queries of
+the fixed databases (\texttt{results/suite/bootstrap\_ci.csv}). The
+intervals cover query sampling only, not other data snapshots, row samples
+or the pilot choices.
+
+\begin{table}[h]
+\centering
+\caption{Median gain over LpBound with $95\%$ bootstrap interval.}
+\label{tab:boot}
+\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Suite & $|V|$ & cover $bs{\le}2$ & interval & polymatroid & interval \\
+\midrule
+Hetionet & $6$ & $45.7\times$ & $[31.1, 69.3]$ & $236\times$ & $[155, 335]$ \\
+Hetionet & $8$ & $269\times$ & $[181, 337]$ & $1{,}724\times$ & $[1{,}213, 2{,}567]$ \\
+Hetionet & $10$ & $920\times$ & $[767, 1{,}204]$ & $10{,}160\times$ & $[7{,}831, 13{,}077]$ \\
+IMDb & $6$ & $1.27\times$ & $[1.14, 1.34]$ & $9.73\times$ & $[8.25, 12.2]$ \\
+IMDb & $8$ & $2.88\times$ & $[2.58, 3.33]$ & $29.8\times$ & $[24.8, 34.5]$ \\
+IMDb & $10$ & $6.83\times$ & $[5.97, 7.94]$ & $86.8\times$ & $[71.1, 96.5]$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Statistics outside a proxy for CorrBound's}
+The interfaces of a block of two binary relations $R(a,b),S(b,c)$ fall into
+four groups by what they count: the pair-join size ($\emptyset$); functions
+of $\deg_R(b)$ and $\deg_S(b)$ alone ($\{b\},\{a,b\},\{b,c\},\{a,b,c\}$),
+whose $\ell_p$ norms are the inner products
+$\sum_b\deg_R(b)^q\deg_S(b)^r$ with $(q,r)\in\{(1,1),(p,p),(1,p),(p,1)\}$, a subset of CorrBound's (its Lemma~3.1 allows a separate $p_i$ per relation and $k$-way products); the one-side
+interfaces $\{a\},\{c\}$; and the common-neighbour interface $\{a,c\}$.
+Table~\ref{tab:overlap} adds them in that order to LpBound's single-relation
+statistics (eleven norms, polymatroid program, median gain over LpBound over
+$120$ queries per suite; \texttt{scripts/ablation\_overlap.py}). The proxy is
+exact (no sketches) but covers only these exponent pairs and no $k$-way
+products, so the shares below are relative to it. Beyond it, the one-side and
+common-neighbour statistics tighten the bound on $120/120$ Hetionet and
+$120/120$ IMDb queries, a median $34.4\times$ and $13.9\times$, and carry a median
+$48\%$ and $79\%$ of the log-gain; on their own they come within
+$1.03\times$ and $1.03\times$ of the full catalog's median.
+
+\begin{table}[h]
+\centering
+\caption{Cumulative catalogs: median gain over LpBound.}
+\label{tab:overlap}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Catalog & Hetionet & IMDb \\
+\midrule
+LpBound (single relation) & $1\times$ & $1\times$ \\
++ pair sizes & $15.1\times$ & $1.00\times$ \\
++ every pairwise product & $41.8\times$ & $1.97\times$ \\
++ one-side & $608\times$ & $18.4\times$ \\
++ common-neighbour (full) & $1{,}724\times$ & $29.4\times$ \\
+one-side + common-nbr only & $1{,}674\times$ & $28.7\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Tail robustness by shape, with every timing kept}
+\texttt{scripts/robustness\_repeat\_raw.py} repeats the paper's
+24-query execution study with every observation written out
+(\texttt{results/e2e/robustness\_raw.csv}: query, plan, run, position in the
+shuffled run, time). Each plan runs six times in shuffled order after a
+warm-up; the reference plan (fastest forced left-deep order) is chosen on
+runs $1$--$2$ and measured on runs $3$--$6$, so choosing and measuring do
+not share a run. Table~\ref{tab:robust-shape} gives the slowdowns over that
+reference and the paired ratio of the bound-guided plan's time to DuckDB's.
+The pooled P95 is $1.11\times$ for the bound-guided order
+against $5.26\times$ for DuckDB. The tail comes from the denser shapes: DuckDB is
+faster on triangles and 4-cycles and slower on diamonds and $K_4$, and the
+AGM filter that sets the suite depends on shape and size, so the pooled
+percentiles describe these four shapes, not a workload.
+
+\begin{table}[h]
+\centering
+\caption{Slowdown over the reference (median/max, evaluation runs) and
+median bound-guided/DuckDB time ratio, by shape.}
+\label{tab:robust-shape}
+\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & & \multicolumn{2}{c}{bound-guided} & \multicolumn{2}{c}{DuckDB} & ratio \\
+Shape & $n$ & med & max & med & max & \\
+\midrule
+triangle & $6$ & $0.83$ & $1.12$ & $0.78$ & $0.94$ & $1.13$ \\
+4-cycle & $6$ & $1.02$ & $1.10$ & $0.59$ & $0.70$ & $1.78$ \\
+diamond & $6$ & $1.04$ & $1.75$ & $2.39$ & $2.81$ & $0.53$ \\
+$K_4$ & $6$ & $1.00$ & $1.05$ & $4.25$ & $5.92$ & $0.25$ \\
+\midrule
+all & $24$ & $1.00$ & $1.75$ & $0.88$ & $5.92$ & $1.01$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Cost measurement details}
+The script \texttt{cost\_accuracy\_indep.py} behind the paper's
+Table~V runs every (query, catalog) pair as its own task in a fresh
+process ($8$ workers, shuffled order, one run), times collection (data loading excluded), the
+constraint build and the solve separately, and reads the process's peak
+RSS after loading and at the end; their difference is a lower bound on the extra memory. The sparse-product and materialized full
+catalogs give the same bound on all $240$ queries (largest $|\Delta\log_2|$
+$0$). Peak memory over the loaded data is a median $60$ against $626$\,MB
+on Hetionet and $44$ against $262$\,MB on IMDb; the largest process peaks
+are $429$ against $6{,}351$\,MB and $341$ against $4{,}149$\,MB. Building the
+constraints takes about $2$\,ms. An earlier version of the table measured
+the catalogs of a query in one process, in a fixed order, with the full
+catalog's joins materialized (\texttt{cost\_accuracy.py}); its
+join-free and $\ell_2$ ratios ($6.0$/$6.9\times$ and $6.2$/$7.1\times$) are
+close to these, and its full-catalog ratio ($52$/$24\times$) is the
+materialized path's.
+
 \section{Unified comparison on synthetic cycles}
 \begin{table}[h]
 \centering
@@ -490,7 +674,7 @@ seeds), so it is a targeted heuristic.
 \section{Complexity}
 Collecting $\muLp{p}{\block}{\interface}$ for a single relation is one
 scan, $O(N)$; for a two-relation block it materializes the pair join,
-except for the interfaces computable from single-relation degree tables
+except for the interfaces computable from a scan of one relation with degree lookups in the other
 (all but the common-neighbour interface of a binary block; paragraph
 ``Which statistic needs the join'' of the paper). The cover LP has $m|\mathcal P|$ variables and $|V|$
 constraints; it solves in milliseconds for the queries in the paper. The

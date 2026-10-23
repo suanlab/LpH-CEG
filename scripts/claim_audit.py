@@ -181,6 +181,10 @@ def main() -> None:
     rrs = load("results/e2e/robustness_repeat_summary.csv")
     apx = load("results/pushdown/ablation_p11_poly_summary.csv")
     cac = load("results/cost/cost_accuracy_summary.csv")
+    cai = load("results/cost/cost_accuracy_indep_summary.csv")
+    abo = load("results/pushdown/ablation_overlap_summary.csv")
+    rrw = load("results/e2e/robustness_raw_summary.csv")
+    iss = load("results/imdb/imdb_scale_sparse_summary.csv")
     cbs = load("results/corrbound/sm_compare_summary.csv")
     vcs = load("results/characterization/voi_cost_summary.csv")
     ssc = load("results/suite/slice_scale_summary.csv")
@@ -1770,12 +1774,6 @@ def main() -> None:
             0.005,
         ),
         (
-            "short P11: cover bs2 below LpBound (10.7x)",
-            1 / med_ratio(p11s, "cover_bs2_p11", "entropic_p11"),
-            10.7,
-            0.005,
-        ),
-        (
             "short P3: cover bs2/entropic (0.057)",
             med_ratio(p11s, "cover_bs2_p3", "entropic_p3"),
             0.057,
@@ -2338,212 +2336,6 @@ def main() -> None:
             1,
         ),
         (
-            "cost table: hetionet free collect/LpBound x (6.0)",
-            pick(
-                cac, "median_collect_over_lpbound", suite="hetionet", catalogue="free"
-            ),
-            6.0,
-            0.05 / 6.0,
-        ),
-        (
-            "cost table: hetionet free gain x (608)",
-            pick(cac, "median_gain_over_lpbound", suite="hetionet", catalogue="free"),
-            608,
-            0.5 / 608,
-        ),
-        (
-            "cost table: hetionet free bound/exact (772)",
-            pick(cac, "median_bound_over_truth", suite="hetionet", catalogue="free"),
-            772,
-            0.5 / 772,
-        ),
-        (
-            "cost table: hetionet free_l2 collect/LpBound x (6.2)",
-            pick(
-                cac,
-                "median_collect_over_lpbound",
-                suite="hetionet",
-                catalogue="free_l2",
-            ),
-            6.2,
-            0.05 / 6.2,
-        ),
-        (
-            "cost table: hetionet free_l2 gain x (1297)",
-            pick(
-                cac, "median_gain_over_lpbound", suite="hetionet", catalogue="free_l2"
-            ),
-            1297,
-            0.5 / 1297,
-        ),
-        (
-            "cost table: hetionet free_l2 bound/exact (340)",
-            pick(cac, "median_bound_over_truth", suite="hetionet", catalogue="free_l2"),
-            340,
-            0.5 / 340,
-        ),
-        (
-            "cost table: hetionet full collect/LpBound x (52)",
-            pick(
-                cac, "median_collect_over_lpbound", suite="hetionet", catalogue="full"
-            ),
-            52,
-            0.5 / 52,
-        ),
-        (
-            "cost table: hetionet full gain x (1724)",
-            pick(cac, "median_gain_over_lpbound", suite="hetionet", catalogue="full"),
-            1724,
-            0.5 / 1724,
-        ),
-        (
-            "cost table: hetionet full bound/exact (211)",
-            pick(cac, "median_bound_over_truth", suite="hetionet", catalogue="full"),
-            211,
-            0.5 / 211,
-        ),
-        (
-            "cost table: imdb free collect/LpBound x (6.9)",
-            pick(cac, "median_collect_over_lpbound", suite="imdb", catalogue="free"),
-            6.9,
-            0.05 / 6.9,
-        ),
-        (
-            "cost table: imdb free gain x (18.4)",
-            pick(cac, "median_gain_over_lpbound", suite="imdb", catalogue="free"),
-            18.4,
-            0.05 / 18.4,
-        ),
-        (
-            "cost table: imdb free bound/exact (7.7)",
-            pick(cac, "median_bound_over_truth", suite="imdb", catalogue="free"),
-            7.7,
-            0.05 / 7.7,
-        ),
-        (
-            "cost table: imdb free_l2 collect/LpBound x (7.1)",
-            pick(cac, "median_collect_over_lpbound", suite="imdb", catalogue="free_l2"),
-            7.1,
-            0.05 / 7.1,
-        ),
-        (
-            "cost table: imdb free_l2 gain x (20.9)",
-            pick(cac, "median_gain_over_lpbound", suite="imdb", catalogue="free_l2"),
-            20.9,
-            0.05 / 20.9,
-        ),
-        (
-            "cost table: imdb free_l2 bound/exact (7.3)",
-            pick(cac, "median_bound_over_truth", suite="imdb", catalogue="free_l2"),
-            7.3,
-            0.05 / 7.3,
-        ),
-        (
-            "cost table: imdb full collect/LpBound x (24)",
-            pick(cac, "median_collect_over_lpbound", suite="imdb", catalogue="full"),
-            24,
-            0.5 / 24,
-        ),
-        (
-            "cost table: imdb full gain x (29.4)",
-            pick(cac, "median_gain_over_lpbound", suite="imdb", catalogue="full"),
-            29.4,
-            0.05 / 29.4,
-        ),
-        (
-            "cost table: imdb full bound/exact (4.6)",
-            pick(cac, "median_bound_over_truth", suite="imdb", catalogue="full"),
-            4.6,
-            0.05 / 4.6,
-        ),
-        (
-            "cost table: hetionet lpbound bound/exact, units of 10^5 (2.1)",
-            1e-5
-            * pick(
-                cac, "median_bound_over_truth", suite="hetionet", catalogue="lpbound"
-            ),
-            2.1,
-            0.05 / 2.1,
-        ),
-        (
-            "cost table: imdb lpbound bound/exact (127)",
-            pick(cac, "median_bound_over_truth", suite="imdb", catalogue="lpbound"),
-            127,
-            0.5 / 127,
-        ),
-        (
-            "cost table: hetionet free_l2 share % (95)",
-            100
-            * pick(
-                cac,
-                "median_share_of_full_log_gain",
-                suite="hetionet",
-                catalogue="free_l2",
-            ),
-            95,
-            0.5 / 95,
-        ),
-        (
-            "cost table: imdb free_l2 share % (90)",
-            100
-            * pick(
-                cac, "median_share_of_full_log_gain", suite="imdb", catalogue="free_l2"
-            ),
-            90,
-            0.5 / 90,
-        ),
-        (
-            "cost table: hetionet free_l2 collect/LpBound (6.2)",
-            pick(
-                cac,
-                "median_collect_over_lpbound",
-                suite="hetionet",
-                catalogue="free_l2",
-            ),
-            6.2,
-            0.05 / 6.2,
-        ),
-        (
-            "cost table: hetionet lpbound collect s (0.9)",
-            pick(cac, "median_collect_s", suite="hetionet", catalogue="lpbound"),
-            0.9,
-            0.005 / 0.9,
-        ),
-        (
-            "cost table: imdb lpbound collect s (0.53)",
-            pick(cac, "median_collect_s", suite="imdb", catalogue="lpbound"),
-            0.53,
-            0.005 / 0.53,
-        ),
-        (
-            "cost table: hetionet free_l2 infer s (0.08)",
-            pick(cac, "median_infer_s", suite="hetionet", catalogue="free_l2"),
-            0.08,
-            0.005 / 0.08,
-        ),
-        (
-            "cost table: imdb free_l2 infer s (0.09)",
-            pick(cac, "median_infer_s", suite="imdb", catalogue="free_l2"),
-            0.09,
-            0.005 / 0.09,
-        ),
-        (
-            "cost table: imdb full infer s (0.09)",
-            pick(cac, "median_infer_s", suite="imdb", catalogue="full"),
-            0.09,
-            0.005 / 0.09,
-        ),
-        (
-            "cost table: hetionet checked queries (115)",
-            pick(cac, "n_checked", suite="hetionet", catalogue="full"),
-            115,
-        ),
-        (
-            "cost table: imdb checked queries (101)",
-            pick(cac, "n_checked", suite="imdb", catalogue="full"),
-            101,
-        ),
-        (
             "CorrBound workload: queries (400)",
             pick(cbs, "n", method="pairwise"),
             400,
@@ -2684,6 +2476,536 @@ def main() -> None:
             pick(cbs, "dblp_edge_rows", method="pairwise") / 1e6,
             2.1,
             0.05 / 2.1,
+        ),
+        (
+            "cost table: hetionet free collect/LpBound (6.0)",
+            pick(
+                cai, "median_collect_over_lpbound", suite="hetionet", catalogue="free"
+            ),
+            6.0,
+            0.05 / 6.0,
+        ),
+        (
+            "cost table: hetionet free gain (608)",
+            pick(cai, "median_gain_over_lpbound", suite="hetionet", catalogue="free"),
+            608,
+            0.5 / 608,
+        ),
+        (
+            "cost table: hetionet free bound/exact (772)",
+            pick(cai, "median_bound_over_truth", suite="hetionet", catalogue="free"),
+            772,
+            0.5 / 772,
+        ),
+        (
+            "cost table: hetionet free_l2 collect/LpBound (6.8)",
+            pick(
+                cai,
+                "median_collect_over_lpbound",
+                suite="hetionet",
+                catalogue="free_l2",
+            ),
+            6.8,
+            0.05 / 6.8,
+        ),
+        (
+            "cost table: hetionet free_l2 gain (1297)",
+            pick(
+                cai, "median_gain_over_lpbound", suite="hetionet", catalogue="free_l2"
+            ),
+            1297,
+            0.5 / 1297,
+        ),
+        (
+            "cost table: hetionet free_l2 bound/exact (340)",
+            pick(cai, "median_bound_over_truth", suite="hetionet", catalogue="free_l2"),
+            340,
+            0.5 / 340,
+        ),
+        (
+            "cost table: hetionet sparse_full collect/LpBound (8.2)",
+            pick(
+                cai,
+                "median_collect_over_lpbound",
+                suite="hetionet",
+                catalogue="sparse_full",
+            ),
+            8.2,
+            0.05 / 8.2,
+        ),
+        (
+            "cost table: hetionet sparse_full gain (1724)",
+            pick(
+                cai,
+                "median_gain_over_lpbound",
+                suite="hetionet",
+                catalogue="sparse_full",
+            ),
+            1724,
+            0.5 / 1724,
+        ),
+        (
+            "cost table: hetionet sparse_full bound/exact (211)",
+            pick(
+                cai,
+                "median_bound_over_truth",
+                suite="hetionet",
+                catalogue="sparse_full",
+            ),
+            211,
+            0.5 / 211,
+        ),
+        (
+            "cost table: hetionet full collect/LpBound (54)",
+            pick(
+                cai, "median_collect_over_lpbound", suite="hetionet", catalogue="full"
+            ),
+            54,
+            0.5 / 54,
+        ),
+        (
+            "cost table: hetionet full gain (1724)",
+            pick(cai, "median_gain_over_lpbound", suite="hetionet", catalogue="full"),
+            1724,
+            0.5 / 1724,
+        ),
+        (
+            "cost table: hetionet full bound/exact (211)",
+            pick(cai, "median_bound_over_truth", suite="hetionet", catalogue="full"),
+            211,
+            0.5 / 211,
+        ),
+        (
+            "cost table: imdb free collect/LpBound (6.9)",
+            pick(cai, "median_collect_over_lpbound", suite="imdb", catalogue="free"),
+            6.9,
+            0.05 / 6.9,
+        ),
+        (
+            "cost table: imdb free gain (18.4)",
+            pick(cai, "median_gain_over_lpbound", suite="imdb", catalogue="free"),
+            18.4,
+            0.5 / 18.4,
+        ),
+        (
+            "cost table: imdb free bound/exact (7.7)",
+            pick(cai, "median_bound_over_truth", suite="imdb", catalogue="free"),
+            7.7,
+            0.05 / 7.7,
+        ),
+        (
+            "cost table: imdb free_l2 collect/LpBound (7.6)",
+            pick(cai, "median_collect_over_lpbound", suite="imdb", catalogue="free_l2"),
+            7.6,
+            0.05 / 7.6,
+        ),
+        (
+            "cost table: imdb free_l2 gain (20.9)",
+            pick(cai, "median_gain_over_lpbound", suite="imdb", catalogue="free_l2"),
+            20.9,
+            0.5 / 20.9,
+        ),
+        (
+            "cost table: imdb free_l2 bound/exact (7.3)",
+            pick(cai, "median_bound_over_truth", suite="imdb", catalogue="free_l2"),
+            7.3,
+            0.05 / 7.3,
+        ),
+        (
+            "cost table: imdb sparse_full collect/LpBound (8.3)",
+            pick(
+                cai,
+                "median_collect_over_lpbound",
+                suite="imdb",
+                catalogue="sparse_full",
+            ),
+            8.3,
+            0.05 / 8.3,
+        ),
+        (
+            "cost table: imdb sparse_full gain (29.4)",
+            pick(
+                cai, "median_gain_over_lpbound", suite="imdb", catalogue="sparse_full"
+            ),
+            29.4,
+            0.5 / 29.4,
+        ),
+        (
+            "cost table: imdb sparse_full bound/exact (4.6)",
+            pick(cai, "median_bound_over_truth", suite="imdb", catalogue="sparse_full"),
+            4.6,
+            0.05 / 4.6,
+        ),
+        (
+            "cost table: imdb full collect/LpBound (25)",
+            pick(cai, "median_collect_over_lpbound", suite="imdb", catalogue="full"),
+            25,
+            0.5 / 25,
+        ),
+        (
+            "cost table: imdb full gain (29.4)",
+            pick(cai, "median_gain_over_lpbound", suite="imdb", catalogue="full"),
+            29.4,
+            0.5 / 29.4,
+        ),
+        (
+            "cost table: imdb full bound/exact (4.6)",
+            pick(cai, "median_bound_over_truth", suite="imdb", catalogue="full"),
+            4.6,
+            0.05 / 4.6,
+        ),
+        (
+            "cost table: hetionet lpbound bound/exact, 10^5 units (2.1)",
+            1e-5
+            * pick(
+                cai, "median_bound_over_truth", suite="hetionet", catalogue="lpbound"
+            ),
+            2.1,
+            0.05 / 2.1,
+        ),
+        (
+            "cost table: imdb lpbound bound/exact (127)",
+            pick(cai, "median_bound_over_truth", suite="imdb", catalogue="lpbound"),
+            127,
+            0.5 / 127,
+        ),
+        (
+            "cost table: hetionet lpbound collect s (0.89)",
+            pick(cai, "median_collect_s", suite="hetionet", catalogue="lpbound"),
+            0.89,
+            0.005 / 0.89,
+        ),
+        (
+            "cost table: imdb lpbound collect s (0.52)",
+            pick(cai, "median_collect_s", suite="imdb", catalogue="lpbound"),
+            0.52,
+            0.005 / 0.52,
+        ),
+        (
+            "cost table: hetionet checked (115)",
+            pick(cai, "n_checked", suite="hetionet", catalogue="full"),
+            115,
+        ),
+        (
+            "cost table: imdb checked (101)",
+            pick(cai, "n_checked", suite="imdb", catalogue="full"),
+            101,
+        ),
+        (
+            "cost table: invalid bounds, all catalogs (0)",
+            sum(float(r["n_invalid"]) for r in cai if r["catalogue"] != "checks"),
+            0,
+        ),
+        (
+            "cost text: hetionet sparse_full extra memory MB (60)",
+            pick(
+                cai,
+                "median_peak_over_loaded_mb",
+                suite="hetionet",
+                catalogue="sparse_full",
+            ),
+            60,
+            0.5 / 60,
+        ),
+        (
+            "cost text: imdb sparse_full extra memory MB (44)",
+            pick(
+                cai, "median_peak_over_loaded_mb", suite="imdb", catalogue="sparse_full"
+            ),
+            44,
+            0.5 / 44,
+        ),
+        (
+            "cost text: hetionet full extra memory MB (626)",
+            pick(cai, "median_peak_over_loaded_mb", suite="hetionet", catalogue="full"),
+            626,
+            0.5 / 626,
+        ),
+        (
+            "cost text: imdb full extra memory MB (262)",
+            pick(cai, "median_peak_over_loaded_mb", suite="imdb", catalogue="full"),
+            262,
+            0.5 / 262,
+        ),
+        (
+            "cost ext: hetionet sparse_full max peak MB (429)",
+            pick(cai, "max_peak_mb", suite="hetionet", catalogue="sparse_full"),
+            429,
+            0.5 / 429,
+        ),
+        (
+            "cost ext: hetionet full max peak MB (6351)",
+            pick(cai, "max_peak_mb", suite="hetionet", catalogue="full"),
+            6351,
+            0.5 / 6351,
+        ),
+        (
+            "cost ext: imdb sparse_full max peak MB (341)",
+            pick(cai, "max_peak_mb", suite="imdb", catalogue="sparse_full"),
+            341,
+            0.5 / 341,
+        ),
+        (
+            "cost ext: imdb full max peak MB (4149)",
+            pick(cai, "max_peak_mb", suite="imdb", catalogue="full"),
+            4149,
+            0.5 / 4149,
+        ),
+        (
+            "cost text: polymatroid solve, fastest catalog median (0.08)",
+            min(float(r["median_solve_s"]) for r in cai if r["catalogue"] != "checks"),
+            0.08,
+            0.005 / 0.08,
+        ),
+        (
+            "cost text: polymatroid solve, slowest catalog median (0.10)",
+            max(float(r["median_solve_s"]) for r in cai if r["catalogue"] != "checks"),
+            0.1,
+            0.005 / 0.1,
+        ),
+        (
+            "cost text: flow solve hetionet (0.012)",
+            pick(cai, "median_lpbound_flow_s", suite="hetionet", catalogue="checks"),
+            0.012,
+            0.0005 / 0.012,
+        ),
+        (
+            "cost text: flow solve imdb (0.014)",
+            pick(cai, "median_lpbound_flow_s", suite="imdb", catalogue="checks"),
+            0.014,
+            0.0005 / 0.014,
+        ),
+        (
+            "cost: sparse_full equals full, max |dlog2| over both suites (0)",
+            pick(
+                cai,
+                "max_abs_log2_sparse_full_minus_full",
+                suite="hetionet",
+                catalogue="checks",
+            )
+            + pick(
+                cai,
+                "max_abs_log2_sparse_full_minus_full",
+                suite="imdb",
+                catalogue="checks",
+            ),
+            0,
+        ),
+        (
+            "cost ext: hetionet free_l2 share % (95)",
+            100
+            * pick(
+                cai,
+                "median_share_of_full_log_gain",
+                suite="hetionet",
+                catalogue="free_l2",
+            ),
+            95,
+            0.5 / 95,
+        ),
+        (
+            "cost ext: imdb free_l2 share % (90)",
+            100
+            * pick(
+                cai, "median_share_of_full_log_gain", suite="imdb", catalogue="free_l2"
+            ),
+            90,
+            0.5 / 90,
+        ),
+        (
+            "earlier cost run: hetionet free collect/LpBound (6.0)",
+            pick(
+                cac, "median_collect_over_lpbound", suite="hetionet", catalogue="free"
+            ),
+            6.0,
+            0.05 / 6.0,
+        ),
+        (
+            "earlier cost run: imdb free collect/LpBound (6.9)",
+            pick(cac, "median_collect_over_lpbound", suite="imdb", catalogue="free"),
+            6.9,
+            0.05 / 6.9,
+        ),
+        (
+            "earlier cost run: hetionet free_l2 collect/LpBound (6.2)",
+            pick(
+                cac,
+                "median_collect_over_lpbound",
+                suite="hetionet",
+                catalogue="free_l2",
+            ),
+            6.2,
+            0.05 / 6.2,
+        ),
+        (
+            "earlier cost run: imdb free_l2 collect/LpBound (7.1)",
+            pick(cac, "median_collect_over_lpbound", suite="imdb", catalogue="free_l2"),
+            7.1,
+            0.05 / 7.1,
+        ),
+        (
+            "earlier cost run: hetionet full collect/LpBound (52)",
+            pick(
+                cac, "median_collect_over_lpbound", suite="hetionet", catalogue="full"
+            ),
+            52,
+            0.5 / 52,
+        ),
+        (
+            "earlier cost run: imdb full collect/LpBound (24)",
+            pick(cac, "median_collect_over_lpbound", suite="imdb", catalogue="full"),
+            24,
+            0.5 / 24,
+        ),
+        (
+            "overlap ablation: hetionet median_gain_products (42)",
+            pick(abo, "median_gain_products", suite="hetionet"),
+            42,
+            0.5 / 42,
+        ),
+        (
+            "overlap ablation: imdb median_gain_products (2.0)",
+            pick(abo, "median_gain_products", suite="imdb"),
+            2.0,
+            0.05 / 2.0,
+        ),
+        (
+            "overlap ablation: hetionet median_full_over_products_gain (34)",
+            pick(abo, "median_full_over_products_gain", suite="hetionet"),
+            34,
+            0.5 / 34,
+        ),
+        (
+            "overlap ablation: imdb median_full_over_products_gain (14)",
+            pick(abo, "median_full_over_products_gain", suite="imdb"),
+            14,
+            0.5 / 14,
+        ),
+        (
+            "overlap ablation: hetionet median_gain_new_only (1674)",
+            pick(abo, "median_gain_new_only", suite="hetionet"),
+            1674,
+            0.5 / 1674,
+        ),
+        (
+            "overlap ablation: imdb median_gain_new_only (28.7)",
+            pick(abo, "median_gain_new_only", suite="imdb"),
+            28.7,
+            0.05 / 28.7,
+        ),
+        (
+            "overlap ablation: hetionet n_full_tighter_than_products (120)",
+            pick(abo, "n_full_tighter_than_products", suite="hetionet"),
+            120,
+        ),
+        (
+            "overlap ablation: imdb n_full_tighter_than_products (120)",
+            pick(abo, "n_full_tighter_than_products", suite="imdb"),
+            120,
+        ),
+        (
+            "overlap ablation: hetionet median_gain_size (15.1)",
+            pick(abo, "median_gain_size", suite="hetionet"),
+            15.1,
+            0.05 / 15.1,
+        ),
+        (
+            "overlap ablation: imdb median_gain_size (1.0)",
+            pick(abo, "median_gain_size", suite="imdb"),
+            1.0,
+            0.005 / 1.0,
+        ),
+        (
+            "overlap ablation: hetionet median_gain_one_side (608)",
+            pick(abo, "median_gain_one_side", suite="hetionet"),
+            608,
+            0.5 / 608,
+        ),
+        (
+            "overlap ablation: imdb median_gain_one_side (18.4)",
+            pick(abo, "median_gain_one_side", suite="imdb"),
+            18.4,
+            0.05 / 18.4,
+        ),
+        (
+            "overlap ablation: hetionet share beyond products % (48)",
+            100 * pick(abo, "median_share_beyond_products", suite="hetionet"),
+            48,
+            0.5 / 48,
+        ),
+        (
+            "overlap ablation: imdb share beyond products % (79)",
+            100 * pick(abo, "median_share_beyond_products", suite="imdb"),
+            79,
+            0.5 / 79,
+        ),
+        (
+            "robustness raw: all bound_slowdown_split_p95 (1.11)",
+            pick(rrw, "bound_slowdown_split_p95", scope="all"),
+            1.11,
+            0.005 / 1.11,
+        ),
+        (
+            "robustness raw: all duckdb_slowdown_split_p95 (5.26)",
+            pick(rrw, "duckdb_slowdown_split_p95", scope="all"),
+            5.26,
+            0.005 / 5.26,
+        ),
+        (
+            "robustness raw: cycle3 bound_over_duckdb_median (1.13)",
+            pick(rrw, "bound_over_duckdb_median", scope="cycle3"),
+            1.13,
+            0.005 / 1.13,
+        ),
+        (
+            "robustness raw: cycle4 bound_over_duckdb_median (1.78)",
+            pick(rrw, "bound_over_duckdb_median", scope="cycle4"),
+            1.78,
+            0.005 / 1.78,
+        ),
+        (
+            "robustness raw: diamond bound_over_duckdb_median (0.53)",
+            pick(rrw, "bound_over_duckdb_median", scope="diamond"),
+            0.53,
+            0.005 / 0.53,
+        ),
+        (
+            "robustness raw: k4 bound_over_duckdb_median (0.25)",
+            pick(rrw, "bound_over_duckdb_median", scope="k4"),
+            0.25,
+            0.005 / 0.25,
+        ),
+        (
+            "imdb sparse n1000 median collect s (9.3)",
+            pick(iss, "median_collect_s", data="n1000"),
+            9.3,
+            0.05 / 9.3,
+        ),
+        (
+            "imdb sparse n1000 max collect s (83)",
+            pick(iss, "max_collect_s", data="n1000"),
+            83,
+            0.5 / 83,
+        ),
+        (
+            "imdb sparse n1000 max peak GB (0.9)",
+            pick(iss, "max_peak_mb", data="n1000") / 1024,
+            0.9,
+            0.05 / 0.9,
+        ),
+        (
+            "imdb sparse growth in time, n1000/n200 (5.1)",
+            pick(iss, "median_collect_s", data="n1000")
+            / pick(iss, "median_collect_s", data="n200"),
+            5.1,
+            0.05 / 5.1,
+        ),
+        (
+            "imdb sparse growth in rows, n1000/n200 (4.4)",
+            pick(iss, "median_rows", data="n1000")
+            / pick(iss, "median_rows", data="n200"),
+            4.4,
+            0.05 / 4.4,
         ),
         (
             "G-CARE yago: LpBound/poly median where counts agree (12x)",

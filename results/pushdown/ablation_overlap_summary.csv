@@ -1,0 +1,3 @@
+suite,n,median_gain_size,median_share_size,median_gain_products,median_share_products,median_gain_one_side,median_share_one_side,median_gain_full,median_share_full,median_gain_new_only,median_share_new_only,median_full_over_products_gain,n_full_tighter_than_products,median_share_beyond_products
+hetionet,120,15.06,0.376,41.82,0.5245,608.4,0.8789,1724,1,1674,1,34.4,120,0.4755
+imdb,120,1,0,1.969,0.2062,18.43,0.859,29.44,1,28.72,1,13.93,120,0.7938

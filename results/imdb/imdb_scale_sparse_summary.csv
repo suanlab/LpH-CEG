@@ -1,0 +1,3 @@
+data,n,median_rows,median_collect_s,max_collect_s,median_solve_s,max_peak_mb,median_peak_over_loaded_mb
+n200,40,29003.0,1.832,21.771,0.022,321,24.5
+n1000,40,128175.0,9.279,82.551,0.022,908,62.5

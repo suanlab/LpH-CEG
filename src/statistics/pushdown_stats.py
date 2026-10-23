@@ -1,8 +1,9 @@
 """Block extension statistics without materializing the block join.
 
 For a two-relation block ``{R, S}`` with shared attributes ``B``, the degree
-sequence of an interface ``I`` is a function of *single-relation* degree
-tables whenever ``I`` lies inside one relation or contains ``B``:
+sequence of an interface ``I`` follows from a scan of one relation with
+degree lookups in the other (no join tuples) whenever ``I`` lies inside one
+relation or contains ``B``:
 
 * ``I ⊆ attrs(R)``, ``B ⊄ I`` ("one-side"): each interface value ``i`` extends
   to ``Σ_{t ∈ R, t[I]=i} deg_S(t[B])`` distinct tuples, where ``deg_S(b)`` is
@@ -17,7 +18,8 @@ The remaining interfaces (``I`` straddles both relations without covering
 ``B``; on a binary block ``R(a,b), S(b,c)`` this is exactly ``{a, c}``) count
 common neighbours and need the join.  :func:`join_free_interfaces` classifies
 every interface of a block; :func:`compute_pushdown_block_extensions` computes
-the join-free ones in ``O(|R| + |S|)``.
+the join-free ones in ``O(|R| + |S|)``, and :func:`codegree_block_extension`
+the common-neighbour one from a sparse matrix product.
 """
 
 from __future__ import annotations
@@ -283,6 +285,63 @@ def codegree_interface(query: QueryHypergraph, block: Block) -> Interface:
     a_r = frozenset(query.get_relation(rels[0]).attributes)
     a_s = frozenset(query.get_relation(rels[1]).attributes)
     return (a_r | a_s) - (a_r & a_s)
+
+
+def codegree_block_extension(
+    query: QueryHypergraph,
+    block: Block,
+    relation_data: RelationDataMap,
+    *,
+    p_values: tuple[float, ...] = DEFAULT_P_VALUES,
+) -> LpBlockExtensionStats:
+    """Exact ``lp`` statistics of the common-neighbour interface ``{a, c}``.
+
+    One sparse product ``M N`` of the 0/1 incidence matrices of ``R(a, b)``
+    and ``S(b, c)`` holds every non-zero ``codeg(a, c)``, so all norms come
+    from it without materializing the ``(a, b, c)`` join tuples.  Equals the
+    ``{a, c}`` entry of :func:`compute_all_lp_block_extensions`.
+    """
+    from scipy.sparse import csr_matrix
+
+    rows_r, (ia, ib_r), rows_s, (ic, ib_s) = _binary_block(query, block, relation_data)
+    a_ids: dict[str, int] = {}
+    b_ids: dict[str, int] = {}
+    c_ids: dict[str, int] = {}
+    ra = [a_ids.setdefault(r[ia], len(a_ids)) for r in rows_r]
+    rb = [b_ids.setdefault(r[ib_r], len(b_ids)) for r in rows_r]
+    sb = [b_ids.setdefault(r[ib_s], len(b_ids)) for r in rows_s]
+    sc = [c_ids.setdefault(r[ic], len(c_ids)) for r in rows_s]
+    nb = len(b_ids)
+    m = csr_matrix(([1] * len(ra), (ra, rb)), shape=(len(a_ids), nb), dtype="int64")
+    n = csr_matrix(([1] * len(sb), (sb, sc)), shape=(nb, len(c_ids)), dtype="int64")
+    prod = m @ n
+    prod.eliminate_zeros()
+    seq = tuple(sorted((int(x) for x in prod.data), reverse=True))
+    norms = {p: _compute_lp_norm(seq, p) for p in p_values}
+    return _make_stats(seq, norms, 2, len(seq), seq[0] if seq else 0)
+
+
+def compute_sparse_block_extensions(
+    query: QueryHypergraph,
+    block: Block,
+    relation_data: RelationDataMap,
+    *,
+    p_values: tuple[float, ...] = DEFAULT_P_VALUES,
+) -> dict[tuple[Block, Interface], LpBlockExtensionStats]:
+    """Every interface of a block of two binary relations, without the join.
+
+    The seven join-free interfaces come from :func:`compute_pushdown_block_extensions`
+    and ``{a, c}`` from :func:`codegree_block_extension`; together they equal
+    :func:`compute_all_lp_block_extensions` on the block.
+    """
+    out = compute_pushdown_block_extensions(
+        query, block, relation_data, p_values=p_values
+    )
+    if len(block.relations) == 2:
+        out[(block, codegree_interface(query, block))] = codegree_block_extension(
+            query, block, relation_data, p_values=p_values
+        )
+    return out
 
 
 def codegree_l2_upper_bound(

@@ -34,7 +34,7 @@ that excludes the paper build inside the container.
 ## The three commands
 
 ```bash
-PYTHONPATH=. pytest tests/ -q            # 144 tests (2 need the real data)
+PYTHONPATH=. pytest tests/ -q            # 155 tests (2 need the real data)
 bash scripts/reproduce_all.sh smoke      # tests + lint + figures + paper (~1 min)
 bash scripts/reproduce_all.sh all        # every experiment (~hours; needs data/)
 ```

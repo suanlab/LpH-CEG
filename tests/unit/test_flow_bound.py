@@ -168,5 +168,34 @@ def test_guaranteed_bound_falls_back_to_the_cover_bound() -> None:
         attrs, cons, cyclic_orders(attrs), 42.0, max_polymatroid_vars=2
     )
     assert res.method == "cover_fallback"
+    assert res.fallback_reason == "size"
     assert res.log_bound == 42.0
     assert res.flow_certified is None
+
+
+def test_guaranteed_bound_without_the_flow_candidate() -> None:
+    """The flow candidate is optional and never needed for the return."""
+    from src.estimators.flow_bound import guaranteed_block_bound
+
+    cons = _path_constraints(100, 80, 3)
+    attrs = ("a", "b", "c")
+    res = guaranteed_block_bound(attrs, cons, None, 99.0)
+    assert res.method == "polymatroid"
+    assert res.flow_log_bound is None and res.flow_certified is None
+
+
+def test_guaranteed_bound_falls_back_when_the_polymatroid_lp_fails(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A solver failure on a small query returns the cover bound, not an error."""
+    import src.estimators.flow_bound as fb
+
+    def fail(*args: object, **kwargs: object) -> float:
+        raise ValueError("polymatroid LP failed: test")
+
+    monkeypatch.setattr(fb, "polymatroid_bound", fail)
+    cons = _path_constraints(100, 80, 3)
+    res = fb.guaranteed_block_bound(("a", "b", "c"), cons, None, 7.0)
+    assert res.method == "cover_fallback"
+    assert res.fallback_reason == "solver"
+    assert res.log_bound == 7.0
