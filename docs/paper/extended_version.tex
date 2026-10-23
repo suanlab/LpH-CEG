@@ -315,6 +315,48 @@ no multi-relation term of CorrBound, or any other statistic, determines the
 common-neighbour norm, and it says nothing about the size of the gain on
 real data (the paper's ablations measure that).
 
+\section{Which statistic needs the join: three-norm details, sketch and selection}
+Of the eight interfaces of a block of binary relations $R(a,b),S(b,c)$,
+seven (five non-trivial) are functions of single-relation degree tables
+(the degree of $a$ is $\sum_{b\in N_R(a)}\deg_S(b)$, that of $b$ is
+$\deg_R(b)\deg_S(b)$); only $\{a,c\}$, the common-neighbour count
+$|N_R(a)\cap N_S(c)|$, needs the pair join; its $\ell_2$ is determined neither by the other interfaces nor by shared-attribute inner products (Section on the separating example), while its $\ell_1$ is the join size. We compute the seven without the join (identical to
+the materialized statistics on $120/120$ Hetionet queries; $0.49$\,s
+against $4.6$\,s per block). With three norms and the flow LP they stop a
+median $2.3\times$ (max $18.7\times$) above the full $bs{=}2$ bound on the
+Hetionet long suite ($1.5$--$2.9\times$ on the families, $1.9$--$57\times$
+on the sweep), and the common-neighbour $\ell_2$, $\|A_R^{\top}A_S\|_F$,
+closes the gap on $12/12$ family--seed pairs, $10/10$ sweep points,
+$85/120$ Hetionet and $116/120$ IMDb queries (Hetionet median
+$1.00\times$, max $1.67\times$); its $\ell_\infty$ does not ($1.70\times$),
+and added to $bs{=}1$ alone it reaches $1.03\times$ ($53/120$ exact), so
+the attribution is order-dependent. In the headline setting (eleven norms,
+polymatroid) the join-free seven carry a median $88\%$ and $86\%$ of the
+log-gain on Hetionet and IMDb, the $\ell_2$ leaves $1.47\times$ and
+$1.39\times$ (full on $1/120$ each), and the other common-neighbour norms (with the join-free $\ell_1$) close the rest. A one-pass triangle-inequality bound on the $\ell_2$
+recovers nothing on Hetionet ($2.2\times$); a $64$-probe Hutchinson sketch
+lands within $0.91$--$1.78\times$ of the full bound in $0.32$\,s per block
+but is an estimate, not a bound. Post hoc, it picks which joins to pay
+for: joining the three of a $|V|{=}6$ query's six blocks whose sketched
+norm lowers the bound most recovers the full $bs{\le}2$ bound on the median
+of $34$ Hetionet queries (top two on $32$ IMDb ones), against half that
+gain for a random three; timed end to end, this plan takes a median
+$0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper)
+but $1.39\times$ on IMDb, where join-free statistics, sketches and ranking
+cost more than the three joins they skip.
+
+
+\section{Which block size to pay for: cost-study details}
+At $bs{=}1$, collecting degree sequences on the four cost-study families
+costs $22$--$27$\,ms against ${\sim}1.9$\,ms to solve; $bs{\ge}2$
+multiplies that term by a median $45\times$ there ($24\times$ more
+entries) and $61\times$ ($8$--$558\times$) on the Hetionet suite, and a
+cataloged $bs{=}2$ estimate costs $10$\,ms (the paper's long-suite table).
+Use $bs{=}1$ when the bound is re-solved many times per statistics build
+and $bs{\ge}2$ when the pair joins can be materialized ahead of the
+workload.
+
+
 \section{Unified comparison on synthetic cycles}
 \begin{table}[h]
 \centering

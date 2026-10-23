@@ -959,30 +959,47 @@ Of the eight interfaces of a block of binary relations $R(a,b),S(b,c)$,
 seven (five non-trivial) are functions of single-relation degree tables
 (the degree of $a$ is $\sum_{b\in N_R(a)}\deg_S(b)$, that of $b$ is
 $\deg_R(b)\deg_S(b)$); only $\{a,c\}$, the common-neighbour count
-$|N_R(a)\cap N_S(c)|$, needs the pair join; its $\ell_2$ is determined neither by the other interfaces nor by shared-attribute inner products (extended version), while its $\ell_1$ is the join size. We compute the seven without the join (identical to
-the materialized statistics on $120/120$ Hetionet queries; $0.49$\,s
-against $4.6$\,s per block). With three norms and the flow LP they stop a
-median $2.3\times$ (max $18.7\times$) above the full $bs{=}2$ bound on the
-Hetionet long suite ($1.5$--$2.9\times$ on the families, $1.9$--$57\times$
-on the sweep), and the common-neighbour $\ell_2$, $\|A_R^{\top}A_S\|_F$,
-closes the gap on $12/12$ family--seed pairs, $10/10$ sweep points,
-$85/120$ Hetionet and $116/120$ IMDb queries (Hetionet median
-$1.00\times$, max $1.67\times$); its $\ell_\infty$ does not ($1.70\times$),
-and added to $bs{=}1$ alone it reaches $1.03\times$ ($53/120$ exact), so
-the attribution is order-dependent. In the headline setting (eleven norms,
-polymatroid) the join-free seven carry a median $88\%$ and $86\%$ of the
-log-gain on Hetionet and IMDb, the $\ell_2$ leaves $1.47\times$ and
-$1.39\times$ (full on $1/120$ each), and the other common-neighbour norms (with the join-free $\ell_1$) close the rest. A one-pass triangle-inequality bound on the $\ell_2$
-recovers nothing on Hetionet ($2.2\times$); a $64$-probe Hutchinson sketch
-lands within $0.91$--$1.78\times$ of the full bound in $0.32$\,s per block
-but is an estimate, not a bound. Post hoc, it picks which joins to pay
-for: joining the three of a $|V|{=}6$ query's six blocks whose sketched
-norm lowers the bound most recovers the full $bs{\le}2$ bound on the median
-of $34$ Hetionet queries (top two on $32$ IMDb ones), against half that
-gain for a random three; timed end to end, this plan takes a median
-$0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper)
-but $1.39\times$ on IMDb, where join-free statistics, sketches and ranking
-cost more than the three joins they skip.
+$|N_R(a)\cap N_S(c)|$, needs the pair join; its $\ell_2$ is determined
+neither by the other interfaces nor by shared-attribute inner products
+(extended version), while its $\ell_1$ is the join size. In the headline
+setting (eleven norms, polymatroid) the join-free seven carry a median
+$88\%$ and $86\%$ of the log-gain on Hetionet and IMDb, the $\ell_2$
+leaves $1.47\times$ and $1.39\times$ (full on $1/120$ each), and the other
+common-neighbour norms (with the join-free $\ell_1$) close the rest; with
+three norms and the flow LP the $\ell_2$ alone restores the full bound on
+$85/120$ and $116/120$ (details in the extended version). A $64$-probe Hutchinson sketch of that
+norm is an estimate, not a bound; post hoc, joining the three of a
+$|V|{=}6$ query's six blocks it ranks highest recovers the full
+$bs{\le}2$ bound on the median Hetionet query, at a median $0.67\times$ the
+time of joining every block ($1.39\times$ on IMDb, where join-free
+statistics, sketches and ranking cost more than the joins they skip).
+
+\begin{table}[t]
+\centering
+\caption{Four catalogs, one setting (eleven norms, polymatroid; medians,
+$120$ queries per suite): cold per-query collection relative to LpBound's
+($0.90$/$0.53$\,s; per-query ratios, Python prototype), gain over LpBound, bound over exact count ($115$ and $101$ queries with one; none below it).}
+\label{tab:cost}
+\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+ & \multicolumn{3}{c}{Hetionet} & \multicolumn{3}{c}{IMDb} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+Catalog & collect & gain & /exact & collect & gain & /exact \\
+\midrule
+LpBound & $1\times$ & $1\times$ & $2.1{\cdot}10^{5}$ & $1\times$ & $1\times$ & $127$ \\
+join-free & $6.0\times$ & $608\times$ & $772$ & $6.9\times$ & $18.4\times$ & $7.7$ \\
+\,+ common-nbr $\ell_2$ & $6.2\times$ & $1{,}297\times$ & $340$ & $7.1\times$ & $20.9\times$ & $7.3$ \\
+full $bs{\le}2$ & $52\times$ & $1{,}724\times$ & $211$ & $24\times$ & $29.4\times$ & $4.6$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\emph{Cost against tightness.} The exact common-neighbour $\ell_2$ is one
+sparse product $A_R^{\top}A_S$ per block, so join-free statistics plus it
+cost $6.2\times$/$7.1\times$ LpBound's collection against $52\times$/$24\times$
+for the full catalog and keep a median $95\%$/$90\%$ of its per-query log-gain
+(Table~\ref{tab:cost}; the $61\times$ above is the three-norm cover LP); median inference is $0.08$--$0.09$\,s for all four. The full catalog pays when pair joins can be materialized ahead of the workload (block-size cost study in the extended version).
 
 \emph{A spectral reading (post hoc).} On even cycles the common-neighbour $\ell_2$ is the Frobenius norm of a block product, and a trace--H\"older bound from it and a certified top singular value is tighter than the polymatroid program on $96/240$ long-suite queries (looser overall; $220/240$ with uncertified Lanczos estimates; extended version), so the next step on the statistics axis may be spectral order rather than block size. On $22$ small random cycles, a search over databases with the same
 $bs{\le}2$ statistics puts at most $1.5\times$ of the gap on the program and
@@ -1331,16 +1348,6 @@ Use it on cyclic queries with moderately skewed data, with $\mathcal{P} = \{1,2,
 sequences can come from catalog histograms
 ($\lpnorm{\mathbf{d}}{p} = (\sum_i c_i d_i^p)^{1/p}$ over buckets
 $(d_i, c_i)$) at \texttt{ANALYZE} time (not evaluated here).
-
-\paragraph{Which block size to pay for}
-At $bs{=}1$, collecting degree sequences on the four cost-study families
-costs $22$--$27$\,ms against ${\sim}1.9$\,ms to solve; $bs{\ge}2$
-multiplies that term by a median $45\times$ there ($24\times$ more
-entries) and $61\times$ ($8$--$558\times$) on the Hetionet suite, and a
-cataloged $bs{=}2$ estimate costs $10$\,ms (Table~\ref{tab:long-suite}).
-Use $bs{=}1$ when the bound is re-solved many times per statistics build
-and $bs{\ge}2$ when the pair joins can be materialized ahead of the
-workload.
 
 \paragraph{Under predicates} Block statistics of unfiltered relations stay valid under a selection (degrees only shrink) but loosen. With a production-year predicate on every movie variable of the $40$ IMDb $|V|{=}6$ cycles, exact filtered single-relation statistics plus a predicate-free block catalog (eleven norms) put the polymatroid bound a median $1.9\times$ below LpBound on $40/40$ queries when $46\%$ of rows pass ($\text{year}{\ge}2005$), but only $1.03\times$ ($22/40$) at $18\%$ ($\text{year}{<}1995$); per-predicate block statistics stay $4.2$--$5.3\times$ below, and no bound falls below the exact count ($240$ checks). Selective predicates thus need costly per-predicate block statistics, the main obstacle to $bs{\ge}2$ under general predicates, not the program.
 

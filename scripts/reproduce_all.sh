@@ -184,6 +184,7 @@ run_experiments() {
     python scripts/predicate_blocks.py        # year predicates on IMDb |V|=6: predicate-free block catalog (~10 min)
     python scripts/guard_ordering.py          # bound-vs-engine-estimate plan guard (negative result; not in the paper)
     python scripts/ablation_p11_poly.py       # l2 ablation in the headline setting: eleven norms, polymatroid (~1 h)
+    python scripts/cost_accuracy.py           # cost against tightness of four catalogs, one setting (Table V; ~45 min)
 
     # Aggregates last: they read the long-suite, IMDb and G-CARE results above.
     section "20n. Aggregates over Every Suite"

@@ -1,0 +1,11 @@
+suite,catalogue,n,median_collect_s,median_collect_over_lpbound,median_infer_s,median_peak_rss_mb,median_gain_over_lpbound,median_share_of_full_log_gain,n_checked,median_bound_over_truth,n_invalid
+hetionet,lpbound,120,0.896,1,0.0833,86,1,0,115,2.126e+05,0
+hetionet,free,120,5.314,6.021,0.08755,94,608.4,0.8789,115,771.7,0
+hetionet,free_l2,120,5.523,6.239,0.0829,123,1297,0.9492,115,340,0
+hetionet,full,120,38.43,51.91,0.0824,708,1724,1,115,210.8,0
+hetionet,lpbound_flow,120,,,0.0126,,,,,,
+imdb,lpbound,120,0.5301,1,0.0823,71,1,0,101,127,0
+imdb,free,120,3.478,6.932,0.08625,90,18.43,0.859,101,7.732,0
+imdb,free_l2,120,3.57,7.105,0.0873,92,20.86,0.8964,101,7.271,0
+imdb,full,120,13.4,23.62,0.09315,328,29.44,1,101,4.623,0
+imdb,lpbound_flow,120,,,0.01405,,,,,,
