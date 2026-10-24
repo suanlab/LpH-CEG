@@ -889,13 +889,13 @@ graphs the $bs{=}2$ program gap ($12\times$, $2.7\times$) is below the
 $bs{=}1$ one. G-CARE is thus a regime where the program matters as much as the statistics.
 
 \emph{CorrBound's workload.} CorrBound's artifact~\cite{mayer2026corrbound}
-ships its $400$ labelled $8$-vertex subgraph-matching queries on DBLP with
+ships the $400$ labelled $8$-vertex subgraph-matching queries on DBLP that it and LpBound evaluate, with
 its estimates. With its norms ($p{=}1,\dots,30,\infty$) our LpBound
 reproduces the artifact's on $400/400$ queries, and its own LP code reproduces the published CorrBound-e ones. Block statistics under the
 polymatroid program sit a median $1.99\times$ above the exact count,
 against $6.1\times$ for CorrBound-e and $64.6\times$ for LpBound, and are
 tighter than CorrBound-e on $382/400$ (median $3.0\times$, at most
-$1.51\times$ looser); no bound falls below a recount (the artifact's counts are a median $0.6\%$ lower); ours cost a median $25$\,s per query, CorrBound's statistics are per dataset. For $p{>}1$ that code's inequalities are stronger than its Lemma~3.1; with the Lemma's, CorrBound-e is a median $2.4\times$ looser, and its statistics added to ours tighten $28/400$ queries by at most $3.1\%$ (extended version).
+$1.51\times$ looser); no bound falls below a recount (the shipped truths are a median $0.6\%$ lower); ours cost a median $25$\,s per query, CorrBound's statistics are per dataset. For $p{>}1$ that code's inequalities are stronger than its Lemma~3.1; with the Lemma's, CorrBound-e is a median $2.4\times$ looser, and its statistics added to ours tighten $28/400$ queries by at most $3.1\%$ (extended version).
 
 \begin{table}[t]
 \centering

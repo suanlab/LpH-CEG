@@ -384,7 +384,7 @@ Degree sequences can come from catalog histograms at \texttt{ANALYZE} time: over
 
 \section{CorrBound's cyclic workload}
 CorrBound's public artifact (\url{https://github.com/christophmayerm/CorrBound}, MIT; inspected revision \texttt{8e05eb7}) ships the
-workload of its cyclic experiment: $400$ labelled subgraph-matching queries
+workload of its cyclic experiment (query graphs from Sun and Luo's subgraph-matching study, in the SQL form and with the truths of LpBound's code base): $400$ labelled subgraph-matching queries
 with $8$ vertices ($200$ dense, $200$ sparse; $11$--$28$ edges) on DBLP
 ($317$K vertices, $2.1$M directed edge rows, symmetric), its estimates for
 CorrBound-e (exact degree vectors) and LpBound (flow bound), and true
