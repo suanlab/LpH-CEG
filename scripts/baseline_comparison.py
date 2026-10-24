@@ -6,12 +6,12 @@ suite, so the bound ordering is explicit and reproducible:
 
 * **AGM**~-- fractional edge cover, $\\prod |R_i|^{w_i}$ (cardinality only,
   no degree information).
-* **CEG_M**~-- binary max-degree shortest-path bound ($bs{=}1$); equivalent
-  to PANDA / MOLP restricted to binary queries.
+* **CEG_M**~-- whole-relation max-degree chain ($bs{=}1$), restricted
+  to nonempty interfaces after the first step; not full MOLP.
 * **Cover-LP (ours)**~-- the polynomial-size $\\ell_p$ block-cover LP at
   $bs{=}1$.
 * **Entropic LpBound**~-- the genuine $2^{|V|}$ polymatroid LP (Zhang et
-  al.), the tightest bound these statistics admit.
+  al.), the strongest bound within the Shannon cone for these statistics.
 
 The expected (and verified) ordering on cyclic queries is
 ``CEG_M >= Cover-LP >= Entropic >= true``, with AGM incomparable in
@@ -19,10 +19,9 @@ general (it ignores degrees). We report each bound and the ratios that
 matter: how much tighter our cover-LP is than CEG_M and AGM, and how
 close it stays to the entropic optimum.
 
-Learned / sampling estimators (FactorJoin, GNCE, COLOR, CorrBound) are
-*point* estimators without guaranteed upper bounds, so they are not
-directly comparable on this axis; we position them in the related-work
-discussion rather than in this guaranteed-bound table.
+FactorJoin and GNCE are point estimators. COLOR includes bound variants,
+and CorrBound uses correlation constraints for pessimistic bounds; the
+latter is compared separately by the corrbound_sm_* scripts.
 
 Output: ``results/baselines/baseline_comparison.csv``.
 """

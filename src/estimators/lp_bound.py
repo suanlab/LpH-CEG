@@ -104,14 +104,12 @@ def optimize_hyperpath_weights(
     for j, step in enumerate(steps):
         key = (step.block, step.interface)
         if key not in lp_stats:
-            LOGGER.warning(
-                "Missing Lp stats for block=%s interface=%s, using inf weight",
-                sorted(step.block.relations),
-                sorted(step.interface),
+            msg = (
+                "Missing Lp statistics for hyperpath step: "
+                f"block={sorted(step.block.relations)!r}, "
+                f"interface={sorted(step.interface)!r}"
             )
-            for pi, _p in enumerate(p_values):
-                c[j * n_p + pi] = 1e6  # large penalty
-            continue
+            raise KeyError(msg)
 
         stats = lp_stats[key]
         for pi, p in enumerate(p_values):
@@ -260,7 +258,7 @@ def _uniform_fallback(
         for _pi, p in enumerate(p_values):
             weights[(j, p)] = 1.0 if p == float("inf") else 0.0
 
-        log_max = lp_stats[key].log_norm(float("inf")) if key in lp_stats else 0.0
+        log_max = lp_stats[key].log_norm(float("inf"))
         log_bound += log_max
         p_used.append(float("inf"))
         w_per_step.append(1.0)

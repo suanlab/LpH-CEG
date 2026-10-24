@@ -46,6 +46,7 @@ run_lint() {
 run_experiments() {
     section "2b. Multi-Seed Synthetic Cycles (Table synthetic: multi_seed.csv)"
     python scripts/revision_experiments.py
+    python scripts/molp_full.py               # full MOLP vs the chain on the synthetic cycle table (~1 min)
 
     section "2c. JOB-medium, TPC-H and K-Hyperpath Exploration (bs=1 text results)"
     python scripts/job_experiment.py
@@ -189,6 +190,7 @@ run_experiments() {
     python scripts/ablation_p11_poly.py       # l2 ablation in the headline setting: eleven norms, polymatroid (~1 h)
     python scripts/cost_accuracy.py           # earlier cost run: four catalogs in one process (extended version; ~45 min)
     python scripts/cost_accuracy_indep.py     # cost against tightness, one process per catalog, sparse and materialized full (Table V; ~1 h, run alone)
+    python scripts/molp_full.py --suites      # the same on the Hetionet and IMDb long suites (~2 min)
     python scripts/ablation_overlap.py        # gain inside and outside CorrBound's pairwise vocabulary (~10 min)
     # CorrBound's cyclic workload: needs a clone of https://github.com/christophmayerm/CorrBound
     # (set LPH_CORRBOUND_DIR; default ../external/CorrBound)
@@ -196,7 +198,8 @@ run_experiments() {
     python scripts/corrbound_sm_compare.py    # same queries, its norm set: LpBound check and block statistics (~25 min)
     python scripts/corrbound_sm_combined.py   # CorrBound-e's inequalities (its Eq. 13/14) in our program, alone and with block statistics (~30 min)
     # the artifact's own LP builder, as shipped and with Eq. 13/14; needs the artifact's Python deps (ortools, sqlparse, joblib):
-    #   <python-with-ortools> scripts/corrbound_sm_artifact_lp.py
+    # Select an existing environment; no packages are installed by this script.
+    if [ -n "${LPH_CORRBOUND_PYTHON:-}" ]; then "$LPH_CORRBOUND_PYTHON" scripts/corrbound_sm_artifact_lp.py; else echo "skip corrbound_sm_artifact_lp.py: set LPH_CORRBOUND_PYTHON"; fi
 
     # Aggregates last: they read the long-suite, IMDb and G-CARE results above.
     section "20n. Aggregates over Every Suite"

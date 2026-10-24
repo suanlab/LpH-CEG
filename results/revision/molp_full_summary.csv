@@ -1,0 +1,7 @@
+query,n,mean_chain_over_cover,mean_molp_over_cover,mean_chain_over_molp,max_chain_over_molp
+cycle_3,10,2.749,2.749,1,1
+cycle_4,10,8.431,1.444,5.86,6.353
+cycle_5,10,23.81,3.725,6.4,7.219
+cycle_6,10,68.9,1.889,36.62,42.68
+cycle_7,10,211.3,5.092,41.59,50.01
+cycle_8,10,613.8,2.603,237.2,276.7

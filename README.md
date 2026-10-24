@@ -7,10 +7,10 @@ headroom lies: in the *program* that combines the statistics, or in the
 polynomial flow LP already reaches the polymatroid optimum, and our
 fractional block-cover LP is dominated. Block statistics (degree sequences
 of two-relation joins, conditioned on their interfaces) tighten LpBound by
-a median 46–920× on registered Hetionet cycles, much less on IMDb unless a
-better program (our ℓp extension of the flow LP, certified per query by
-the polymatroid bound) uses them, and on G-CARE's AIDS the program gap
-dominates. Paper: `docs/paper/main.tex`.
+a median 46–920× on registered Hetionet cycles, much less on IMDb unless the
+polymatroid program uses them. The optional ℓp flow relaxation is a
+candidate, checked against that program rather than generally proved valid.
+On G-CARE's AIDS the program gap dominates. Paper: `docs/paper/main.tex`.
 
 **Status: research artifact under submission (ICDE 2027); public copy at
 <https://github.com/suanlab/LpH-CEG>.** The validity
@@ -34,7 +34,7 @@ that excludes the paper build inside the container.
 ## The three commands
 
 ```bash
-PYTHONPATH=. pytest tests/ -q            # 155 tests (2 need the real data)
+PYTHONPATH=. pytest tests/ -q            # data-dependent tests report missing input explicitly
 bash scripts/reproduce_all.sh smoke      # tests + lint + figures + paper (~1 min)
 bash scripts/reproduce_all.sh all        # every experiment (~hours; needs data/)
 ```
@@ -44,13 +44,13 @@ Individual targets: `tests`, `lint`, `figures`, `paper`, `experiments`.
 ## What reproduces without any data download
 
 The **synthetic half runs standalone** — fixed seeds, no external input, and
-it reproduces bit-for-bit. This covers the validity search, the Shannon-cone
+fixed-seed result values can be checked; floating-point results and timings may vary across environments. This covers the validity search, the Shannon-cone
 certification, the ablations, the gap characterization, and the LP-cost
 measurements.
 
 The **real-data half**:
 
-- **Hetionet** (CC0) is shipped: the 13 per-metaedge edge lists the suites
+- **Hetionet** edge lists are shipped (the upstream project dedicates its original content to CC0; underlying source terms must also be checked): the 13 per-metaedge edge lists the suites
   use are in `data/hetionet_cc0/` with `SHA256SUMS`. Link them as
   `data/hetionet` (`ln -s hetionet_cc0 data/hetionet`). Row order matters —
   relations are capped at the first N rows in file order.
@@ -67,7 +67,7 @@ The **real-data half**:
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 457 headline numbers must match their source CSV cell (counts exactly), and reports pinned values missing from `main.tex` |
+| `scripts/claim_audit.py` | 622 registered numerical claims are checked against CSV-derived values; token occurrence is checked in both TeX files, not claim-context identity or completeness |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |
@@ -86,6 +86,21 @@ with their first results, so for them the rule, not the commit order, is
 the guarantee. Post-registration choices (the 109-query short subset, row
 caps, G-CARE size caps) are disclosed in the paper.
 
+## Reproduction boundaries
+
+`estimate_lph_ceg` is the cover estimator; `guaranteed_block_bound` consumes
+precomputed constraints and a valid cover fallback, returning the polymatroid
+value up to 12 variables or the cover fallback on size/solver failure.
+Marginal selectivity products are not guaranteed bounds: use filtered tuples.
+The legacy shared H-CEG `estimate_pessimistic` selectivity option is outside
+this guarantee; paper baseline runs use unit selectivities.
+
+The full workflow also needs G-CARE and the public CorrBound artifact (see
+`data/README.md`). CorrBound's LP rerun needs `ortools`, `sqlparse` and
+`joblib`; set `LPH_CORRBOUND_PYTHON` to an existing environment containing
+them and `LPH_CORRBOUND_DIR` to the artifact checkout. The `all` target is
+many hours and is not validated by the short tests or the CSV audit.
+
 ## Layout
 
 - `src/estimators/` — `lph_ceg.py` (entry point), `lp_bound.py` (the cover LP),
@@ -101,13 +116,11 @@ caps, G-CARE size caps) are disclosed in the paper.
 - `scripts/` — one script per experiment; each writes a CSV under `results/`
 - `benchmarks/query_suite_v1.json` — the pre-registered evaluation suite (|V| ≤ 5)
 - `benchmarks/query_suite_v2_long.json` — the pre-registered long-cycle suite (|V| = 6, 8, 10; 40 per length by hash order)
-- `docs/paper/` — the manuscript (`main.tex`); `docs/step5_lemma.md` — the open
-  proof obligation
+- `docs/paper/` — the manuscript (`main.tex`); `docs/step5_lemma.md` — the historical proof-obligation note (the current proof is in the extended version)
 
 ## License
 
 MIT (see [`LICENSE`](LICENSE)), matching LpBound's. The license covers this
 repository, including the copies of the shared H-CEG core under `src/core/`,
 `src/utils/`, `src/statistics/block_stats.py`, `src/estimators/pessimistic.py`
-and `src/wcoj/{evaluation,residual_bound,variable_order}.py`. The datasets are
-not redistributed and keep their own terms (see `data/README.md`).
+and `src/wcoj/{evaluation,residual_bound,variable_order}.py`. Hetionet dedicates its original content to CC0 but asks users to consider each integrated source's terms. The stripped edge lists here do not retain those per-edge license attributes, so this audit has not established blanket redistribution rights. Other datasets retain their source terms (see `data/README.md`).

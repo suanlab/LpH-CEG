@@ -169,6 +169,9 @@ def main() -> None:
     spe = load("results/suite/slice_poly_certify.csv")
     pse = load("results/suite/poly_certify_short.csv")
     swc = load("results/flow/sweep_poly_certify.csv")
+    mfs = load("results/revision/molp_full_summary.csv")
+    mfu = load("results/revision/molp_full_suites_summary.csv")
+    mfr = load("results/revision/molp_full_suites.csv")
     sps = load("results/spectral/spectral_summary.csv")
     osg = load("results/characterization/opt_stats_gap_summary.csv")
     vsl = load("results/characterization/voi_selection_summary.csv")
@@ -3120,6 +3123,97 @@ def main() -> None:
             max(int(r["catalogue_size"]) for r in cat) * 11 * 8 / 1000,
             59,
             0.5 / 59,
+        ),
+        (
+            "full MOLP over cover, cycle-4 (1.4x)",
+            pick(mfs, "mean_molp_over_cover", query="cycle_4"),
+            1.4,
+            0.05 / 1.4,
+        ),
+        (
+            "full MOLP over cover, cycle-7 (5.1x)",
+            pick(mfs, "mean_molp_over_cover", query="cycle_7"),
+            5.1,
+            0.05 / 5.1,
+        ),
+        (
+            "full MOLP over cover, cycle-8 (2.6x)",
+            pick(mfs, "mean_molp_over_cover", query="cycle_8"),
+            2.6,
+            0.05 / 2.6,
+        ),
+        (
+            "chain over full MOLP, cycle-8 (237x)",
+            pick(mfs, "mean_chain_over_molp", query="cycle_8"),
+            237,
+            0.5 / 237,
+        ),
+        (
+            "full MOLP over cover, Hetionet |V|=6 (1.4x)",
+            pick(mfu, "median_molp_over_cover", suite="hetionet", n_vars="6"),
+            1.4,
+            0.05 / 1.4,
+        ),
+        (
+            "full MOLP over cover, Hetionet |V|=8 (2.1x)",
+            pick(mfu, "median_molp_over_cover", suite="hetionet", n_vars="8"),
+            2.1,
+            0.05 / 2.1,
+        ),
+        (
+            "full MOLP over cover, Hetionet |V|=10 (3.6x)",
+            pick(mfu, "median_molp_over_cover", suite="hetionet", n_vars="10"),
+            3.6,
+            0.05 / 3.6,
+        ),
+        (
+            "full MOLP over cover, IMDb |V|=10 (3.2x)",
+            pick(mfu, "median_molp_over_cover", suite="imdb", n_vars="10"),
+            3.2,
+            0.05 / 3.2,
+        ),
+        (
+            "chain over full MOLP, Hetionet |V|=10 (2.9x)",
+            pick(mfu, "median_chain_over_molp", suite="hetionet", n_vars="10"),
+            2.9,
+            0.05 / 2.9,
+        ),
+        (
+            "chain over full MOLP, Hetionet |V|=6 (1.2x)",
+            pick(mfu, "median_chain_over_molp", suite="hetionet", n_vars="6"),
+            1.2,
+            0.05 / 1.2,
+        ),
+        (
+            "full MOLP/cover growth per two vertices, geometric mean (1.35x)",
+            (
+                pick(mfs, "mean_molp_over_cover", query="cycle_8")
+                / pick(mfs, "mean_molp_over_cover", query="cycle_4")
+                * pick(mfs, "mean_molp_over_cover", query="cycle_7")
+                / pick(mfs, "mean_molp_over_cover", query="cycle_3")
+            )
+            ** 0.25,
+            1.35,
+            0.01 / 1.35,
+        ),
+        (
+            "Hetionet queries where full MOLP beats cover bs=1 (7)/120",
+            sum(
+                float(r["full_molp"]) < float(r["cover_bs1"]) * (1 - 1e-9)
+                for r in mfr
+                if r["suite"] == "hetionet"
+            ),
+            7,
+        ),
+        (
+            "cover bs=1 over full MOLP, worst Hetionet query (2.4x)",
+            max(
+                float(r["cover_bs1"]) / float(r["full_molp"])
+                for r in mfr
+                if r["suite"] == "hetionet"
+            ),
+            2.4,
+            0.05 / 2.4,
         ),
         (
             "G-CARE yago: LpBound/poly median where counts agree (12x)",

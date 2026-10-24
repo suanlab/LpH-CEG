@@ -1,0 +1,7 @@
+suite,n_vars,n,median_chain_over_cover,median_molp_over_cover,median_chain_over_molp,n_molp_below_cover
+hetionet,6,40,1.849,1.39,1.182,3
+hetionet,8,40,5.056,2.072,2.127,3
+hetionet,10,40,8.891,3.599,2.933,1
+imdb,6,40,1.837,1.837,1,0
+imdb,8,40,1.907,1.907,1,0
+imdb,10,40,3.21,3.21,1,0

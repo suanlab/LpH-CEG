@@ -7,9 +7,9 @@ selects optimal (p, w) weights to minimize the cardinality upper bound.
 Supports two strategies:
 - **Hyperpath-then-LP** (default): Find the ℓ∞-shortest hyperpath,
   then LP-optimize its weights.  Fast, often near-optimal.
-- **Joint optimization** (explore_k > 1): Enumerate the K best
-  hyperpaths by ℓ∞ weight, LP-optimize each, and return the
-  tightest bound across all candidates.  Strictly tighter or equal.
+- **Candidate search** (explore_k > 1): Keep the shortest hyperpath and
+  up to K - 1 candidates from bounded search, optimize each, and return
+  the tightest bound across those candidates.
 """
 
 from __future__ import annotations
@@ -123,10 +123,11 @@ def estimate_lph_ceg(
         max_block_size: Maximum block size for enumeration.
         max_states: Maximum H-CEG DAG states.
         p_values: Lp-norm exponents for the LP.
-        apply_selectivity: Scale bound by relation selectivities.
+        apply_selectivity: Legacy flag; non-unit selectivities are rejected.
+            To retain a deterministic bound, pass explicitly filtered tuples.
         explore_k: Number of candidate hyperpaths to LP-optimize.
             1 = standard hyperpath-then-LP (default).
-            >1 = joint optimization over K best hyperpaths.
+            >1 = bounded search over additional candidate hyperpaths.
         lp_stats: Precomputed ``(block, interface)`` statistics covering
             every block of size ``<= max_block_size``. When given, the
             statistics-collection step is skipped, which is how a
@@ -137,6 +138,14 @@ def estimate_lph_ceg(
         Estimation result with the tightest bound found.
     """
     from src.utils.types import EstimationResult, State
+
+    # Marginal selectivities need not multiply under correlated joins.
+    if apply_selectivity and any(rel.selectivity != 1.0 for rel in query.relations):
+        msg = (
+            "Multiplying marginal selectivities does not preserve an upper bound; "
+            "pass filtered relation tuples and use apply_selectivity=False"
+        )
+        raise ValueError(msg)
 
     # Step 1: Enumerate blocks and compute all Lp stats (or take them as given)
     blocks = enumerate_blocks(query, max_block_size=max_block_size)

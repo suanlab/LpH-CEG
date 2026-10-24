@@ -96,7 +96,7 @@ def plot_cycle_improvement() -> None:
     lp_std = [float(r["ratio_std"]) for r in rows]
 
     fig, ax = plt.subplots()
-    ax.semilogy(k_values, lp_mean, "o-", color=COLORS["lph"], label="LpH-CEG / CEG$_M$")
+    ax.semilogy(k_values, lp_mean, "o-", color=COLORS["lph"], label="chain / LpH-CEG")
     ax.fill_between(
         k_values,
         [m - s for m, s in zip(lp_mean, lp_std, strict=False)],
@@ -320,7 +320,12 @@ def plot_4way_comparison() -> None:
 
     fig, ax = plt.subplots(figsize=(4.0, 3.0))
     ax.loglog(
-        n_vertices, ceg_mean, "s--", color=COLORS["ceg"], label="CEG$_M$", markersize=6
+        n_vertices,
+        ceg_mean,
+        "s--",
+        color=COLORS["ceg"],
+        label="chain (whole-relation CEG$_M$)",
+        markersize=6,
     )
     ax.loglog(
         n_vertices,
@@ -413,7 +418,7 @@ FLOW_SCALE_CSV = Path("results/flow/flow_scale.csv")
 
 
 def plot_crossover() -> None:
-    """Fig 8: Cover LP vs entropic 2^|V| LpBound solve-time crossover.
+    """Plot recorded runtimes; collection scopes are qualified in the caption.
 
     Reads ``results/scalability/scale_entropic.csv`` so the figure cannot
     drift from the recorded measurements.
@@ -454,14 +459,14 @@ def plot_crossover() -> None:
             flow1_ms,
             "^-",
             color=COLORS["hceg"],
-            label="Flow LP, $bs{=}1$ (LpBound's LPflow)",
+            label="LpBound flow, $bs{=}1$",
         )
         ax.semilogy(
             flow_k,
             flow2_ms,
             "v-",
             color="tab:purple",
-            label="Flow LP, $bs{=}2$ ($4k$ orders)",
+            label="Flow candidate, $bs{=}2$",
         )
     ax.semilogy(
         ent_k,
@@ -506,7 +511,7 @@ def plot_crossover() -> None:
             )
 
     ax.set_xlabel("Cycle size $k$ (= $|V|$)")
-    ax.set_ylabel("LP solve time (ms, log scale)")
+    ax.set_ylabel("Reported runtime (ms, log scale)")
     ax.set_xticks(ks)
     ax.grid(True, alpha=0.3, linestyle="--", which="both")
     ax.legend(loc="upper left", fontsize=7)
@@ -599,17 +604,11 @@ BASELINE_CSV_P = Path("results/baselines/baseline_comparison.csv")
 
 
 def plot_positioning() -> None:
-    """Figure 1: MEASURED cost-vs-looseness Pareto frontier.
+    """Plot recorded runtime and bound tightness with scope-qualified labels.
 
-    x = LP solve time (ms), y = looseness over the entropic optimum. Each
-    point is a synthetic cycle-k query. Reads scale_entropic.csv (cover and
-    entropic solve time + their gap) and baseline_comparison.csv (CEG_M
-    looseness), so the frontier is measured, not schematic. The message:
-    to reach the entropic optimum you pay a solve time that explodes with
-    |V| in the 2^|V| formulation but not in LpBound's flow LP, which reaches
-    the same bound in milliseconds (the inference axis at bs=1 is closed);
-    the statistics axis (bs=2 block statistics, cover or flow LP) is what
-    moves the bound below that optimum.
+    The bs=1 cover/Shannon timings include collection; flow and bs=2 cover
+    timings exclude it. This is not an equal-cost Pareto comparison. The
+    chain baseline has no recorded runtime and is therefore not plotted.
     """
     import csv
 
@@ -620,21 +619,9 @@ def plot_positioning() -> None:
     ent_ms = [float(r["entropic_ms"]) for r in se]
     gap = [float(r["gap_cover_over_entropic"]) for r in se]
 
-    # CEG_M looseness (ceg_m / entropic) from the baseline comparison, at the
-    # same cheap cost tier as the cover LP (max-degree solve ~ cover solve).
-    # Only plot points whose x-coordinate we actually measured; a fallback
-    # constant here would put a fabricated coordinate on a figure whose
-    # whole claim is that the frontier is measured.
-    ceg_x, ceg_y, ceg_k = [], [], []
-    with open(BASELINE_CSV_P) as fh:
-        for r in csv.DictReader(fh):
-            if r["query"].startswith("Cycle-"):
-                k = int(r["query"].split("-")[1].split()[0])
-                if k not in ks:
-                    continue
-                ceg_x.append(cover_ms[ks.index(k)])
-                ceg_y.append(float(r["ceg_m"]) / float(r["entropic"]))
-                ceg_k.append(k)
+    # The baseline CSV has bounds but no baseline timing. Do not assign
+    # another estimator's runtime to its points; retain the bound comparison
+    # in the manuscript and source CSV.
 
     # Flow LP (LpBound's polynomial LPflow) at bs=1 -- same bound as the
     # 2^|V| program (y=1) at ms cost -- and, on bs=2 block statistics, the
@@ -716,16 +703,6 @@ def plot_positioning() -> None:
         color=COLORS["lph"],
     )
 
-    # CEG_M: cheap but loose, looseness grows with |V|.
-    ax.plot(
-        ceg_x,
-        ceg_y,
-        "^--",
-        color=COLORS["ceg"],
-        markersize=6,
-        label="CEG$_M$ / MOLP ($\\ell_\\infty$)",
-    )
-
     # Statistics axis: the same two programs on bs=2 block statistics.
     if fl_x2:
         ax.plot(
@@ -743,7 +720,7 @@ def plot_positioning() -> None:
             "v-",
             color="tab:purple",
             markersize=6,
-            label="flow LP, $bs{=}2$",
+            label="flow candidate, $bs{=}2$",
         )
         ax.annotate(
             f"$k{{=}}{fl_k[-1]}$",
@@ -766,7 +743,7 @@ def plot_positioning() -> None:
 
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_xlabel("LP solve time (ms, log scale)")
+    ax.set_xlabel("Reported runtime (ms, log scale)")
     ax.set_ylabel("Bound / $bs{=}1$ entropic optimum")
     ax.grid(True, alpha=0.25, linestyle="--", which="both")
     ax.legend(

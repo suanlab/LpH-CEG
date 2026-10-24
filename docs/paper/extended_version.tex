@@ -239,13 +239,12 @@ iff $n<d$, and $10^4$ values of degree $1$ plus one of degree $20$ do not).
 When every middle factor is at least $c>1$ the ratio grows geometrically
 in the number $k-2$ of middle edges. As $p\to\infty$ every factor tends to $1$, and LpH-CEG
 returns $\min(B_{\max},B_{\mathrm{LP}})$, so the realized ratio is always
-at least $1$. The boundary factor $(N_1/N_k)^{1/(p+1)}$ does not depend on
+at least $1$. The boundary factor $(N_1/N_k)^{1/(p+1)}$ is fixed when the boundary relation sizes are fixed as we vary
 $k$; it is $1$ for a uniform cycle.
 
 \paragraph{Acyclic queries.} On a star the cover constraints force unit
 weight on every step and the LP returns the max-degree bound. On a path the
-LP can use an interface at $p=1$ in place of an extension (on a 4-path it
-returns weights $(1,0,1)$), so acyclicity alone does not force unit
+LP can use an interface at $p=1$ in place of an extension (on a path of three relations it can use weights $(1,0,1)$), so acyclicity alone does not force unit
 weights; what redundant coverage on cycles adds is the slack exploited
 above.
 
@@ -282,7 +281,7 @@ Statistic & Definition & Pair join? & Used by \\
 single-relation norms & $\|\deg_R(\cdot\mid a)\|_p$, $\|\deg_R(\cdot\mid b)\|_p$ & no & LpBound, all programs \\
 pair-join size & $\sum_b\deg_R(b)\deg_S(b)$ & no & CorrBound ($\ell_1$ inner product) \\
 shared-attribute products & $\sum_b\deg_R(b)^{p}\deg_S(b)^{q}$ & no & CorrBound's generalized \\
- & & & inner products (per its authors) \\
+ & & & inner products (Lemma 3.1) \\
 one-side interface norms & $\big\|\big(\sum_{b\in N_R(a)}\deg_S(b)\big)_a\big\|_p$ & no & this paper (join-free) \\
 common-neighbour norms & $\big\|\big(|N_R(a)\cap N_S(c)|\big)_{a,c}\big\|_p$ & yes & this paper \\
 \bottomrule
@@ -327,7 +326,7 @@ the materialized statistics on $120/120$ Hetionet queries; $0.49$\,s
 against $4.6$\,s per block). With three norms and the flow LP they stop a
 median $2.3\times$ (max $18.7\times$) above the full $bs{=}2$ bound on the
 Hetionet long suite ($1.5$--$2.9\times$ on the families, $1.9$--$57\times$
-on the sweep), and the common-neighbour $\ell_2$, $\|A_R^{\top}A_S\|_F$,
+on the sweep), and the common-neighbour $\ell_2$, $\|A_RA_S\|_F$ for $A_R\in\mathbb{R}^{|a|\times|b|}$ and $A_S\in\mathbb{R}^{|b|\times|c|}$,
 closes the gap on $12/12$ family--seed pairs, $10/10$ sweep points,
 $85/120$ Hetionet and $116/120$ IMDb queries (Hetionet median
 $1.00\times$, max $1.67\times$); its $\ell_\infty$ does not ($1.70\times$),
@@ -347,7 +346,7 @@ $0.67\times$ the time of joining every block on Hetionet ($33/40$ cheaper)
 but $1.39\times$ on IMDb, where join-free statistics, sketches and ranking
 cost more than the three joins they skip.
 These times are against materialized pair joins. The sparse-product path
-of the paper's Table~V computes every common-neighbour norm without join
+of the paper's cost--tightness table computes every common-neighbour norm without join
 tuples, for $8.2\times$ and $8.3\times$ LpBound's collection, so choosing
 which blocks to join matters only where the joins are materialized.
 
@@ -384,7 +383,7 @@ others), so the gap is in semantics or preprocessing we could not reconstruct, n
 Degree sequences can come from catalog histograms at \texttt{ANALYZE} time: over buckets $(d_i, c_i)$ (degree $d_i$ held by $c_i$ values), $\|\mathbf{d}\|_p = (\sum_i c_i d_i^p)^{1/p}$. We have not evaluated this.
 
 \section{CorrBound's cyclic workload}
-CorrBound's public artifact (\url{https://github.com/christophmayerm/CorrBound}, MIT) ships the
+CorrBound's public artifact (\url{https://github.com/christophmayerm/CorrBound}, MIT; inspected revision \texttt{8e05eb7}) ships the
 workload of its cyclic experiment: $400$ labelled subgraph-matching queries
 with $8$ vertices ($200$ dense, $200$ sparse; $11$--$28$ edges) on DBLP
 ($317$K vertices, $2.1$M directed edge rows, symmetric), its estimates for
@@ -392,8 +391,7 @@ CorrBound-e (exact degree vectors) and LpBound (flow bound), and true
 cardinalities. Each edge atom becomes a binary relation over its two query
 vertices holding the edges whose endpoints carry the query's labels; the
 vertex atoms are key lookups with a label predicate, and CorrBound's own LP
-drops them too. CorrBound-e's and the artifact LpBound's estimates are
-taken from the artifact's result files, not recomputed.
+drops them too. The initial comparison imports CorrBound-e's and LpBound's estimates from the artifact's result files; the re-runs described below independently check those imported values.
 
 \emph{Same norms, same baseline.} CorrBound's LpBound statistics use
 $p\in\{1,\dots,30,\infty\}$, and so do we. Our single-relation polymatroid
@@ -423,8 +421,7 @@ either.
 incident edges, the $k$-way generalized inner products of their degree
 vectors ($p=1,2,3$) and intra-relation correlation norms; our $bs{\le}2$
 catalog has neither. It has the interface-conditioned norms of every pair
-block, which CorrBound's vocabulary lacks for the one-side and
-common-neighbour interfaces (Proposition~\ref{prop:separation}).
+block. The released cyclic implementation does not explicitly collect those block-interface norms. Proposition~\ref{prop:separation} separates the common-neighbour norm only from the listed pairwise statistics, not from CorrBound's general Lemma~3.1.
 CorrBound's statistics are computed once per dataset; ours cost a median
 $25$\,s per query in our Python prototype (all pair blocks, $31$ norms,
 materialized joins), and the solve $0.38$\,s.
@@ -461,8 +458,8 @@ program, CorrBound-e's statistics alone give $15.1\times$ over the exact
 count, against $15.2\times$ in the artifact's LP, whose Shannon cone omits
 the $h(x)+h(y)\ge h(xy)$ inequalities.
 
-\section{Condensed in the main text}
-Three passages are shortened in the paper. \emph{Pair-join sizes on IMDb} (the paper's IMDb paragraph keeps the self-join explanation): where half the
+\section{Additional interpretation of comparison results}
+The following details complement the main comparisons. \emph{Pair-join sizes on IMDb} (the paper's IMDb paragraph keeps the self-join explanation): where half the
 pairs are self-joins, sizes add almost nothing over LpBound, while the
 interface-conditioned statistics add $17$--$171\times$. \emph{Collection cost:} the
 $61\times$ overhead of blocks, growing faster than the data, calls for
@@ -542,9 +539,7 @@ statistics that side is guaranteed by construction (its constraints contain
 LpBound's), so the informative quantity is the size of the gain.
 Table~\ref{tab:boot} gives it: median gain over LpBound (eleven norms) with
 its $95\%$ interval, from $10{,}000$ resamples of the registered queries of
-the fixed databases (\texttt{results/suite/bootstrap\_ci.csv}). The
-intervals cover query sampling only, not other data snapshots, row samples
-or the pilot choices.
+the fixed databases (\texttt{results/suite/bootstrap\_ci.csv}). These are conditional query-bootstrap intervals: resampling treats the registered queries as exchangeable units. Queries share relations and motifs, so the intervals are descriptive resampling sensitivity, not uncertainty across independent databases. They do not cover other snapshots, row samples or pilot choices, and are pointwise rather than simultaneous across comparisons.
 
 \begin{table}[h]
 \centering
@@ -610,7 +605,7 @@ warm-up; the reference plan (fastest forced left-deep order) is chosen on
 runs $1$--$2$ and measured on runs $3$--$6$, so choosing and measuring do
 not share a run. Table~\ref{tab:robust-shape} gives the slowdowns over that
 reference and the paired ratio of the bound-guided plan's time to DuckDB's.
-The pooled P95 is $1.11\times$ for the bound-guided order
+Percentiles use the sorted observation at zero-based index $\lfloor q(n-1)\rfloor$ (P95 is the third largest for $n=24$). Slowdowns below one are possible because reference selection and evaluation use disjoint runs. The paired bound-guided/DuckDB ratio uses all six runs. The pooled P95 is $1.11\times$ for the bound-guided order
 against $5.26\times$ for DuckDB. The tail comes from the denser shapes: DuckDB is
 faster on triangles and 4-cycles and slower on diamonds and $K_4$, and the
 AGM filter that sets the suite depends on shape and size, so the pooled
@@ -639,7 +634,7 @@ all & $24$ & $1.00$ & $1.75$ & $0.88$ & $5.92$ & $1.01$ \\
 
 \section{Cost measurement details}
 The script \texttt{cost\_accuracy\_indep.py} behind the paper's
-Table~V runs every (query, catalog) pair as its own task in a fresh
+cost--tightness table runs every (query, catalog) pair as its own task in a fresh
 process ($8$ workers, shuffled order, one run), times collection (data loading excluded), the
 constraint build and the solve separately, and reads the process's peak
 RSS after loading and at the end; their difference is a lower bound on the extra memory. The sparse-product and materialized full
@@ -695,15 +690,71 @@ $16$ & $4{,}438$ & $>21{,}600$ & -- & cover & $288\times$ \\
 \section{Sensitivity to the number of $p$-values}
 The paper's four-family sweep (cycle-4/6, $K_4$, chordal-5) of the cover LP's improvement as norms are added.
 
-\begin{figure}[h]
+\begin{figure}[htbp]
 \centering
-\includegraphics[width=\columnwidth]{pvalue_sensitivity.pdf}
+\includegraphics[width=0.7\columnwidth]{pvalue_sensitivity.pdf}
 \caption{Sensitivity to the number of $p$-values across four query
 families (log scale). Improvement saturates at
 $\mathcal{P} = \{1,2,\infty\}$ (dotted line) in every family;
 additional norms add ${<}2.4\%$.}
 \label{fig:pvalue}
 \end{figure}
+
+\section{Scope of the chain max-degree baseline}
+The experimental CEG$_M$ baseline uses \texttt{estimate\_pessimistic} at $bs=1$, restricting each step to a whole relation. Its DAG requires a nonempty interface after the first step; full CEG$_M$/MOLP permits additional attribute-subset transitions. For a checked binary example, let
+\[
+\begin{aligned}
+R(a,b)&=\{(a_0,b_0),(a_1,b_0)\},\\
+T(c,d)&=\{(c_0,d_j):0\le j<3\},\\
+S(b,c)&=\{(b_0,c_0)\}\cup\{(b_i,c_j):1\le i,j\le4\}.
+\end{aligned}
+\]
+The join count and full MOLP are $6$, while the chain bound is $24$. Thus the reported improvements over the chain are not general improvements over full MOLP. The comparisons against LpBound use the separate polymatroid baseline and are unaffected.
+
+\section{Full MOLP against the chain baseline}
+Full MOLP is the shortest path over all attribute subsets, with, for every
+binary relation $R(u,v)$, edges adding $\{u,v\}$ at cost $\log|R|$, $\{u\}$
+at cost $\log|\pi_uR|$, and $v$ given $u$ at cost $\log\max_u\deg_R(v\mid u)$
+(\texttt{scripts/molp\_full.py}; on the counterexample to the chain's MOLP
+equivalence it gives $6$ against the chain's $24$). Table~\ref{tab:molp} sets it beside the chain on the
+paper's synthetic cycle table (the same ten seeds; means of per-seed
+ratios) and on the long suites (medians). On the synthetic cycles the
+chain is up to $237\times$ looser than full MOLP: full MOLP covers alternate
+relations at their cardinality (on cycle-$8$, $800^4$, the AGM bound) or
+starts from projections, which the chain cannot. Against full MOLP the
+cover LP's gain is $1.4$--$5.1\times$ and grows only about $1.35\times$ per
+two added vertices (odd cycles, which an alternating cover does not fit,
+gain more). On Hetionet the chain is
+$1.2$--$2.9\times$ looser than full MOLP; on IMDb the two coincide. The cover LP does not dominate MOLP: on Hetionet it is looser than full
+MOLP on $7$ of $120$ queries (by up to $2.4\times$). The
+comparisons against LpBound in the paper use the polymatroid program and
+are unaffected.
+
+\begin{table}[h]
+\centering
+\caption{Chain and full MOLP over the $bs{=}1$ cover LP, and chain over full MOLP.}
+\label{tab:molp}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Instances & chain/cover & MOLP/cover & chain/MOLP \\
+\midrule
+Cycle-3 & $2.75\times$ & $2.75\times$ & $1.00\times$ \\
+Cycle-4 & $8.43\times$ & $1.44\times$ & $5.86\times$ \\
+Cycle-5 & $23.8\times$ & $3.73\times$ & $6.40\times$ \\
+Cycle-6 & $68.9\times$ & $1.89\times$ & $36.6\times$ \\
+Cycle-7 & $211\times$ & $5.09\times$ & $41.6\times$ \\
+Cycle-8 & $614\times$ & $2.60\times$ & $237\times$ \\
+\midrule
+Hetionet $|V|{=}6$ & $1.85\times$ & $1.39\times$ & $1.18\times$ \\
+Hetionet $|V|{=}8$ & $5.06\times$ & $2.07\times$ & $2.13\times$ \\
+Hetionet $|V|{=}10$ & $8.89\times$ & $3.60\times$ & $2.93\times$ \\
+IMDb $|V|{=}6$ & $1.84\times$ & $1.84\times$ & $1.00\times$ \\
+IMDb $|V|{=}8$ & $1.91\times$ & $1.91\times$ & $1.00\times$ \\
+IMDb $|V|{=}10$ & $3.21\times$ & $3.21\times$ & $1.00\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \section{Unified comparison on synthetic cycles}
 \begin{table}[h]
@@ -732,14 +783,12 @@ On the JOB-medium subset (CI: 3K, MK: 2K, MC: 1K rows) the two co-actor
 4-cycles improve $1.94\times$ (with keywords) and $2.80\times$ (with
 companies) at $bs=1$ with weights $w{=}0.5$, and a star query by
 exactly $1.00\times$; the IMDb suite of the paper is the
-systematic version. On a small TPC-H-like synthetic schema (SF${=}0.01$; not \texttt{dbgen} data) every cyclic query we built yields $1.00\times$; LpH-CEG needs \emph{cyclic structure} together with \emph{degree skew} in a middle relation. On synthetic cycle-4 (10 seeds) the improvement grows
+systematic version. On a small TPC-H-like synthetic schema (SF${=}0.01$; not \texttt{dbgen} data) every cyclic query we built yields $1.00\times$; The sufficient condition in the cyclic theorem combines cyclic structure with degree skew in a middle relation; the acyclic counterexample above shows that cycles are not necessary. On synthetic cycle-4 (10 seeds) the improvement grows
 with data size, from $5.9{\pm}0.7\times$ at $100$ vertices to
 $33.9{\pm}1.5\times$ at $2$K (relative std ${<}12\%$; a single-run sweep
 reaches $57\times$ at $5$K), and peaks at moderate skew: $2.3{\pm}0.5\times$
 at $\alpha{=}0.5$, $16.1{\pm}0.8\times$ at $\alpha{=}2.0$,
-$6.6{\pm}0.4\times$ at $\alpha{=}3.0$. At low skew all $\ell_p$-norms
-nearly coincide, at extreme skew $\ell_\infty$ is already near-tight, and
-in between $\ell_2$ captures the heavy tail.
+$6.6{\pm}0.4\times$ at $\alpha{=}3.0$. The measured gain is smaller at both ends of this skew sweep. Low skew does not make the norms equal: $n$ equal degrees $d$ have $\ell_p$ norm $n^{1/p}d$. The theorem's factors, rather than equality of norms, determine whether an intermediate norm improves the bound.
 
 Every number in this section is produced by the scripts in the repository
 and checked by its claim audit.
@@ -756,11 +805,7 @@ losses; Wilcoxon $p{=}0.003$, indicative, as queries share shapes and
 seeds), so it is a targeted heuristic.
 
 \section{Complexity}
-Collecting $\muLp{p}{\block}{\interface}$ for a single relation is one
-scan, $O(N)$; for a two-relation block it materializes the pair join,
-except for the interfaces computable from a scan of one relation with degree lookups in the other
-(all but the common-neighbour interface of a binary block; paragraph
-``Which statistic needs the join'' of the paper). The cover LP has $m|\mathcal P|$ variables and $|V|$
+Degree counts for one relation require a scan with grouping; the implementation also sorts the degree sequence. For a binary pair block, seven interfaces use relation scans and degree lookups, while the common-neighbour sequence is the nonzero entries of a sparse product $A_RA_S$. Its cost depends on sparsity and output size and need not be linear in the input. The earlier implementation materializes the pair join; both paths are retained for comparison. The cover LP has $m|\mathcal P|$ variables and $|V|$
 constraints; it solves in milliseconds for the queries in the paper. The
 flow LP over a $bs\le2$ catalog is polynomial in the number of constraints
 and solves in $0.03$--$4.4$\,s at $k=3$--$16$ over $4k$ orders.
