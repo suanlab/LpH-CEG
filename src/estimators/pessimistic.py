@@ -4,7 +4,14 @@ from src.core.block import enumerate_blocks
 from src.core.hceg import DEFAULT_MAX_STATES, build_hceg_dag
 from src.core.hyperpath import shortest_hyperpath
 from src.statistics.block_stats import RelationDataMap, compute_all_block_extensions
-from src.utils.types import Block, EstimationResult, Interface, QueryHypergraph, State
+from src.utils.types import (
+    Block,
+    EstimationResult,
+    Hyperpath,
+    Interface,
+    QueryHypergraph,
+    State,
+)
 
 
 def estimate_pessimistic(
@@ -13,14 +20,20 @@ def estimate_pessimistic(
     *,
     max_block_size: int = 3,
     max_states: int = DEFAULT_MAX_STATES,
-    apply_selectivity: bool = True,
+    apply_selectivity: bool = False,
 ) -> EstimationResult:
     """Estimate query cardinality with the exact pessimistic H-CEG_M bound.
 
-    When ``apply_selectivity`` is True and any relation has
-    ``selectivity < 1.0``, the estimate is scaled down by the product of
-    selectivities. This provides a tighter bound when filter predicates
-    reduce the effective relation sizes.
+    With ``apply_selectivity=False`` (the default) the returned estimate is an
+    unconditional valid upper bound on the join size. ``apply_selectivity=True``
+    is an *optional tightening* that multiplies the bound by the product of
+    relation selectivities; it remains a valid upper bound ONLY under the
+    contract that ``relation_data`` holds the unfiltered base tuples and each
+    ``selectivity`` is the true fraction of tuples surviving a predicate that
+    has NOT yet been applied to that data. If ``relation_data`` is already
+    filtered, or the selectivity is mis-specified, the scaled value can fall
+    below the true cardinality and is no longer a guaranteed bound. The default
+    is therefore the guarantee-preserving mode.
 
     Args:
         query: Query hypergraph whose cardinality upper bound is estimated.
@@ -28,7 +41,8 @@ def estimate_pessimistic(
         max_block_size: Maximum block size used during block enumeration.
         max_states: Maximum number of reachable H-CEG states to materialize.
         apply_selectivity: If True, multiply the bound by relation
-            selectivities. Default True.
+            selectivities (optional, non-guaranteed tightening; see above).
+            Default False (guarantee-preserving).
 
     Returns:
         Estimation result whose ``estimate`` equals the exact pessimistic
@@ -47,6 +61,26 @@ def estimate_pessimistic(
             raise KeyError(msg)
         return all_stats[key].log_max_extension
 
+    # Empty block join => empty query result. The full join projected onto
+    # attr(F) is contained in the block join, so if any block is empty the
+    # answer is exactly 0. Without this the log-space DAG would floor
+    # log(mu = 0) to 0, i.e. treat the block as a factor of 1: still a valid
+    # bound, but needlessly loose on a case we can answer exactly.
+    if any(stat.max_extension == 0 for stat in all_stats.values()):
+        return EstimationResult(
+            estimate=0.0,
+            hyperpath=Hyperpath(states=(), blocks=(), weights=()),
+            method="pessimistic",
+            metadata={
+                "method_variant": "hceg_m",
+                "max_block_size": max_block_size,
+                "num_blocks": len(blocks),
+                "empty_block": True,
+                "bound": 0.0,
+                "exact_shortest_path": True,
+            },
+        )
+
     dag = build_hceg_dag(query, blocks, weight_fn, max_states=max_states)
     hyperpath_result = shortest_hyperpath(dag)
     bound = hyperpath_result.bound
@@ -64,6 +98,8 @@ def estimate_pessimistic(
         "num_blocks": len(blocks),
         "num_states": len(dag.vertices),
         "num_hyperedges": len(dag.hyperedges),
+        "pruned_count": dag.pruned_count,
+        "exact_shortest_path": dag.pruned_count == 0,
         "total_weight_log2": total_weight_log2,
         "bound": bound,
         "selectivity_factor": selectivity_factor,

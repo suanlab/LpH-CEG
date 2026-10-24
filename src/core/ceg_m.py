@@ -5,9 +5,11 @@ for binary queries. Vertices are attribute subsets and each directed edge adds
 exactly one attribute using a binary relation already present in the query.
 
 Edge weights are stored in log2-space using Task 4 binary degree statistics.
-The shortest path from the empty attribute set to the full attribute set is the
-MOLP optimum from Theorem 5.1 of the CEG paper, so the final upper bound is
-``2 ** shortest_path_weight``.
+The final upper bound is ``2 ** shortest_path_weight``. Because each edge adds a
+single attribute, this graph cannot use a constraint that adds several attributes at
+once -- notably a relation's cardinality ``|R|`` from the empty set -- so it is a
+restriction of the CEG_M / MOLP of Theorem 5.1 of the CEG paper and can be looser
+than it. ``src.core.molp`` implements the full MOLP for relations of any arity.
 """
 
 from __future__ import annotations

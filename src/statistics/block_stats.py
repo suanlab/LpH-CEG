@@ -284,6 +284,196 @@ def compute_block_extension(
     return _compute_extension_stats(joined_tuples, joined_attrs, interface)
 
 
+def _streaming_join_stats(
+    query: QueryHypergraph,
+    block: Block,
+    relation_data: RelationDataMap,
+) -> dict[Interface, BlockExtensionStats]:
+    """Compute extension stats for ALL interfaces via streaming join.
+
+    For pairwise blocks, performs a hash-probe join that never
+    materializes the full join result. Instead, each join tuple is
+    immediately dispatched to per-interface counters, keeping only
+    the distinct extension sets in memory.
+
+    Memory: O(distinct_interface_values * avg_extensions) per interface.
+    Time: O(|R join S|) -- same as materialized join, but no list storage.
+    """
+    relation_names = tuple(sorted(block.relations))
+
+    if len(relation_names) == 1:
+        attrs_order, rows = relation_data[relation_names[0]]
+        joined_tuples = sorted(set(rows))
+        joined_attrs = attrs_order
+        return _aggregate_all_interfaces(joined_tuples, joined_attrs)
+
+    # Multi-relation: streaming hash-probe join with inline aggregation
+    first_payload = relation_data[relation_names[0]]
+    current_attrs, current_tuples = first_payload
+    current_rows = sorted(set(current_tuples))
+    current_joined_attrs = current_attrs
+
+    for rname in relation_names[1:]:
+        next_attrs, next_tuples = relation_data[rname]
+        next_rows = sorted(set(next_tuples))
+
+        output_attrs = current_joined_attrs + tuple(
+            a for a in next_attrs if a not in current_joined_attrs
+        )
+        shared = tuple(sorted(set(current_joined_attrs) & set(next_attrs)))
+
+        if not shared:
+            # Cross join — must materialize (rare for connected blocks)
+            joined: list[tuple[str, ...]] = sorted(
+                {ra + rb for ra in current_rows for rb in next_rows}
+            )
+            current_rows = joined
+            current_joined_attrs = output_attrs
+            continue
+
+        idx_a = {a: i for i, a in enumerate(current_joined_attrs)}
+        idx_b = {a: i for i, a in enumerate(next_attrs)}
+        shared_a = [idx_a[a] for a in shared]
+        shared_b = [idx_b[a] for a in shared]
+        extra_b = [idx_b[a] for a in next_attrs if a not in idx_a]
+
+        # If this is the LAST relation in the block, stream directly
+        # to interface counters without materializing
+        if rname == relation_names[-1]:
+            # Build hash index on smaller side
+            buckets: dict[tuple[str, ...], list[tuple[str, ...]]]
+            buckets = defaultdict(list)
+            for rb in next_rows:
+                key = tuple(rb[i] for i in shared_b)
+                buckets[key].append(rb)
+
+            return _streaming_probe_aggregate(
+                current_rows, current_joined_attrs,
+                buckets, shared_a, extra_b, output_attrs,
+            )
+
+        # Intermediate join — must materialize for next step
+        buckets_mid: dict[tuple[str, ...], list[tuple[str, ...]]]
+        buckets_mid = defaultdict(list)
+        for rb in next_rows:
+            key = tuple(rb[i] for i in shared_b)
+            buckets_mid[key].append(rb)
+
+        new_rows: list[tuple[str, ...]] = []
+        seen: set[tuple[str, ...]] = set()
+        for ra in current_rows:
+            key = tuple(ra[i] for i in shared_a)
+            for rb in buckets_mid.get(key, []):
+                ext = tuple(rb[i] for i in extra_b)
+                row = ra + ext
+                if row not in seen:
+                    seen.add(row)
+                    new_rows.append(row)
+        current_rows = new_rows
+        current_joined_attrs = output_attrs
+
+    return _aggregate_all_interfaces(current_rows, current_joined_attrs)
+
+
+def _streaming_probe_aggregate(
+    probe_rows: list[tuple[str, ...]],
+    probe_attrs: tuple[AttributeName, ...],
+    build_buckets: dict[tuple[str, ...], list[tuple[str, ...]]],
+    shared_probe_indices: list[int],
+    extra_build_indices: list[int],
+    output_attrs: tuple[AttributeName, ...],
+) -> dict[Interface, BlockExtensionStats]:
+    """Probe hash index and aggregate interface stats without materialization.
+
+    For each probe row, looks up matching build rows and immediately
+    updates all interface counters. No join result list is created.
+    """
+    block_attrs = frozenset(output_attrs)
+    all_interfaces = _enumerate_interfaces(block_attrs)
+
+    iface_mappings: list[tuple[Interface, list[int], list[int]]] = []
+    for interface in all_interfaces:
+        iface_idx = _resolve_attr_indices(output_attrs, interface)
+        ext_attrs = frozenset(output_attrs) - interface
+        ext_idx = _resolve_attr_indices(output_attrs, ext_attrs)
+        iface_mappings.append((interface, iface_idx, ext_idx))
+
+    counters: dict[Interface, dict[tuple[str, ...], set[tuple[str, ...]]]] = {
+        iface: defaultdict(set) for iface, _, _ in iface_mappings
+    }
+
+    seen: set[tuple[str, ...]] = set()
+    for probe_row in probe_rows:
+        key = tuple(probe_row[i] for i in shared_probe_indices)
+        for build_row in build_buckets.get(key, []):
+            ext = tuple(build_row[i] for i in extra_build_indices)
+            joined_row = probe_row + ext
+            if joined_row in seen:
+                continue
+            seen.add(joined_row)
+
+            for interface, iface_idx, ext_idx in iface_mappings:
+                iv = tuple(joined_row[i] for i in iface_idx) if iface_idx else ()
+                ev = tuple(joined_row[i] for i in ext_idx) if ext_idx else ()
+                counters[interface][iv].add(ev)
+
+    return _build_stats_from_counters(counters, iface_mappings)
+
+
+def _aggregate_all_interfaces(
+    joined_tuples: list[tuple[str, ...]],
+    joined_attrs: tuple[AttributeName, ...],
+) -> dict[Interface, BlockExtensionStats]:
+    """Aggregate extension stats for all interfaces from materialized tuples."""
+    block_attrs = frozenset(joined_attrs)
+    all_interfaces = _enumerate_interfaces(block_attrs)
+
+    iface_mappings: list[tuple[Interface, list[int], list[int]]] = []
+    for interface in all_interfaces:
+        iface_idx = _resolve_attr_indices(joined_attrs, interface)
+        ext_attrs = frozenset(joined_attrs) - interface
+        ext_idx = _resolve_attr_indices(joined_attrs, ext_attrs)
+        iface_mappings.append((interface, iface_idx, ext_idx))
+
+    counters: dict[Interface, dict[tuple[str, ...], set[tuple[str, ...]]]] = {
+        iface: defaultdict(set) for iface, _, _ in iface_mappings
+    }
+
+    for row in joined_tuples:
+        for interface, iface_idx, ext_idx in iface_mappings:
+            iv = tuple(row[i] for i in iface_idx) if iface_idx else ()
+            ev = tuple(row[i] for i in ext_idx) if ext_idx else ()
+            counters[interface][iv].add(ev)
+
+    return _build_stats_from_counters(counters, iface_mappings)
+
+
+def _build_stats_from_counters(
+    counters: dict[Interface, dict[tuple[str, ...], set[tuple[str, ...]]]],
+    iface_mappings: list[tuple[Interface, list[int], list[int]]],
+) -> dict[Interface, BlockExtensionStats]:
+    """Convert counter dicts to BlockExtensionStats."""
+    results: dict[Interface, BlockExtensionStats] = {}
+    for interface, _, _ in iface_mappings:
+        ext_map = counters[interface]
+        if not ext_map:
+            results[interface] = BlockExtensionStats(
+                max_extension=0, avg_extension=0.0,
+                count=0, log_max_extension=0.0,
+            )
+            continue
+        sizes = [len(v) for v in ext_map.values()]
+        mx = max(sizes)
+        cnt = len(sizes)
+        avg = sum(sizes) / cnt
+        results[interface] = BlockExtensionStats(
+            max_extension=mx, avg_extension=avg,
+            count=cnt,
+            log_max_extension=math.log2(mx) if mx >= 2 else 0.0,
+        )
+    return results
+
+
 def compute_all_block_extensions(
     query: QueryHypergraph,
     blocks: Iterable[Block],
@@ -291,8 +481,9 @@ def compute_all_block_extensions(
 ) -> dict[tuple[Block, Interface], BlockExtensionStats]:
     """Compute exact extension stats for every interface of each block.
 
-    Block join results are cached to avoid redundant computation when
-    blocks share sub-blocks.
+    Uses streaming aggregation: join tuples are scanned once to update
+    all interface counters simultaneously, reducing memory overhead.
+    Block join results are cached to avoid redundant computation.
     """
     result: dict[tuple[Block, Interface], BlockExtensionStats] = {}
     unique_blocks = tuple(
@@ -304,7 +495,7 @@ def compute_all_block_extensions(
     # Cache block join results by frozenset of relation names
     join_cache: dict[
         frozenset[str],
-        tuple[list[tuple[str, ...]], tuple[AttributeName, ...]],
+        dict[Interface, BlockExtensionStats],
     ] = {}
 
     for block in unique_blocks:
@@ -322,19 +513,14 @@ def compute_all_block_extensions(
 
         cache_key = block.relations
         if cache_key in join_cache:
-            joined_tuples, joined_attrs = join_cache[cache_key]
+            iface_stats = join_cache[cache_key]
         else:
-            joined_tuples, joined_attrs = _join_block_relations(
+            iface_stats = _streaming_join_stats(
                 query, block, relation_data_map
             )
-            join_cache[cache_key] = (joined_tuples, joined_attrs)
+            join_cache[cache_key] = iface_stats
 
-        block_attrs = frozenset(joined_attrs)
-        for interface in _enumerate_interfaces(block_attrs):
-            result[(block, interface)] = _compute_extension_stats(
-                joined_tuples,
-                joined_attrs,
-                interface,
-            )
+        for interface, stats in iface_stats.items():
+            result[(block, interface)] = stats
 
     return result

@@ -56,6 +56,10 @@ class HCEGDAG:
         hyperedges: Hyperedges between reachable relation states.
         source: Empty relation state.
         sink: Full relation state containing all query relations.
+        pruned_count: Number of states discarded by beam pruning during
+            construction. ``0`` means the DAG is complete and the shortest
+            hyperpath is exact; a positive value means the bound is a
+            beam-search approximation and may not be the true shortest path.
     """
 
     query_name: str
@@ -63,6 +67,7 @@ class HCEGDAG:
     hyperedges: tuple[HCEGHyperedge, ...]
     source: State
     sink: State
+    pruned_count: int = 0
 
 
 def build_hceg_dag(
@@ -222,19 +227,25 @@ def _build_hceg_dag_beam(
                 counter += 1
                 heapq.heappush(pq, (new_acc, counter, target))
 
-        # Beam pruning: if too many pending states, keep only the best
+        # Beam pruning: if too many pending states, keep only the best.
+        # Dropping frontier states only removes candidate hyperpaths, so the
+        # surviving minimum can only be larger: the bound stays valid (T1).
         if len(best_weight) > max_states * 2:
             # Keep source, sink, and the max_states best by weight
             sorted_states = sorted(best_weight.items(), key=lambda x: x[1])
             keep: set[State] = {source, sink}
             for s, _ in sorted_states[:max_states]:
                 keep.add(s)
-            old_count = len(best_weight)
-            best_weight = {s: w for s, w in best_weight.items() if s in keep}
-            # Filter priority queue
-            pq = [(w, c, s) for w, c, s in pq if s in keep or s not in visited]
-            heapq.heapify(pq)
-            pruned_count += old_count - len(best_weight)
+            # Drop unexpanded frontier states outright -- retaining them (as an
+            # earlier version did) made the threshold inert and the DAG grew in
+            # full. Already-visited states keep their emitted hyperedges.
+            dropped = {s for _, _, s in pq if s not in keep and s not in visited}
+            if dropped:
+                pq = [(w, c, s) for w, c, s in pq if s not in dropped]
+                heapq.heapify(pq)
+                pruned_count += len(dropped)
+            best_weight = {s: w for s, w in best_weight.items()
+                           if s in keep or s in visited}
 
     if pruned_count > 0:
         LOGGER.info(
@@ -249,7 +260,9 @@ def _build_hceg_dag_beam(
         if he.source in visited and he.target in visited
     ]
 
-    return _finalize_dag(query.name, visited, valid_hyperedges, source, sink)
+    return _finalize_dag(
+        query.name, visited, valid_hyperedges, source, sink, pruned_count=pruned_count
+    )
 
 
 def _finalize_dag(
@@ -258,6 +271,7 @@ def _finalize_dag(
     hyperedges: list[HCEGHyperedge],
     source: State,
     sink: State,
+    pruned_count: int = 0,
 ) -> HCEGDAG:
     """Sort and package visited states and hyperedges into an HCEGDAG."""
     vertices = tuple(sorted(visited, key=_state_sort_key))
@@ -275,6 +289,7 @@ def _finalize_dag(
         hyperedges=ordered_hyperedges,
         source=source,
         sink=sink,
+        pruned_count=pruned_count,
     )
 
 

@@ -80,3 +80,17 @@ def test_full_molp_is_tighter_than_the_chain_on_the_audit_example() -> None:
     chain = estimate_pessimistic(query, data, max_block_size=1).estimate
     assert chain == pytest.approx(24.0)
     assert 2.0 ** full_molp(query, data) == pytest.approx(6.0)
+
+
+def test_full_molp_matches_the_shared_molp_module() -> None:
+    """scripts/molp_full.py agrees with src.core.molp (synced from H-CEG)."""
+    import math
+
+    from scripts.molp_full import full_molp
+    from scripts.revision_experiments import make_cycle_data
+    from src.core.molp import estimate_molp
+
+    for k in (4, 5):
+        query, data = make_cycle_data(k, 60, 200, alpha=1.0, seed=1000)
+        ours = full_molp(query, data)
+        assert ours == pytest.approx(math.log2(estimate_molp(data).bound), abs=1e-9)
