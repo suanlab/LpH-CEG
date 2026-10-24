@@ -3,6 +3,8 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{hyperref}
 \usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
 
 \newcommand{\query}{\mathcal{Q}}
 \newcommand{\block}{F}
@@ -422,11 +424,42 @@ incident edges, the $k$-way generalized inner products of their degree
 vectors ($p=1,2,3$) and intra-relation correlation norms; our $bs{\le}2$
 catalog has neither. It has the interface-conditioned norms of every pair
 block, which CorrBound's vocabulary lacks for the one-side and
-common-neighbour interfaces (Proposition~\ref{prop:separation}). The two
-are complementary, and the $18$ queries where CorrBound-e is tighter
-suggest that combining them would help. CorrBound's statistics are computed
-once per dataset; ours cost a median $25$\,s per query in our Python
-prototype (all pair blocks, $31$ norms), and the solve $0.38$\,s.
+common-neighbour interfaces (Proposition~\ref{prop:separation}).
+CorrBound's statistics are computed once per dataset; ours cost a median
+$25$\,s per query in our Python prototype (all pair blocks, $31$ norms,
+materialized joins), and the solve $0.38$\,s.
+
+\emph{Re-running CorrBound-e.} We ran the artifact's own LP builder
+(\texttt{corrbound.cyclic.LPBuilder}, OR-Tools GLOP; its flow-LP extension,
+unused by CorrBound-e, stubbed) on statistics we computed in its formats
+from its DBLP files (\texttt{scripts/corrbound\_sm\_artifact\_lp.py}). Run
+unchanged it reproduces the published estimate on $400/400$ queries
+(ratio $1.000000$ at both extremes). Its inter-relation inequality is
+written $p\sum_i h(xy_i) - (k-1)h(x) \le \log_2\sum_v\prod_i d_i(v)^p$ and
+its intra-relation one $(p+q+1)h(AB) - h(A) - h(B) \le \log_2\sum_{(s,t)}
+d(s)^p d(t)^q$, for every $p\in\{1,2,3\}$ and every $p,q\le 10$ with $pq\le 12$ respectively. The paper's Eq.~(13) and (14),
+$h(x)+p\sum_i h(y_i\mid x)$ and $h(AB)+p\,h(B\mid A)+q\,h(A\mid B)$ on the
+left, give $-(pk-1)h(x)$ and $-p\,h(A)-q\,h(B)$; the two agree at
+$p{=}q{=}1$. For larger $p$ the coded forms are not implied by the Lemma:
+on a complete bipartite relation $K_{m,m}$ the uniform distribution makes
+the coded intra-relation left side $8\log_2 m$ at $p{=}q{=}2$, against a
+right side of $6\log_2 m$. With Eq.~(13)/(14) and nothing else changed,
+the builder's estimates are a median $2.4\times$ ($1.5$--$6.1\times$)
+higher, $15.2\times$ above the exact count; neither version falls below an
+exact count on these queries. The paper's comparison uses the published
+estimates, which is the conservative comparison for block statistics; against the Eq.~(13)/(14) version,
+block statistics are a median $7.3\times$ tighter.
+
+\emph{Combined catalog.} Adding CorrBound-e's inter- and intra-relation
+inequalities (Eq.~(13)/(14)) to our polymatroid program over the
+$bs{\le}2$ block catalog (\texttt{scripts/corrbound\_sm\_combined.py}; the
+program gets \texttt{polymatroid\_bound}'s \texttt{extra} constraints)
+tightens $28$ of the $400$ queries, by at most $3.1\%$ (median over the
+exact count $1.985\times$ against $1.987\times$). On this workload the
+block statistics carry nearly all of what CorrBound-e's statistics add. In the same
+program, CorrBound-e's statistics alone give $15.1\times$ over the exact
+count, against $15.2\times$ in the artifact's LP, whose Shannon cone omits
+the $h(x)+h(y)\ge h(xy)$ inequalities.
 
 \section{Condensed in the main text}
 Three passages are shortened in the paper. \emph{Pair-join sizes on IMDb} (the paper's IMDb paragraph keeps the self-join explanation): where half the
@@ -614,12 +647,63 @@ catalogs give the same bound on all $240$ queries (largest $|\Delta\log_2|$
 $0$). Peak memory over the loaded data is a median $60$ against $626$\,MB
 on Hetionet and $44$ against $262$\,MB on IMDb; the largest process peaks
 are $429$ against $6{,}351$\,MB and $341$ against $4{,}149$\,MB. Building the
-constraints takes about $2$\,ms. An earlier version of the table measured
+constraints takes about $2$\,ms. The workload catalog of the paper's Hetionet long suite holds $676$ entries; stored as norms only, eleven per entry, it needs $676\cdot 11\cdot 8$ bytes, about $59$\,KB (degree sequences, kept by our prototype for norms not precomputed, are optional). An earlier version of the table measured
 the catalogs of a query in one process, in a fixed order, with the full
 catalog's joins materialized (\texttt{cost\_accuracy.py}); its
 join-free and $\ell_2$ ratios ($6.0$/$6.9\times$ and $6.2$/$7.1\times$) are
 close to these, and its full-catalog ratio ($52$/$24\times$) is the
 materialized path's.
+
+\section{Candidate, certificate and returned bound by query size}
+For the synthetic cycle sweep of the paper's scalability section ($bs{\le}2$,
+three norms), Table~\ref{tab:return} separates the three costs that the
+paper's flow-LP results combine: computing the polynomial-time candidate
+(all orders, total), certifying it by the $2^{|V|}$ polymatroid program, and
+the bound \texttt{guaranteed\_block\_bound} returns with its default limit
+$|V|\le 12$ (the polymatroid optimum up to $k{=}12$, the cover LP beyond).
+The last column divides the returned bound by the flow candidate. At
+$k{=}14$ the certificate still finishes ($1{,}425$\,s) and matches; at
+$k{=}16$ it does not finish in six hours, and the guaranteed value is the
+cover LP's, $288\times$ above the uncertified candidate. The candidate's
+speed is therefore not a speed of the guaranteed estimator beyond
+$|V|{=}12$; there the returned bound is the cover LP's.
+
+\begin{table}[h]
+\centering
+\caption{Flow candidate (ms), polymatroid certificate (s), candidate over
+optimum, returned method and returned bound over the candidate.}
+\label{tab:return}
+\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}rrrrlr@{}}
+\toprule
+$k$ & flow & poly & flow/poly & returned & ret./flow \\
+\midrule
+$3$ & $28$ & $0.003$ & $1.00\times$ & polymatroid & $1.00\times$ \\
+$4$ & $103$ & $0.004$ & $1.00\times$ & polymatroid & $1.00\times$ \\
+$5$ & $218$ & $0.006$ & $1.59\times$ & polymatroid & $0.63\times$ \\
+$6$ & $284$ & $0.010$ & $1.00\times$ & polymatroid & $1.00\times$ \\
+$7$ & $438$ & $0.023$ & $1.56\times$ & polymatroid & $0.64\times$ \\
+$8$ & $628$ & $0.056$ & $1.00\times$ & polymatroid & $1.00\times$ \\
+$10$ & $1{,}209$ & $0.684$ & $1.00\times$ & polymatroid & $1.00\times$ \\
+$12$ & $1{,}786$ & $20.1$ & $1.00\times$ & polymatroid & $1.00\times$ \\
+$14$ & $2{,}842$ & $1{,}425$ & $1.00\times$ & cover & $136\times$ \\
+$16$ & $4{,}438$ & $>21{,}600$ & -- & cover & $288\times$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Sensitivity to the number of $p$-values}
+The paper's four-family sweep (cycle-4/6, $K_4$, chordal-5) of the cover LP's improvement as norms are added.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{pvalue_sensitivity.pdf}
+\caption{Sensitivity to the number of $p$-values across four query
+families (log scale). Improvement saturates at
+$\mathcal{P} = \{1,2,\infty\}$ (dotted line) in every family;
+additional norms add ${<}2.4\%$.}
+\label{fig:pvalue}
+\end{figure}
 
 \section{Unified comparison on synthetic cycles}
 \begin{table}[h]

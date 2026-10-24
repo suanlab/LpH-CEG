@@ -1,0 +1,2 @@
+n,shipped_over_published_min,shipped_over_published_max,median_eq_over_shipped,min_eq_over_shipped,max_eq_over_shipped,median_shipped_over_truth,median_eq_over_truth,n_shipped_below_truth,n_eq_below_truth
+400,1.000000,1.000000,2.406,1.499,6.071,6.145,15.17,0,0

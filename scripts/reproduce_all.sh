@@ -194,6 +194,9 @@ run_experiments() {
     # (set LPH_CORRBOUND_DIR; default ../external/CorrBound)
     python scripts/corrbound_sm_recount.py    # recount its 400 subgraph-matching queries with DuckDB (~5 min)
     python scripts/corrbound_sm_compare.py    # same queries, its norm set: LpBound check and block statistics (~25 min)
+    python scripts/corrbound_sm_combined.py   # CorrBound-e's inequalities (its Eq. 13/14) in our program, alone and with block statistics (~30 min)
+    # the artifact's own LP builder, as shipped and with Eq. 13/14; needs the artifact's Python deps (ortools, sqlparse, joblib):
+    #   <python-with-ortools> scripts/corrbound_sm_artifact_lp.py
 
     # Aggregates last: they read the long-suite, IMDb and G-CARE results above.
     section "20n. Aggregates over Every Suite"

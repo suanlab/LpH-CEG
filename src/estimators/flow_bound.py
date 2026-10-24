@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import math
 import time
+from collections import defaultdict
 from dataclasses import dataclass
 from itertools import combinations
 from typing import TYPE_CHECKING
@@ -345,6 +346,7 @@ def flow_bound(
 def polymatroid_bound(
     attributes: Iterable[AttributeName],
     constraints: Sequence[DegreeConstraint],
+    extra: Sequence[tuple[dict[AttrSet, float], float]] = (),
 ) -> float:
     """Maximise ``h(V)`` over the Shannon cone subject to ``constraints``.
 
@@ -355,6 +357,8 @@ def polymatroid_bound(
     Args:
         attributes: The query attributes ``V``.
         constraints: Degree constraints over subsets of ``V``.
+        extra: Further linear constraints ``sum_S coeff_S h(S) <= rhs`` given
+            as ``({S: coeff}, rhs)`` (e.g. another estimator's statistics).
 
     Returns:
         The optimum in ``log2`` units; ``-inf`` when a constraint certifies an
@@ -407,6 +411,13 @@ def polymatroid_bound(
         if con.conditioning:
             coeffs[col_of[con.conditioning]] = -(1.0 - _inv_p(con.p))
         add_row(coeffs, con.log_norm)
+    for terms, bound in extra:
+        if bound == -math.inf:
+            return -math.inf
+        row: dict[int, float] = defaultdict(float)
+        for subset, coeff in terms.items():
+            row[col_of[frozenset(subset)]] += coeff
+        add_row(dict(row), bound)
 
     n_vars = len(subsets)
     c = np.zeros(n_vars)

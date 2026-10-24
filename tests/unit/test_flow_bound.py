@@ -199,3 +199,16 @@ def test_guaranteed_bound_falls_back_when_the_polymatroid_lp_fails(
     assert res.method == "cover_fallback"
     assert res.fallback_reason == "solver"
     assert res.log_bound == 7.0
+
+
+def test_polymatroid_extra_constraints_tighten() -> None:
+    """An extra linear constraint enters the 2^|V| program as given."""
+    cons = _path_constraints(100, 80, 3)
+    attrs = ("a", "b", "c")
+    base = polymatroid_bound(attrs, cons)
+    capped = polymatroid_bound(
+        attrs, cons, extra=[({frozenset("abc"): 1.0}, base - 1.0)]
+    )
+    assert capped == pytest.approx(base - 1.0)
+    loose = polymatroid_bound(attrs, cons, extra=[({frozenset("a"): 1.0}, 1e9)])
+    assert loose == pytest.approx(base)

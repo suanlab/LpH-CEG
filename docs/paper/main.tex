@@ -102,17 +102,13 @@ is block statistics with polymatroid inference.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{positioning.pdf}
-\caption{Both axes on one \emph{measured} cost--tightness plot (each
-point a synthetic cycle-$k$ query; $y$ is relative to the entropic
-optimum on single-relation statistics). Above $y{=}1$, the inference
-axis at $bs{=}1$: CEG$_M$/MOLP (placed at the cover LP's time) is up to $45\times$ loose,
-the cover LP within $1.43\times$ ($7$--$43$\,ms end to end), and the
-optimum itself $25$\,s at $k{=}12$ as a $2^{|V|}$ program but a
-$3$--$18$\,ms solve ($k{\le}14$) as LpBound's flow LP---that axis is
-closed. Below $y{=}1$, the statistics
-axis: the same programs on $bs{=}2$ block statistics (three norms), the
-cover LP level with the optimum at $k{\le}4$ and up to $6\times$ below
-it, the flow LP (Section~\ref{sec:scalability}) $2$--$800\times$ below.}
+\caption{Both axes on one \emph{measured} cost--tightness plot (synthetic
+cycle-$k$ queries; $y$ relative to the entropic optimum on single-relation
+statistics). Above $y{=}1$, the inference axis at $bs{=}1$: CEG$_M$/MOLP up
+to $45\times$ loose, the cover LP within $1.43\times$, and the optimum
+reached by LpBound's flow LP in $3$--$18$\,ms. Below $y{=}1$, the
+statistics axis: the same programs on $bs{=}2$ block statistics (three
+norms), the flow LP $2$--$800\times$ below.}
 \label{fig:positioning}
 \end{figure}
 
@@ -297,10 +293,12 @@ Algorithm~\ref{alg:lph-ceg} summarizes the LpH-CEG estimation pipeline.
 \STATE Enumerate blocks $\mathcal{B} \gets \{F \subseteq \mathcal{E} :
   |F| \le b,\; F \text{ connected}\}$
 \FOR{each block $F \in \mathcal{B}$ and interface $I$}
-  \STATE Compute join $Q_F \gets \bowtie_{R \in F} R$
-  \STATE Collect degree sequence $\mathbf{d}_{F,I}$
+  \STATE Collect $\mathbf{d}_{F,I}$ \COMMENT{binary pairs: no join tuples}
   \STATE Compute $\muLp{p}{F}{I}$ for each $p \in \mathcal{P}$
 \ENDFOR
+\IF{$|V| \le 12$}
+  \STATE \textbf{return} $2^{h^*}$, $h^* = \max h(V)$ over the Shannon cone under all $\ell_p$ block constraints
+\ENDIF
 \STATE Build block-extension DAG with $\ell_\infty$ weights
 \STATE Find candidate hyperpaths $P_1, \ldots, P_K$ (shortest, then a bounded search) \COMMENT{$K{=}1$: default}
 \FOR{each hyperpath $P_i = (F_1, \ldots, F_m)$}
@@ -311,10 +309,10 @@ Algorithm~\ref{alg:lph-ceg} summarizes the LpH-CEG estimation pipeline.
 \end{algorithmic}
 \end{algorithm}
 
-The LP in line~10 has $O(m \cdot |\mathcal{P}|)$ variables
+The LP in line~12 has $O(m \cdot |\mathcal{P}|)$ variables
 ($m \le |\mathcal{E}|$ steps, $|\mathcal{P}| = 3$ in practice) and $|V|$
 constraints, solved by HiGHS~\cite{huangfu2018highs} in about $1$--$2$\,ms.
-Line~13 ensures LpH-CEG never produces a looser bound than the standard max-degree bound. Algorithm~\ref{alg:lph-ceg} is the cover-LP path; the estimator of Section~\ref{sec:stats-vs-inference} replaces lines~9--12 by the polymatroid program (or the flow LP, checked against it) on the same statistics.
+Lines~6--8 return the estimator of Section~\ref{sec:stats-vs-inference}, the polymatroid program over block statistics (as \texttt{guaranteed\_block\_bound}; the flow LP is only a candidate checked against it). Beyond $|V|{=}12$, and as the instrument of Sections~\ref{sec:theory}--\ref{sec:vs-lpbound}, the cover-LP path (lines~9--15) is the guarantee; line~15 keeps it no looser than the max-degree bound.
 
 %% ===================================================================
 \section{Theoretical Results}
@@ -901,14 +899,12 @@ $bs{=}1$ one. G-CARE is thus a regime where the program matters as much as the s
 
 \emph{CorrBound's workload.} CorrBound's artifact~\cite{mayer2026corrbound}
 ships its $400$ labelled $8$-vertex subgraph-matching queries on DBLP with
-its published estimates, used as given. With its norms ($p{=}1,\dots,30,\infty$) our LpBound
-reproduces the artifact's on $400/400$ queries; block statistics under the
+its estimates. With its norms ($p{=}1,\dots,30,\infty$) our LpBound
+reproduces the artifact's on $400/400$ queries, and its own LP code reproduces the published CorrBound-e ones. Block statistics under the
 polymatroid program sit a median $1.99\times$ above the exact count,
 against $6.1\times$ for CorrBound-e and $64.6\times$ for LpBound, and are
 tighter than CorrBound-e on $382/400$ (median $3.0\times$, at most
-$1.51\times$ looser), with no bound below a recount (the artifact's own counts are a median $0.6\%$ lower; extended version). Our statistics cost a
-median $25$\,s per query against CorrBound's per-dataset ones, and lack its
-$k$-way inner products (extended version).
+$1.51\times$ looser); no bound falls below a recount (the artifact's counts are a median $0.6\%$ lower); ours cost a median $25$\,s per query, CorrBound's statistics are per dataset. For $p{>}1$ that code's inequalities are stronger than its Lemma~3.1; with the Lemma's, CorrBound-e is a median $2.4\times$ looser, and its statistics added to ours tighten $28/400$ queries by at most $3.1\%$ (extended version).
 
 \begin{table}[t]
 \centering
@@ -990,7 +986,7 @@ $60$/$44$\,MB of extra peak memory (at least) against $626$/$262$\,MB
 $0.08$--$0.10$\,s for every catalog, LpBound's flow LP $0.012$--$0.014$\,s.
 At five times the IMDb films ($|V|{=}6$) the sparse path takes a median $9.3$\,s per query (at most $83$\,s, peak $0.9$\,GB) against $48$\,s, $25$\,min and $16$\,GiB materialized (sparse: eleven norms; materialized: three), $5.1\times$ its time at $200$ films for $4.4\times$ the rows.
 
-\emph{A spectral reading (post hoc).} On even cycles the common-neighbour $\ell_2$ is the Frobenius norm of a block product, and a trace--H\"older bound from it and a certified top singular value is tighter than the polymatroid program on $96/240$ long-suite queries (looser overall; $220/240$ with uncertified Lanczos estimates; extended version), so the next step on the statistics axis may be spectral order rather than block size. On $22$ small random cycles, a search over databases with the same
+A post hoc spectral reading of the common-neighbour $\ell_2$ is in the extended version. On $22$ small random cycles, a search over databases with the same
 $bs{\le}2$ statistics puts at most $1.5\times$ of the gap on the program and
 at least $2.5\times$ on the statistics (cycle-$4$ medians).
 
@@ -1157,22 +1153,14 @@ achieves $17.6\times$ improvement; adding $\ell_2$ ($\mathcal{P} =
 $\ell_5$) yield no additional gain.
 We recommend $\mathcal{P} = \{1, 2, \infty\}$ as the default (cardinality
 $\ell_1$, variance $\ell_2$, worst case $\ell_\infty$); repeating the
-sweep on four families (cycle-4/6, $K_4$, chordal-5; Figure~\ref{fig:pvalue}) confirms this is not
+sweep on four families (cycle-4/6, $K_4$, chordal-5; extended version) confirms this is not
 cycle-specific---$\ell_2$ helps in every family and $p$ beyond
 $\{1,2,\infty\}$ adds $<2.4\%$ to the cover LP. This does not hold for
 the entropic bound, which gains a median $1.9$--$6.7\times$ from eleven norms
 on the real suites; comparisons against it therefore use eleven norms on
 both sides (Section~\ref{sec:experiments}).
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\columnwidth]{pvalue_sensitivity.pdf}
-\caption{Sensitivity to the number of $p$-values across four query
-families (log scale). Improvement saturates at
-$\mathcal{P} = \{1,2,\infty\}$ (dotted line) in every family;
-additional norms add ${<}2.4\%$.}
-\label{fig:pvalue}
-\end{figure}
+
 
 \subsection{Bound-Guided Join Ordering}
 \label{sec:robustness}\label{sec:wcoj}
@@ -1273,7 +1261,7 @@ near-symmetric sampled degrees (the $5$K-edge-prefix Epinions cycles,
 Section~\ref{sec:realdata}, and all $8$ IMDb co-actor/co-director and
 replicated movie--actor cycle-$4$ instances at $5$K--$1$M rows); case~(2) is a property of the sample, as $20$K
 edges of the same graph give $2.06\times$ on cycle-4
-(Section~\ref{sec:suite}). On our data the gains came from \emph{asymmetric degree structure in cyclic joins}: on JOB-medium the two co-actor 4-cycles improve $1.94\times$ and $2.80\times$ at $bs{=}1$, a star query and every cyclic query on a TPC-H-like schema exactly $1.00\times$ (extended version). Synthetic power-law graphs improve more (up to
+(Section~\ref{sec:suite}). On our data the gains came from \emph{asymmetric degree structure in cyclic joins} (JOB-medium and TPC-H-like cases in the extended version). Synthetic power-law graphs improve more (up to
 $614\times$ at cycle-8) than real data, where the median over the long
 suites is $1.8$--$8.9\times$ (tails $157\times$ on Hetionet, $34\times$
 on IMDb): every synthetic relation is drawn with one shared Zipf exponent ($\alpha{=}1$ in the headline sweep), so every middle factor of Theorem~\ref{thm:cyclic} exceeds $1$ at once, whereas real relations differ in skew.
@@ -1284,7 +1272,7 @@ on IMDb): every synthetic relation is drawn with one shared Zipf exponent ($\alp
 
 \paragraph{Block decomposition methods}
 CEG's pessimistic variant CEG$_M$~\cite{chen2022ceg,salihoglu2026ceg} models estimation as a shortest path over max-degree weights of base relations and small joins (its optimistic CEG$_O$, like Graphflow's catalog~\cite{mhedhbi2019graphflow}, uses average degrees of such joins); multi-way block extensions~\cite{hceg2027} generalize this to groups of relations via hyperpaths. Both use only $\ell_\infty$ statistics. LpH-CEG replaces these scalar weights with LP-optimized, interface-conditioned $\ell_p$-norm products and
-characterizes \emph{when} the LP can improve: cyclic queries with
+gives a sufficient condition for the LP to improve: cyclic queries with
 redundant coverage (Theorem~\ref{thm:cyclic}).
 
 \paragraph{Information-theoretic bounds}

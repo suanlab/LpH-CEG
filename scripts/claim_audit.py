@@ -185,6 +185,9 @@ def main() -> None:
     abo = load("results/pushdown/ablation_overlap_summary.csv")
     rrw = load("results/e2e/robustness_raw_summary.csv")
     iss = load("results/imdb/imdb_scale_sparse_summary.csv")
+    alp = load("results/corrbound/sm_artifact_lp_summary.csv")
+    cbc = load("results/corrbound/sm_combined_summary.csv")
+    swc = load("results/flow/sweep_poly_certify.csv")
     cbs = load("results/corrbound/sm_compare_summary.csv")
     vcs = load("results/characterization/voi_cost_summary.csv")
     ssc = load("results/suite/slice_scale_summary.csv")
@@ -3006,6 +3009,117 @@ def main() -> None:
             / pick(iss, "median_rows", data="n200"),
             4.4,
             0.05 / 4.4,
+        ),
+        (
+            "CorrBound artifact LP as shipped reproduces published, min (1.000000)",
+            float(alp[0]["shipped_over_published_min"]),
+            1.0,
+            1e-06 / 1.0,
+        ),
+        (
+            "CorrBound artifact LP as shipped reproduces published, max (1.000000)",
+            float(alp[0]["shipped_over_published_max"]),
+            1.0,
+            1e-06 / 1.0,
+        ),
+        (
+            "CorrBound Eq13/14 over shipped, median (2.4x)",
+            float(alp[0]["median_eq_over_shipped"]),
+            2.4,
+            0.05 / 2.4,
+        ),
+        (
+            "CorrBound Eq13/14 over shipped, min (1.5x)",
+            float(alp[0]["min_eq_over_shipped"]),
+            1.5,
+            0.05 / 1.5,
+        ),
+        (
+            "CorrBound Eq13/14 over shipped, max (6.1x)",
+            float(alp[0]["max_eq_over_shipped"]),
+            6.1,
+            0.05 / 6.1,
+        ),
+        (
+            "CorrBound Eq13/14 in artifact LP, median over exact (15.2x)",
+            float(alp[0]["median_eq_over_truth"]),
+            15.2,
+            0.05 / 15.2,
+        ),
+        (
+            "CorrBound shipped/Eq13/14 below exact (0)",
+            int(alp[0]["n_shipped_below_truth"]) + int(alp[0]["n_eq_below_truth"]),
+            0,
+        ),
+        (
+            "CorrBound Eq13/14 in our program, median over exact (15.1x)",
+            pick(cbc, "median_over_truth", catalog="corrbound"),
+            15.1,
+            0.05 / 15.1,
+        ),
+        (
+            "block over Eq13/14 CorrBound-e, median (7.3x)",
+            pick(cbc, "median_corrbound_over_block", catalog="checks"),
+            7.3,
+            0.05 / 7.3,
+        ),
+        (
+            "combined tighter than block (28)/400",
+            pick(cbc, "n_combined_tighter_than_block", catalog="checks"),
+            28,
+        ),
+        (
+            "combined at most 3.1% tighter (3.1)",
+            100 * (pick(cbc, "max_block_over_combined", catalog="checks") - 1),
+            3.1,
+            0.05 / 3.1,
+        ),
+        (
+            "combined median over exact (1.985)",
+            pick(cbc, "median_over_truth", catalog="combined"),
+            1.985,
+            0.0005 / 1.985,
+        ),
+        (
+            "block median over exact, combined run (1.987)",
+            pick(cbc, "median_over_truth", catalog="block"),
+            1.987,
+            0.0005 / 1.987,
+        ),
+        (
+            "combined run block equals sm_compare (0)",
+            pick(cbc, "max_abs_log2_block_minus_compare", catalog="checks"),
+            0,
+        ),
+        (
+            "combined/corrbound below exact (0)",
+            sum(int(r["n_below_truth"]) for r in cbc if r["catalog"] != "checks"),
+            0,
+        ),
+        (
+            "sweep k=14: cover over flow candidate (136x)",
+            float(next(r for r in fsc if r["k"] == "14")["cover_bs2_bound"])
+            / float(next(r for r in fsc if r["k"] == "14")["flow_bs2_bound"]),
+            136,
+            0.5 / 136,
+        ),
+        (
+            "sweep k=14: polymatroid certificate seconds (1,425)",
+            float(next(r for r in swc if r["k"] == "14")["poly_s"]),
+            1425,
+            0.5 / 1425,
+        ),
+        (
+            "sweep k=12: polymatroid certificate seconds (20.1)",
+            float(next(r for r in swc if r["k"] == "12")["poly_s"]),
+            20.1,
+            0.05 / 20.1,
+        ),
+        (
+            "catalog norms-only size, KB (59)",
+            max(int(r["catalogue_size"]) for r in cat) * 11 * 8 / 1000,
+            59,
+            0.5 / 59,
         ),
         (
             "G-CARE yago: LpBound/poly median where counts agree (12x)",

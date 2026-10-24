@@ -1,0 +1,5 @@
+catalog,n,median_over_truth,p95_over_truth,n_below_truth,corrbound_ours_over_artifact_min,corrbound_ours_over_artifact_median,corrbound_ours_over_artifact_max,max_abs_log2_block_minus_compare,median_corrbound_over_block,median_block_over_combined,max_block_over_combined,n_combined_tighter_than_block,median_corrbound_over_combined
+corrbound,400,15.14,47.33,0,,,,,,,,,
+block,400,1.987,3.911,0,,,,,,,,,
+combined,400,1.985,3.911,0,,,,,,,,,
+checks,400,,,,1.499284,2.406095,6.071315,0.00e+00,7.337,1,1.031,28,7.337
