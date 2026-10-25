@@ -80,10 +80,15 @@ $\ell_p$-norms of degree sequences, achieving orders-of-magnitude
 improvements on skewed data via an LP over entropy inequalities.
 Independently, statistics over small multi-relation joins~\cite{chen2022ceg,salihoglu2026ceg} and multi-way \emph{block extensions}~\cite{hceg2027} capture joint constraints across relations.
 
-The empirical question is how much interface-conditioned $\ell_p$ block statistics add beyond base-relation norms and correlation summaries, and at what cost. CEG$_M$ uses their $\ell_\infty$ case; CorrBound's generalized inner products overlap the shared-interface case (Section~\ref{sec:related}).
-LpBound's program exploits the redundant coverage of cyclic queries, but
-over single-relation statistics only; block extension methods capture
-joint constraints, but through max degrees only.
+The two lines improve the bound from different sides. LpBound strengthens
+the \emph{program} over single-relation statistics; CEG$_M$, block
+extensions and CorrBound~\cite{mayer2026corrbound} enrich the
+\emph{statistics} with multi-relation information, but only through max
+degrees or inner products of degree vectors. Between them sit the
+interface-conditioned $\ell_p$ norms of two-relation joins, which
+CorrBound's shared-interface products overlap only in part
+(Section~\ref{sec:related}). We ask which side has the headroom on
+cyclic joins, what those statistics add, and at what cost.
 
 \paragraph{Our contribution}
 We separate what a better \emph{program} and what richer
@@ -113,51 +118,45 @@ norms), the flow LP $2$--$800\times$ below.}
 Our contributions are:
 
 \begin{enumerate}
-\item \textbf{The estimator and its tightness
+\item \textbf{An estimator that moves the bound by orders of magnitude
 (Sections~\ref{sec:stats-vs-inference},~\ref{sec:scalability}).}
 With eleven norms on both sides, block statistics
-$\mu_p(\block\mid\interface)$, $|\block|\ge2$, in the polymatroid program
-are a median $236$--$10{,}200\times$ below LpBound on $120$ rule-selected
-Hetionet cycles ($|V|{=}6$--$10$), $9.7$--$87\times$ on $120$ IMDb cycles
-and $15$--$24\times$ on G-CARE ($433$ AIDS and YAGO queries run), and a
-median $3.0\times$ below CorrBound-e's published estimates on CorrBound's
-own $400$ subgraph-matching queries. On these statistics the program
-matters again: the polymatroid optimum beats the cover LP by a median
-$5.0$--$11.6\times$, against $2.7$--$6.8\times$ on single-relation
-statistics.
+$\mu_p(\block\mid\interface)$, $|\block|\ge2$, under the polymatroid
+program are a median $236$--$10{,}200\times$ below LpBound on $120$
+rule-selected Hetionet cycles ($|V|{=}6$--$10$), $9.7$--$87\times$ on
+$120$ IMDb cycles and $15$--$24\times$ on G-CARE, and a median $3.0\times$
+below CorrBound-e's published estimates on CorrBound's own $400$
+subgraph-matching queries, never below an exact count. On these
+statistics a stronger program pays off again ($5.0$--$11.6\times$ over the
+cover LP, against $2.7$--$6.8\times$ on single-relation statistics).
 
-\item \textbf{Which statistics matter, and their cost
+\item \textbf{Which statistics matter, and what they cost
 (Section~\ref{sec:stats-vs-inference}).}
-Pair sizes and pairwise inner products (a proxy for CorrBound's statistics)
-gain $42\times$ (Hetionet) and $2.0\times$ (IMDb); the one-side and
-common-neighbour statistics add $34\times$ and $14\times$ on $120/120$
-queries. All interfaces but one come from a scan of one relation with
-degree lookups in the other; the common-neighbour sequence needs one
-sparse product per block, and its $\ell_2$ is determined by none of the
-others (extended version). The full catalog thus costs about $8\times$
-LpBound's collection, against $25$--$54\times$ with the pair joins
-materialized.
+All interfaces of a pair block but one come from a scan of one relation
+with degree lookups in the other; the common-neighbour sequence needs one
+sparse product, and its $\ell_2$ is determined by none of the others
+(extended version). A median $48\%$ (Hetionet) and $79\%$ (IMDb) of the
+log-gain lies outside a pairwise proxy for CorrBound's statistics, and the
+full catalog costs about $8\times$ LpBound's collection ($25$--$54\times$
+with materialized pair joins).
 
-\item \textbf{For simple degree constraints, the Shannon-cone optimum is attainable
+\item \textbf{Why single-relation statistics leave little headroom
 (Sections~\ref{sec:theory},~\ref{sec:vs-lpbound}).}
-On a fixed hyperpath the cover LP is optimal among weightings valid on
-every self-join-free database (Proposition~\ref{prop:necessity}), yet sits
-$2.7$--$6.8\times$ above the entropic optimum, which LpBound's flow LP
-reaches in polynomial time. An $\ell_p$ Composition Inequality makes the
-cover bound valid for every hyperpath, block size and $p$ ($207$K
-database--block-size checks and an LP certificate over $6{,}197$
-hyperpath structures agree); our $\ell_p$ flow LP is a polynomial-time
-candidate for the polymatroid optimum (equal on $633$ of $862$ queries),
-checked per query.
+An $\ell_p$ Composition Inequality makes the cover bound valid for every
+hyperpath, block size and $p$; on a fixed hyperpath the cover LP is optimal
+among weightings valid on every self-join-free database
+(Proposition~\ref{prop:necessity}), yet sits $2.7$--$6.8\times$ above the
+entropic optimum, which LpBound's flow LP reaches in polynomial time. Our
+$\ell_p$ flow LP is a polynomial-time candidate for the polymatroid
+optimum over block statistics (equal on $633$ of $862$ queries), checked
+per query.
 
 \item \textbf{Limits (Sections~\ref{sec:experiments},~\ref{sec:wcoj}).}
-Guiding join order, the bound trims the catastrophic tail on $24$ small
-synthetic cyclic queries (P95 slowdown $1.2\times$ vs.\ $5.8\times$, from
-the denser shapes) rather than the average; on IMDb block statistics
-pick the exact-count order on $24/40$ queries, yet those left-deep plans
-lose to DuckDB's own; a per-step residual ordering heuristic does not
-generalize (median $-1.3\%$ over $66$ queries); and a predicate-free
-catalog helps only under mild predicates.
+Bound-guided join orders trim the catastrophic tail on small synthetic
+cyclic queries (P95 slowdown $1.2\times$ vs.\ $5.8\times$, from the denser
+shapes) but lose to DuckDB's plans on IMDb; a per-step residual ordering
+heuristic does not generalize; and a predicate-free catalog helps only
+under mild predicates.
 \end{enumerate}
 
 %% ===================================================================
@@ -1350,7 +1349,7 @@ automated audit that checks registered numerical claims against the result CSVs 
 drafts. The level of assistance was substantial: the model generated, and
 did not merely edit, much of the text, code and proofs, under the author's
 direction. The author directed the work, reviewed the content and takes
-full responsibility for it. OpenAI Codex was additionally used for this revision to audit claims, references and code, recompute recorded results, and edit the manuscript, plotting code and API checks. The audit trail records the changes and verification scope; it does not replace author review.
+full responsibility for it. OpenAI Codex was also used in a later revision to audit claims, references and code, recompute recorded results, and edit the manuscript, plotting code and API checks.
 
 %% ===================================================================
 \bibliographystyle{IEEEtran}
