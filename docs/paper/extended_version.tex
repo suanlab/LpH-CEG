@@ -260,7 +260,7 @@ bounded above by a Collatz--Wielandt certificate on $B^{\top}B$. Two
 numbers per block, both from the pair join ($\sigma_{\max}$ lies outside the
 polymatroid catalog), give a bound tighter than the polymatroid program on
 $96/240$ long-suite queries (by a median $1.25\times$ there, though $1.11\times$
-looser over all) and never below an exact count; with each block's top
+looser over all) and never below an available exact count; with each block's top
 $24$ singular values (Lanczos; uncertified, yet above every exact count)
 it is tighter on $220/240$ and takes IMDb at $|V|{=}10$ from
 $14.9\times$ to $3.2\times$ the truth. The next step on the statistics axis may thus be spectral order rather
@@ -596,6 +596,53 @@ one-side + common-nbr only & $1{,}674\times$ & $28.7\times$ \\
 \end{tabular}
 \end{table}
 
+\section{Leave-one-out and add-one over the statistic groups}
+The cumulative table above adds the groups in one order, and the three-norm
+ablation another; an attribution read off one order can depend on it.
+\texttt{scripts/ablation\_loo.py} therefore removes each group from the full
+catalog and adds each group alone to LpBound's single-relation statistics, in
+the headline setting (eleven norms, polymatroid program, pair statistics from
+the sparse collector that the cost table times; $120/120$ queries per suite
+finish). Table~\ref{tab:loo} gives the median ratio to the full catalog's bound
+(the full catalog is a median $1{,}724\times$ and $29.4\times$ below LpBound)
+and how many queries are within $1.0001\times$ of it.
+
+\begin{table}[h]
+\centering
+\caption{Leave-one-out and add-one: median bound over the full catalog's
+(queries within $1.0001\times$ of full, of $120$).}
+\label{tab:loo}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Catalog & Hetionet & IMDb \\
+\midrule
+full $-$ pair sizes & $1.00\times$ ($120$) & $1.00\times$ ($120$) \\
+full $-$ shared products & $1.00\times$ ($98$) & $1.00\times$ ($85$) \\
+full $-$ one-side & $1.79\times$ ($0$) & $3.82\times$ ($0$) \\
+full $-$ common-nbr & $2.56\times$ ($1$) & $1.56\times$ ($1$) \\
+full, common-nbr $\ell_2$ only & $1.47\times$ ($1$) & $1.39\times$ ($1$) \\
+\midrule
+LpBound $+$ pair sizes & $105\times$ ($0$) & $29.4\times$ ($0$) \\
+LpBound $+$ shared products & $34.4\times$ ($0$) & $13.9\times$ ($0$) \\
+LpBound $+$ one-side & $3.08\times$ ($1$) & $1.56\times$ ($0$) \\
+LpBound $+$ common-nbr & $1.93\times$ ($0$) & $6.25\times$ ($0$) \\
+LpBound $+$ common-nbr $\ell_2$ & $2.08\times$ ($0$) & $8.72\times$ ($0$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The pair sizes are implied by the other groups on every query, and the
+shared products matter on only $22$ and $35$ queries. The one-side interfaces and the common-neighbour norms are each
+needed, and neither suffices alone, with opposite weights: on Hetionet
+removing the common-neighbour norms costs more ($2.56\times$ against
+$1.79\times$), on IMDb removing the one-side interfaces does ($3.82\times$
+against $1.56\times$), and the common-neighbour $\ell_2$ alone, added to
+LpBound's statistics, recovers a median $90\%$ of the log-gain on Hetionet but
+$35\%$ on IMDb. The statement that the common-neighbour $\ell_2$ carries the
+gain therefore holds for the three-norm flow-LP ablation and for Hetionet; at
+eleven norms on IMDb the join-free one-side interfaces carry most of it.
+
 \section{Tail robustness by shape, with every timing kept}
 \texttt{scripts/robustness\_repeat\_raw.py} repeats the paper's
 24-query execution study with every observation written out
@@ -648,6 +695,21 @@ catalog's joins materialized (\texttt{cost\_accuracy.py}); its
 join-free and $\ell_2$ ratios ($6.0$/$6.9\times$ and $6.2$/$7.1\times$) are
 close to these, and its full-catalog ratio ($52$/$24\times$) is the
 materialized path's.
+
+\emph{Repeats.} \texttt{scripts/cost\_repeat.py} reruns the same $1{,}200$
+tasks three times, each repetition in its own shuffled order, with the
+BLAS and OpenMP pools pinned to one thread ($8$ workers; the server was shared
+with other users, at a median $1$-minute load of about $21$ on $40$ hardware
+threads, recorded per task). Bounds agree exactly across repetitions; the
+per-query collection time varies by a median $3.8$--$4.9\%$ across catalogs
+(coefficient of variation). The per-repetition medians of the collection ratio to LpBound are
+$7.8$--$8.2\times$ (Hetionet) and $8.4$--$8.5\times$ (IMDb) for the sparse full
+catalog and $48$--$52\times$ and $23$--$24\times$ for the materialized one;
+query-bootstrap $95\%$ intervals of the median ratio (per-query median over
+repetitions, $2{,}000$ resamples) are $[7.6, 8.6]$ and $[7.9, 9.1]$ (sparse)
+and $[35, 78]$ and $[20, 27]$ (materialized). The one-run values of the
+paper's table lie inside them. These are timing repeats on one database
+slice, not independent data conditions.
 
 \section{Candidate, certificate and returned bound by query size}
 For the synthetic cycle sweep of the paper's scalability section ($bs{\le}2$,
@@ -800,7 +862,7 @@ prefix is the LP re-solved on the query with the prefix attributes projected
 out, which bounds the residual for every value of the prefix (and could be
 computed for LpBound in the same way): GenericJoin iterations drop $2.3\times$
 on the Hetionet cycle-4 in our simulator, but over $66$ synthetic queries
-the bound-guided order is $1.3\%$ worse at the median ($20$ wins, $43$
+the bound-guided order is $1.6\%$ worse at the median ($20$ wins, $43$
 losses; Wilcoxon $p{=}0.003$, indicative, as queries share shapes and
 seeds), so it is a targeted heuristic.
 

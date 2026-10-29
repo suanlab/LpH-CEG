@@ -43,13 +43,49 @@ run_lint() {
     mypy --strict src/
 }
 
+# Inputs no builder in this repository produces: the legacy bs=1 scripts read
+# hand-prepared JOB-medium CSVs and 10k IMDb edge lists, and CorrBound's own LP
+# builder needs a separate Python with its dependencies.  'all' checks for them
+# before any long run and fails, unless the user opts out explicitly:
+#   LPH_SKIP_LEGACY=1               skip the legacy bs=1 scripts (2c, 4, 5)
+#   LPH_REUSE_STORED_CORRBOUND=1    keep the stored sm_artifact_lp_summary.csv
+LEGACY_INPUTS="data/job_medium/cast_info.csv data/job_medium/movie_keyword.csv \
+data/job_medium/movie_companies.csv data/job_medium/movie_info.csv \
+data/job_medium/title.csv data/imdb/movie_actor_10k.tsv \
+data/imdb/movie_director_10k.tsv data/imdb/movie_genre_10k.tsv \
+data/imdb/movie_actor.tsv data/imdb/movie_director.tsv"
+SKIP_LEGACY=0
+
+preflight_experiments() {
+    section "0. Preflight (inputs not built by this repository)"
+    local missing="" f
+    for f in $LEGACY_INPUTS; do [ -e "$f" ] || missing="$missing $f"; done
+    if [ -n "$missing" ]; then
+        if [ "${LPH_SKIP_LEGACY:-0}" = "1" ]; then
+            SKIP_LEGACY=1
+            echo "LPH_SKIP_LEGACY=1: legacy bs=1 scripts (2c, 4, 5) will be SKIPPED; missing:$missing"
+        else
+            echo "FAIL: legacy bs=1 inputs missing:$missing" >&2
+            echo "      (set LPH_SKIP_LEGACY=1 to skip sections 2c, 4 and 5)" >&2
+            exit 1
+        fi
+    fi
+    if [ -z "${LPH_CORRBOUND_PYTHON:-}" ] && [ "${LPH_REUSE_STORED_CORRBOUND:-0}" != "1" ]; then
+        echo "FAIL: LPH_CORRBOUND_PYTHON is not set (CorrBound's LP builder)" >&2
+        echo "      (set LPH_REUSE_STORED_CORRBOUND=1 to keep the stored artifact-LP results)" >&2
+        exit 1
+    fi
+    echo "preflight ok"
+}
+
 run_experiments() {
-    section "2b. Multi-Seed Synthetic Cycles (Table synthetic: multi_seed.csv)"
+    preflight_experiments
+    section "2b. Multi-Seed Synthetic Cycles (Table synthetic: multi_seed_v2.csv + per-seed multi_seed_v2_seeds.csv)"
     python scripts/revision_experiments.py
     python scripts/molp_full.py               # full MOLP vs the chain on the synthetic cycle table (~1 min)
 
     section "2c. JOB-medium, TPC-H and K-Hyperpath Exploration (bs=1 text results)"
-    python scripts/job_experiment.py
+    if [ "$SKIP_LEGACY" = 1 ]; then echo "SKIPPED job_experiment.py (LPH_SKIP_LEGACY=1)"; else python scripts/job_experiment.py; fi
     python scripts/tpch_experiment.py
     python scripts/explore_k_experiment.py
 
@@ -57,10 +93,10 @@ run_experiments() {
     python scripts/large_scale_comparison.py
 
     section "4. Real Data Experiments (Tables 2, 5)"
-    python scripts/lph_ceg_full_experiments.py
+    if [ "$SKIP_LEGACY" = 1 ]; then echo "SKIPPED (LPH_SKIP_LEGACY=1)"; else python scripts/lph_ceg_full_experiments.py; fi
 
     section "5. JOB-Full Experiment (Table 5 update)"
-    python scripts/job_full_experiment.py
+    if [ "$SKIP_LEGACY" = 1 ]; then echo "SKIPPED (LPH_SKIP_LEGACY=1)"; else python scripts/job_full_experiment.py; fi
 
     section "6. WCOJ End-to-End (Table 4)"
     python scripts/wcoj_e2e_experiment.py
@@ -96,7 +132,7 @@ run_experiments() {
     python scripts/skew_gap_characterization.py
 
     section "17. WCOJ Ordering Study (C3: LpH vs baselines, paired stats)"
-    python scripts/wcoj_ordering_study.py
+    python scripts/wcoj_ordering_study.py   # then: --summarise rebuilds ordering_study_summary.csv from the stored runs
 
     section "18. Broad Tail-Robustness Distribution (C4)"
     python scripts/robustness_broad.py
@@ -188,8 +224,10 @@ run_experiments() {
     python scripts/predicate_blocks.py        # year predicates on IMDb |V|=6: predicate-free block catalog (~10 min)
     python scripts/guard_ordering.py          # bound-vs-engine-estimate plan guard (negative result; not in the paper)
     python scripts/ablation_p11_poly.py       # l2 ablation in the headline setting: eleven norms, polymatroid (~1 h)
+    python scripts/ablation_loo.py            # leave-one-out and add-one over the statistic groups, same setting, sparse collector (~20 min)
     python scripts/cost_accuracy.py           # earlier cost run: four catalogs in one process (extended version; ~45 min)
     python scripts/cost_accuracy_indep.py     # cost against tightness, one process per catalog, sparse and materialized full (Table V; ~1 h, run alone)
+    python scripts/cost_repeat.py             # the same tasks three times, BLAS/OpenMP pinned to one thread: timing spread and bootstrap CI (~3 h, run alone)
     python scripts/molp_full.py --suites      # the same on the Hetionet and IMDb long suites (~2 min)
     python scripts/ablation_overlap.py        # gain inside and outside CorrBound's pairwise vocabulary (~10 min)
     # CorrBound's cyclic workload: needs a clone of https://github.com/christophmayerm/CorrBound
@@ -199,7 +237,7 @@ run_experiments() {
     python scripts/corrbound_sm_combined.py   # CorrBound-e's inequalities (its Eq. 13/14) in our program, alone and with block statistics (~30 min)
     # the artifact's own LP builder, as shipped and with Eq. 13/14; needs the artifact's Python deps (ortools, sqlparse, joblib):
     # Select an existing environment; no packages are installed by this script.
-    if [ -n "${LPH_CORRBOUND_PYTHON:-}" ]; then "$LPH_CORRBOUND_PYTHON" scripts/corrbound_sm_artifact_lp.py; else echo "skip corrbound_sm_artifact_lp.py: set LPH_CORRBOUND_PYTHON"; fi
+    if [ -n "${LPH_CORRBOUND_PYTHON:-}" ]; then "$LPH_CORRBOUND_PYTHON" scripts/corrbound_sm_artifact_lp.py; else echo "REUSING stored sm_artifact_lp_summary.csv (LPH_REUSE_STORED_CORRBOUND=1)"; fi
 
     # Aggregates last: they read the long-suite, IMDb and G-CARE results above.
     section "20n. Aggregates over Every Suite"
@@ -221,13 +259,26 @@ run_paper() {
     cd docs/paper
     # `|| true`: let the integrity gate below report the diagnosis rather
     # than having `set -e` abort on pdflatex's exit code alone.
+    for tool in pdflatex bibtex; do
+        command -v "$tool" > /dev/null || { echo "FAIL: $tool not found -- the paper was NOT built"; exit 1; }
+    done
     pdflatex -interaction=nonstopmode main > /dev/null 2>&1 || true
-    bibtex main > /dev/null 2>&1 || true
+    # BibTeX failures are fatal: an empty bibliography leaves every \cite
+    # undefined while the LaTeX error gate below still sees no '! ' line.
+    if ! bibtex main > bibtex.out 2>&1; then
+        echo "FAIL: bibtex exited non-zero:"; tail -5 bibtex.out; exit 1
+    fi
+    if [ ! -s main.bbl ] || ! grep -q '\\bibitem' main.bbl; then
+        echo "FAIL: main.bbl is empty -- no bibliography"; exit 1
+    fi
     pdflatex -interaction=nonstopmode main > /dev/null 2>&1 || true
     pdflatex -interaction=nonstopmode main > /dev/null 2>&1 || true
     # extended version (full proofs), cited from the paper
     pdflatex -interaction=nonstopmode extended_version > /dev/null 2>&1 || true
     pdflatex -interaction=nonstopmode extended_version > /dev/null 2>&1 || true
+    if [ ! -f extended_version.log ] || [ extended_version.tex -nt extended_version.log ]; then
+        echo "FAIL: extended_version.log missing or older than its source"; exit 1
+    fi
     if grep -q '^! ' extended_version.log; then
         echo "FAIL: LaTeX error(s) in extended_version.log"; exit 1
     fi
@@ -257,6 +308,14 @@ run_paper() {
         grep -n '^! ' main.log | head
         exit 1
     fi
+    # Undefined citations or references survive a clean '! '-free log.
+    for log in main.log extended_version.log; do
+        if grep -Eq "(Citation|Reference) .* undefined|There were undefined" "$log"; then
+            echo "FAIL: undefined citation/reference in $log:"
+            grep -En "(Citation|Reference) .* undefined" "$log" | head -5
+            exit 1
+        fi
+    done
     # Environment balance: every \begin{X} needs its \end{X}.
     for env in theorem proof lemma definition proposition corollary; do
         b=$(grep -c "\\\\begin{$env}" main.tex || true)
@@ -269,6 +328,7 @@ run_paper() {
     # ICDE page limit: the body (everything before the acknowledgment) must
     # end on page 12. Checking only where the acknowledgment starts is not
     # enough: body lines can spill onto page 13 above it.
+    command -v pdftotext > /dev/null || { echo "FAIL: pdftotext not found -- page limit NOT checked"; exit 1; }
     if command -v pdftotext > /dev/null; then
         # no early `exit` in awk: under pipefail a SIGPIPE to pdftotext
         # would abort the script without a message
@@ -280,7 +340,7 @@ run_paper() {
             exit 1
         fi
     fi
-    echo "Paper build clean: 0 LaTeX errors, environments balanced, body <= 12 pages."
+    echo "Paper build clean: 0 LaTeX errors, bibliography built, no undefined citations or references, environments balanced, body <= 12 pages."
     cd ../..
 }
 

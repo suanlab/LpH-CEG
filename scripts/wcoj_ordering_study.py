@@ -23,6 +23,8 @@ import csv
 import itertools
 import math
 import random
+import statistics
+import sys
 from pathlib import Path
 
 from scripts.wcoj_e2e_experiment import generic_join
@@ -130,8 +132,60 @@ def wilcoxon_p(diffs: list[float]) -> float:
     return 2 * (1 - 0.5 * (1 + math.erf(abs(z) / math.sqrt(2))))
 
 
-def cliffs_delta(better: int, worse: int, total: int) -> float:
+def paired_sign_balance(better: int, worse: int, total: int) -> float:
     return (better - worse) / total if total else 0.0
+
+
+def analyze(rows: list[dict], label: str, a_key: str, b_key: str) -> dict[str, object]:  # type: ignore[type-arg]
+    """Paired comparison of iteration counts (a = LpH order, b = baseline)."""
+    ratios, better, worse, eq = [], 0, 0, 0
+    p90reg = []
+    log_diffs = []
+    for r in rows:
+        a, b = int(r[a_key]), max(int(r[b_key]), 1)
+        ratios.append(b / max(a, 1))  # >1 means LpH used fewer iterations
+        log_diffs.append(math.log(max(a, 1)) - math.log(b))
+        p90reg.append(a / b)  # >1 means LpH regressed
+        if a < b:
+            better += 1
+        elif a > b:
+            worse += 1
+        else:
+            eq += 1
+    med = statistics.median(ratios)  # was ratios[n // 2], wrong for even n
+    p90reg.sort()
+    p90 = p90reg[int(0.9 * (len(p90reg) - 1))]
+    return {
+        "comparison": label,
+        "n": len(rows),
+        "median_ratio": f"{med:.4f}",
+        "median_reduction_pct": f"{(1 - 1 / med) * 100:.1f}",
+        "median_lph_over_baseline": f"{statistics.median(p90reg):.4f}",
+        "better": better,
+        "worse": worse,
+        "tie": eq,
+        "wilcoxon_p": f"{wilcoxon_p(log_diffs):.4f}",
+        "paired_sign_balance": f"{paired_sign_balance(better, worse, len(rows)):.3f}",
+        "p90_regression_ratio": f"{p90:.3f}",
+    }
+
+
+def summarise_stored() -> None:
+    """Rewrite ordering_study_summary.csv from the stored per-query rows."""
+    out = Path(__file__).resolve().parent.parent / "results" / "wcoj"
+    with open(out / "ordering_study.csv") as fh:
+        rows = list(csv.DictReader(fh))
+    summ = [
+        analyze(rows, "LpH vs H-CEG", "lph", "hceg"),
+        analyze(rows, "LpH vs best-simple", "lph", "best_simple"),
+        analyze(rows, "LpH vs max_deg", "lph", "max_deg"),
+    ]
+    with open(out / "ordering_study_summary.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(summ[0].keys()))
+        w.writeheader()
+        w.writerows(summ)
+    for row in summ:
+        print(row)
 
 
 def main() -> None:
@@ -169,40 +223,6 @@ def main() -> None:
             {"shape": shape, "nv": nv, "ne": ne, "alpha": alpha, "seed": seed, **it}
         )
 
-    # Paired analysis: LpH vs H-CEG, and LpH vs best simple baseline.
-    def analyze(label: str, a_key: str, b_key: str) -> dict[str, object]:
-        ratios, better, worse, eq = [], 0, 0, 0
-        p90reg = []
-        log_diffs = []
-        for r in rows:
-            a, b = r[a_key], max(r[b_key], 1)
-            ratio = b / max(a, 1)  # >1 means LpH used fewer iterations
-            ratios.append(ratio)
-            log_diffs.append(math.log(max(a, 1)) - math.log(b))
-            p90reg.append(a / b)  # >1 means LpH regressed
-            if a < b:
-                better += 1
-            elif a > b:
-                worse += 1
-            else:
-                eq += 1
-        ratios.sort()
-        med = ratios[len(ratios) // 2]
-        p90reg.sort()
-        p90 = p90reg[int(0.9 * (len(p90reg) - 1))]
-        return {
-            "comparison": label,
-            "n": len(rows),
-            "median_ratio": f"{med:.3f}",
-            "median_reduction_pct": f"{(1 - 1 / med) * 100:.1f}",
-            "better": better,
-            "worse": worse,
-            "tie": eq,
-            "wilcoxon_p": f"{wilcoxon_p(log_diffs):.4f}",
-            "cliffs_delta": f"{cliffs_delta(better, worse, len(rows)):.3f}",
-            "p90_regression_ratio": f"{p90:.3f}",
-        }
-
     print(f"  evaluated {len(rows)} queries ({censored} censored: join > {cap:,})")
     if not rows:
         print("  [all queries censored -- lower the cap or graph density]")
@@ -214,9 +234,9 @@ def main() -> None:
     for r in rows:
         r["best_simple"] = best_simple(r)
     summ = [
-        analyze("LpH vs H-CEG", "lph", "hceg"),
-        analyze("LpH vs best-simple", "lph", "best_simple"),
-        analyze("LpH vs max_deg", "lph", "max_deg"),
+        analyze(rows, "LpH vs H-CEG", "lph", "hceg"),
+        analyze(rows, "LpH vs best-simple", "lph", "best_simple"),
+        analyze(rows, "LpH vs max_deg", "lph", "max_deg"),
     ]
 
     print(
@@ -229,7 +249,7 @@ def main() -> None:
         print(
             f"  {s['comparison']:<20} {s['n']:>3} {s['median_ratio']:>9} "
             f"{s['median_reduction_pct']:>5}% {wtl:>10} {s['wilcoxon_p']:>8} "
-            f"{s['cliffs_delta']:>6} {s['p90_regression_ratio']:>7}"
+            f"{s['paired_sign_balance']:>6} {s['p90_regression_ratio']:>7}"
         )
 
     primary = summ[0]
@@ -271,4 +291,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    summarise_stored() if "--summarise" in sys.argv else main()

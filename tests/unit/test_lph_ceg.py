@@ -133,7 +133,7 @@ class TestLpWeightOptimization:
 
 
 class TestLpBoundBaseline:
-    """Tests for the LpBound baseline estimator."""
+    """Tests for the bs=1 cover LP (``estimate_cover_bs1``; not LpBound)."""
 
     def test_produces_finite_bound(self) -> None:
         """LpBound baseline should produce a finite positive bound."""
@@ -143,7 +143,7 @@ class TestLpBoundBaseline:
         result = estimate_lpbound(q, _TRIANGLE_DATA)
         assert result.estimate > 0
         assert result.estimate < float("inf")
-        assert result.method == "lpbound"
+        assert result.method == "cover_bs1"
 
     def test_equals_lph_ceg_bs1(self) -> None:
         """LpBound baseline must equal LpH-CEG with block_size=1."""
@@ -175,7 +175,13 @@ class TestLpBoundBaseline:
 
         q = triangle_query()
         result = estimate_lpbound(q, _TRIANGLE_DATA)
-        assert result.metadata["baseline_method"] == "lpbound"
+        assert result.metadata["baseline_method"] == "cover_bs1"
+
+    def test_deprecated_alias_is_cover_bs1(self) -> None:
+        """The old name is an alias of the correctly named function."""
+        from src.estimators import lpbound_baseline as lb
+
+        assert lb.estimate_lpbound is lb.estimate_cover_bs1
 
     def test_acyclic_gives_no_improvement(self) -> None:
         """On a star query, LpBound should equal CEG_M (1.00x)."""

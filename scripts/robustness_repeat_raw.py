@@ -55,7 +55,7 @@ def main() -> None:
         orders = connected_orders(q)
         bound_order = choose_order(q, data, orders, worst=False)
         sample = orders if len(orders) <= 16 else rng.sample(orders, 16)
-        eval_orders = list({bound_order, *sample})
+        eval_orders = sorted({bound_order, *sample})
         con = load_duckdb(q, data)
         plans = [("forced", o) for o in eval_orders] + [("duckdb", bound_order)]
         counts = set()

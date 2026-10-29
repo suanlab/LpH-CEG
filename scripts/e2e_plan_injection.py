@@ -3,11 +3,12 @@
 A cardinality *upper bound* is not a drop-in cost model for binary-join
 ordering: it never underestimates, so ranking left-deep plans by the bound
 does not reliably beat a modern sampling-based optimizer, and a *tighter*
-bound need not yield a faster plan. What a pessimistic bound *does* give is
-**robustness**: by construction it cannot be fooled into a catastrophic plan
-on the cyclic, skewed queries where sampling-based estimators
-underestimate intermediate sizes and the engine optimizer occasionally
-picks a disastrous order.
+bound need not yield a faster plan. What a pessimistic bound *may* give is
+**robustness**: it never underestimates, so it is not misled into a plan by
+an underestimated intermediate size, the failure that makes engine
+optimizers occasionally pick a disastrous order on cyclic, skewed queries.
+This is a hypothesis to measure, not a guarantee on runtime: an upper bound
+can still rank a slow plan first.
 
 This experiment quantifies that. For each query we:
 
@@ -238,7 +239,7 @@ def robustness_case(
     # bounded, deterministic sample of orders (exhaustive when small).
     rng = random.Random(0)
     sample = orders if len(orders) <= SAMPLE_CAP else rng.sample(orders, SAMPLE_CAP)
-    eval_orders = list({bound_order, *sample})
+    eval_orders = sorted({bound_order, *sample})
 
     con = load_duckdb(query, data)
     counts: set[int] = set()

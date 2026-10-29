@@ -14,7 +14,8 @@ at |V| = 6 (`register_imdb_suite.py`, 200 most-voted films):
 
 Strategies: ``cover_bs1`` (our bs=1 cover LP), ``lpbound`` (the entropic
 bound on bs=1 statistics, via the flow LP), ``flow_bs2`` (the flow LP over
-the bs<=2 block catalogue -- the paper's recommended estimator) and
+the bs<=2 block catalogue, three norms: an uncertified candidate for the
+paper's polymatroid estimator, which is not run per prefix here) and
 ``oracle`` (exact prefix counts), plus ``duckdb`` (optimizer on).  Each
 execution has a TIMEOUT_S budget; a timed-out run is recorded at the budget
 and flagged (a lower bound on its slowdown).  Every order must return the

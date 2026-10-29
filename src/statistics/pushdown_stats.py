@@ -337,10 +337,23 @@ def compute_sparse_block_extensions(
     out = compute_pushdown_block_extensions(
         query, block, relation_data, p_values=p_values
     )
-    if len(block.relations) == 2:
+    if len(block.relations) != 2:
+        return out
+    needed = [
+        i for i, kind in join_free_interfaces(query, block).items() if kind is None
+    ]
+    if not needed:  # e.g. R(a,b), S(a,b): every interface is join-free
+        return out
+    try:
         out[(block, codegree_interface(query, block))] = codegree_block_extension(
             query, block, relation_data, p_values=p_values
         )
+    except ValueError:  # not R(a,b), S(b,c): take the exact join-based statistics
+        full = compute_all_lp_block_extensions(
+            query, [block], relation_data, p_values=p_values
+        )
+        for interface in needed:
+            out[(block, interface)] = full[(block, interface)]
     return out
 
 

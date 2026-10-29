@@ -64,7 +64,7 @@ COLORS = {
 # from the recorded numbers.  Regenerate the CSV with the revision
 # experiments, then re-run this script.
 # ---------------------------------------------------------------------------
-MULTISEED_CSV = Path("results/revision/multi_seed.csv")
+MULTISEED_CSV = Path("results/revision/multi_seed_v2.csv")
 
 
 def _load_multiseed() -> list[dict[str, str]]:
@@ -315,8 +315,8 @@ def plot_4way_comparison() -> None:
     n_vertices = [int(r["n_vertices"]) for r in rows]
     ceg_mean = [float(r["ceg_mean"]) for r in rows]
     [float(r["ceg_std"]) for r in rows]
-    lpb_mean = [float(r["lpbound_mean"]) for r in rows]
-    lpb_std = [float(r["lpbound_std"]) for r in rows]
+    lpb_mean = [float(r["cover_lp_bs1_mean"]) for r in rows]
+    lpb_std = [float(r["cover_lp_bs1_std"]) for r in rows]
 
     fig, ax = plt.subplots(figsize=(4.0, 3.0))
     ax.loglog(
@@ -332,7 +332,7 @@ def plot_4way_comparison() -> None:
         lpb_mean,
         "o-",
         color=COLORS["lpbound"],
-        label="LpBound",
+        label="Cover-LP ($bs{=}1$)",
         markersize=6,
     )
     ax.fill_between(

@@ -112,7 +112,8 @@ def main() -> None:
     failures: list[str] = []
     lines: list[str] = []
 
-    ms = load("results/revision/multi_seed.csv")
+    ms = load("results/revision/multi_seed_v2.csv")
+    mss = load("results/revision/multi_seed_v2_seeds.csv")
     sc = load("results/scalability/lp_scalability.csv")
     se = load("results/scalability/scale_entropic.csv")
     cr = load("results/scalability/crossover_real.csv")
@@ -183,8 +184,10 @@ def main() -> None:
     pbs = load("results/imdb/predicate_blocks_summary.csv")
     rrs = load("results/e2e/robustness_repeat_summary.csv")
     apx = load("results/pushdown/ablation_p11_poly_summary.csv")
+    loo = load("results/pushdown/ablation_loo_summary.csv")
     cac = load("results/cost/cost_accuracy_summary.csv")
     cai = load("results/cost/cost_accuracy_indep_summary.csv")
+    crp = load("results/cost/cost_repeat_summary.csv")
     abo = load("results/pushdown/ablation_overlap_summary.csv")
     rrw = load("results/e2e/robustness_raw_summary.csv")
     iss = load("results/imdb/imdb_scale_sparse_summary.csv")
@@ -256,12 +259,60 @@ def main() -> None:
     p22 = load("results/pushdown/pushdown_2x2.csv")
     psc = load("results/pushdown/pushdown_scale.csv")
 
+    def synth_qerror(k: int) -> list[float]:
+        """Per-seed q-error of the bs=1 cover LP on the synthetic cycle table."""
+        by: dict[str, dict[str, float]] = {}
+        for r in mss:
+            if r["experiment"] == "cycle_scale" and r["query"] == f"cycle_{k}":
+                by.setdefault(r["run"], {})[r["method"]] = float(r["value"])
+        out = []
+        for d in by.values():
+            c, t = d["Cover-LP(bs1)"], d["true_count"]
+            out.append(max(c / t, t / c))
+        return out
+
     def cyc(q: str) -> float:
         return pick(ms, "ratio_mean", experiment="cycle_scale", query=q)
 
     checks: list[tuple] = [
         # -- tab:synthetic / abstract headline ------------------------------
         ("cycle-8 headline ratio (614x)", cyc("cycle_8"), 613.7641),
+        (
+            "synthetic q-error cycle-3, mean over seeds (10.8)",
+            statistics.mean(synth_qerror(3)),
+            10.8,
+            0.05 / 10.8,
+        ),
+        (
+            "synthetic q-error cycle-3, std over seeds (0.3)",
+            statistics.stdev(synth_qerror(3)),
+            0.3,
+            0.05 / 0.3,
+        ),
+        (
+            "synthetic q-error cycle-4, mean over seeds (18.3)",
+            statistics.mean(synth_qerror(4)),
+            18.3,
+            0.05 / 18.3,
+        ),
+        (
+            "synthetic q-error cycle-4, std over seeds (2.0)",
+            statistics.stdev(synth_qerror(4)),
+            2.0,
+            0.05 / 2.0,
+        ),
+        (
+            "synthetic q-error cycle-5, mean over seeds (39.0)",
+            statistics.mean(synth_qerror(5)),
+            39.0,
+            0.05 / 39.0,
+        ),
+        (
+            "synthetic q-error cycle-5, std over seeds (1.3)",
+            statistics.stdev(synth_qerror(5)),
+            1.3,
+            0.05 / 1.3,
+        ),
         ("cycle-7 ratio (211x)", cyc("cycle_7"), 211.3454),
         ("cycle-6 ratio (69x)", cyc("cycle_6"), 68.9005),
         ("cycle-3 ratio (2.8x, range floor)", cyc("cycle_3"), 2.7486),
@@ -352,13 +403,15 @@ def main() -> None:
         # -- gap predictor (C2) --------------------------------------------
         # -- WCOJ ordering honest negative (C3) ----------------------------
         (
-            "LpH vs H-CEG median ratio (-1.3%)",
-            pick(ordr, "median_ratio", comparison="LpH vs H-CEG"),
-            0.988,
+            "LpH order over H-CEG order, paired median iterations (1.6% worse)",
+            100
+            * (pick(ordr, "median_lph_over_baseline", comparison="LpH vs H-CEG") - 1),
+            1.6,
+            0.05 / 1.6,
         ),
         (
-            "LpH vs H-CEG Cliff's delta (-0.35)",
-            pick(ordr, "cliffs_delta", comparison="LpH vs H-CEG"),
+            "internal: LpH vs H-CEG paired sign balance (-0.348)",
+            pick(ordr, "paired_sign_balance", comparison="LpH vs H-CEG"),
             -0.348,
         ),
         # -- ablations ------------------------------------------------------
@@ -830,7 +883,7 @@ def main() -> None:
             0.02,
         ),
         (
-            "flow long suite: median flow bs=2 s at |V|=10 (1.1 s)",
+            "internal: flow long suite: median flow bs=2 s at |V|=10 (1.1 s)",
             pick(fls, "median_flow_bs2_s_total", n_vars="10"),
             1.1,
             0.02,
@@ -3141,6 +3194,302 @@ def main() -> None:
             pick(mfs, "mean_molp_over_cover", query="cycle_8"),
             2.6,
             0.05 / 2.6,
+        ),
+        (
+            "leave-one-out: full minus one-side, Hetionet (1.79x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="full-one_side"),
+            1.79,
+            0.002793296089385475,
+        ),
+        (
+            "leave-one-out: full minus one-side, IMDb (3.82x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="full-one_side"),
+            3.82,
+            0.0013089005235602095,
+        ),
+        (
+            "leave-one-out: full minus one-side, Hetionet, main text (1.8x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="full-one_side"),
+            1.8,
+            0.02777777777777778,
+        ),
+        (
+            "leave-one-out: full minus one-side, IMDb, main text (3.8x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="full-one_side"),
+            3.8,
+            0.013157894736842106,
+        ),
+        (
+            "leave-one-out: full minus common-nbr, Hetionet (2.56x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="full-codeg"),
+            2.56,
+            0.001953125,
+        ),
+        (
+            "leave-one-out: full minus common-nbr, IMDb (1.56x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="full-codeg"),
+            1.56,
+            0.0035,
+        ),
+        (
+            "leave-one-out: full minus common-nbr, Hetionet, main text (2.6x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="full-codeg"),
+            2.6,
+            0.019230769230769232,
+        ),
+        (
+            "leave-one-out: full minus common-nbr, IMDb, main text (1.6x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="full-codeg"),
+            1.6,
+            0.03125,
+        ),
+        (
+            "leave-one-out: full, common-nbr l2 only, Hetionet (1.47x)",
+            pick(
+                loo, "median_over_full", suite="hetionet", catalogue="full-codeg_but_l2"
+            ),
+            1.47,
+            0.0034013605442176874,
+        ),
+        (
+            "leave-one-out: full, common-nbr l2 only, IMDb (1.39x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="full-codeg_but_l2"),
+            1.39,
+            0.0035971223021582736,
+        ),
+        (
+            "leave-one-out: LpBound + pair sizes, Hetionet (105x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="bs1+size"),
+            105,
+            0.004761904761904762,
+        ),
+        (
+            "leave-one-out: LpBound + pair sizes, IMDb (29.4x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="bs1+size"),
+            29.4,
+            0.0017006802721088437,
+        ),
+        (
+            "leave-one-out: LpBound + shared, Hetionet (34.4x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="bs1+shared"),
+            34.4,
+            0.0014534883720930235,
+        ),
+        (
+            "leave-one-out: LpBound + shared, IMDb (13.9x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="bs1+shared"),
+            13.9,
+            0.0035971223021582736,
+        ),
+        (
+            "leave-one-out: LpBound + one-side, Hetionet (3.08x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="bs1+one_side"),
+            3.08,
+            0.0016233766233766233,
+        ),
+        (
+            "leave-one-out: LpBound + one-side, IMDb (1.56x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="bs1+one_side"),
+            1.56,
+            0.0035,
+        ),
+        (
+            "leave-one-out: LpBound + common-nbr, Hetionet (1.93x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="bs1+codeg"),
+            1.93,
+            0.0025906735751295338,
+        ),
+        (
+            "leave-one-out: LpBound + common-nbr, IMDb (6.25x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="bs1+codeg"),
+            6.25,
+            0.0008,
+        ),
+        (
+            "leave-one-out: LpBound + common-nbr l2, Hetionet (2.08x)",
+            pick(loo, "median_over_full", suite="hetionet", catalogue="bs1+codeg_l2"),
+            2.08,
+            0.002403846153846154,
+        ),
+        (
+            "leave-one-out: LpBound + common-nbr l2, IMDb (8.72x)",
+            pick(loo, "median_over_full", suite="imdb", catalogue="bs1+codeg_l2"),
+            8.72,
+            0.000573394495412844,
+        ),
+        (
+            "leave-one-out: full minus shared, Hetionet: queries unchanged (98)",
+            pick(loo, "n_eq_full", suite="hetionet", catalogue="full-shared"),
+            98,
+        ),
+        (
+            "leave-one-out: full minus shared, IMDb: queries unchanged (85)",
+            pick(loo, "n_eq_full", suite="imdb", catalogue="full-shared"),
+            85,
+        ),
+        (
+            "leave-one-out: full minus sizes, Hetionet: queries unchanged (120)",
+            pick(loo, "n_eq_full", suite="hetionet", catalogue="full-size"),
+            120,
+        ),
+        (
+            "leave-one-out: full minus sizes, IMDb: queries unchanged (120)",
+            pick(loo, "n_eq_full", suite="imdb", catalogue="full-size"),
+            120,
+        ),
+        (
+            "leave-one-out: common-nbr l2 alone, Hetionet log-gain share (90%)",
+            100
+            * pick(
+                loo, "median_gain_share", suite="hetionet", catalogue="bs1+codeg_l2"
+            ),
+            90,
+            0.5 / 90,
+        ),
+        (
+            "leave-one-out: common-nbr l2 alone, IMDb log-gain share (35%)",
+            100
+            * pick(loo, "median_gain_share", suite="imdb", catalogue="bs1+codeg_l2"),
+            35,
+            0.5 / 35,
+        ),
+        (
+            "cost repeats: sparse full, Hetionet, min rep median (7.8x)",
+            pick(crp, "min_rep_median", suite="hetionet", catalogue="sparse_full"),
+            7.8,
+            0.007010256410256411,
+        ),
+        (
+            "cost repeats: sparse full, Hetionet, max rep median (8.2x)",
+            pick(crp, "max_rep_median", suite="hetionet", catalogue="sparse_full"),
+            8.2,
+            0.006697560975609757,
+        ),
+        (
+            "cost repeats: sparse full, IMDb, min rep median (8.4x)",
+            pick(crp, "min_rep_median", suite="imdb", catalogue="sparse_full"),
+            8.4,
+            0.006552380952380953,
+        ),
+        (
+            "cost repeats: sparse full, IMDb, max rep median (8.5x)",
+            pick(crp, "max_rep_median", suite="imdb", catalogue="sparse_full"),
+            8.5,
+            0.006482352941176471,
+        ),
+        (
+            "cost repeats: materialized, Hetionet, min rep median (48x)",
+            pick(crp, "min_rep_median", suite="hetionet", catalogue="full"),
+            48,
+            0.011016666666666668,
+        ),
+        (
+            "cost repeats: materialized, Hetionet, max rep median (52x)",
+            pick(crp, "max_rep_median", suite="hetionet", catalogue="full"),
+            52,
+            0.010215384615384616,
+        ),
+        (
+            "cost repeats: materialized, IMDb, min rep median (23x)",
+            pick(crp, "min_rep_median", suite="imdb", catalogue="full"),
+            23,
+            0.02233913043478261,
+        ),
+        (
+            "cost repeats: materialized, IMDb, max rep median (24x)",
+            pick(crp, "max_rep_median", suite="imdb", catalogue="full"),
+            24,
+            0.021433333333333332,
+        ),
+        (
+            "cost repeats: sparse full, Hetionet, bootstrap lo (7.6x)",
+            pick(crp, "boot95_lo", suite="hetionet", catalogue="sparse_full"),
+            7.6,
+            0.007178947368421054,
+        ),
+        (
+            "cost repeats: sparse full, Hetionet, bootstrap hi (8.6x)",
+            pick(crp, "boot95_hi", suite="hetionet", catalogue="sparse_full"),
+            8.6,
+            0.006413953488372094,
+        ),
+        (
+            "cost repeats: sparse full, IMDb, bootstrap lo (7.9x)",
+            pick(crp, "boot95_lo", suite="imdb", catalogue="sparse_full"),
+            7.9,
+            0.0069291139240506335,
+        ),
+        (
+            "cost repeats: sparse full, IMDb, bootstrap hi (9.1x)",
+            pick(crp, "boot95_hi", suite="imdb", catalogue="sparse_full"),
+            9.1,
+            0.006094505494505495,
+        ),
+        (
+            "cost repeats: materialized, Hetionet, bootstrap lo (35x)",
+            pick(crp, "boot95_lo", suite="hetionet", catalogue="full"),
+            35,
+            0.014885714285714287,
+        ),
+        (
+            "cost repeats: materialized, Hetionet, bootstrap hi (78x)",
+            pick(crp, "boot95_hi", suite="hetionet", catalogue="full"),
+            78,
+            0.00701025641025641,
+        ),
+        (
+            "cost repeats: materialized, IMDb, bootstrap lo (20x)",
+            pick(crp, "boot95_lo", suite="imdb", catalogue="full"),
+            20,
+            0.0256,
+        ),
+        (
+            "cost repeats: materialized, IMDb, bootstrap hi (27x)",
+            pick(crp, "boot95_hi", suite="imdb", catalogue="full"),
+            27,
+            0.019118518518518517,
+        ),
+        (
+            "cost repeats: bounds identical across repetitions (0)",
+            max(
+                float(r["max_abs_log2_bound_spread"])
+                for r in crp
+                if r["catalogue"] != "checks"
+            ),
+            0,
+        ),
+        (
+            "cost repeats: smallest median timing CV (3.8%)",
+            100
+            * min(
+                float(r["median_cv_collect_s"])
+                for r in crp
+                if r["catalogue"] != "checks"
+            ),
+            3.8,
+            0.05 / 3.8,
+        ),
+        (
+            "cost repeats: largest median timing CV (4.9%)",
+            100
+            * max(
+                float(r["median_cv_collect_s"])
+                for r in crp
+                if r["catalogue"] != "checks"
+            ),
+            4.9,
+            0.05 / 4.9,
+        ),
+        (
+            "cost repeats: tasks not ok (0)",
+            sum(int(r["n_tasks_not_ok"]) for r in crp if r["catalogue"] == "checks"),
+            0,
+        ),
+        (
+            "internal: cost repeats: median 1-minute load (21)",
+            pick(crp, "median_load1", suite="hetionet", catalogue="sparse_full"),
+            21,
+            1.0 / 21,
         ),
         (
             "chain over full MOLP, cycle-8 (237x)",

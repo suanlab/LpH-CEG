@@ -69,7 +69,9 @@ def exact_count(query: QueryHypergraph, data: dict, timeout_s: float) -> int | N
         con.execute(
             f'CREATE TABLE "{r.name}" ("{cols[0]}" VARCHAR, "{cols[1]}" VARCHAR)'
         )
-        con.executemany(f'INSERT INTO "{r.name}" VALUES (?, ?)', rows)
+        distinct = sorted(set(rows))  # set semantics, as the estimators use
+        if distinct:
+            con.executemany(f'INSERT INTO "{r.name}" VALUES (?, ?)', distinct)
     rel = query.relations
     sql = (
         "SELECT count(*) FROM "
@@ -94,13 +96,16 @@ def exact_count(query: QueryHypergraph, data: dict, timeout_s: float) -> int | N
     th = threading.Thread(target=run, daemon=True)
     th.start()
     th.join(timeout_s)
-    if th.is_alive():
-        con.interrupt()
-        th.join()
-        return None
-    if err[0] is not None:
-        raise err[0]
-    return out[0]
+    try:
+        if th.is_alive():
+            con.interrupt()
+            th.join()
+            return None
+        if err[0] is not None:
+            raise err[0]
+        return out[0]
+    finally:
+        con.close()
 
 
 def main() -> None:

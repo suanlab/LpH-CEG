@@ -67,14 +67,14 @@ The **real-data half**:
 
 | Gate | What it enforces |
 |---|---|
-| `scripts/claim_audit.py` | 622 registered numerical claims are checked against CSV-derived values; token occurrence is checked in both TeX files, not claim-context identity or completeness |
+| `scripts/claim_audit.py` | every registered numerical claim (the count is printed by the script) is checked against CSV-derived values; token occurrence is checked in both TeX files, not claim-context identity or completeness |
 | `tests/unit/test_query_suite.py` | the 377-query suite must match its registered hash |
 | `tests/unit/test_long_suite.py` | the 120-query long-cycle suite (|V| = 6, 8, 10) must match its hash and re-derive from its rule |
 | `tests/unit/test_agm_pairjoin.py` | the AGM-over-pair-join-sizes baseline (`scripts/agm_pairjoin_baseline.py`): join sizes and cover LP sanity |
 | `tests/unit/test_stats_catalogue.py` | the amortised statistics catalogue (`scripts/stats_catalogue.py`): relabel-invariant keys, orientation, catalogue hits reproduce the uncached bound |
 | `tests/unit/test_shannon_wide.py` | hyperpath-structure enumeration behind the every-hyperpath Step-5 certificate (`scripts/shannon_check_wide.py`) |
 | `tests/unit/test_validity.py` | the bound must never fall below a true count |
-| `tests/unit/test_pushdown_stats.py` | join-free block statistics (`src/statistics/pushdown_stats.py`) equal the materialized ones; the codegree triangle bound is an upper bound; the l2 codegree alone recovers the bs=2 bound |
+| `tests/unit/test_pushdown_stats.py` | join-free block statistics (`src/statistics/pushdown_stats.py`) equal the materialized ones; the codegree triangle bound is an upper bound; the l2 codegree alone recovers the bs=2 bound on the test instance (three norms, flow LP; at eleven norms the one-side interfaces matter too, `scripts/ablation_loo.py`) |
 | `tests/unit/test_flow_bound.py` | the flow LP (`src/estimators/flow_bound.py`): analytic path bound, ℓp bundle = polymatroid, bs=1 == entropic, every order valid and the best cyclic order tight |
 | build gate in `reproduce_all.sh paper` | fails on any LaTeX error or unbalanced theorem env |
 | `MANIFEST.sha256` | source-file integrity (`scripts/gen_manifest.sh` regenerates) |
@@ -99,7 +99,12 @@ The full workflow also needs G-CARE and the public CorrBound artifact (see
 `data/README.md`). CorrBound's LP rerun needs `ortools`, `sqlparse` and
 `joblib`; set `LPH_CORRBOUND_PYTHON` to an existing environment containing
 them and `LPH_CORRBOUND_DIR` to the artifact checkout. The `all` target is
-many hours and is not validated by the short tests or the CSV audit.
+many hours and is not validated by the short tests or the CSV audit. It first
+checks for inputs this repository does not build and fails if any is missing:
+the legacy bs=1 scripts (JOB-medium CSVs, 10k IMDb edge lists; they back only the
+extended version's bs=1 JOB-medium paragraph) and the CorrBound environment. `LPH_SKIP_LEGACY=1` skips the
+former and `LPH_REUSE_STORED_CORRBOUND=1` keeps the stored CorrBound LP results;
+both are reported as skipped or reused in the log.
 
 ## Layout
 

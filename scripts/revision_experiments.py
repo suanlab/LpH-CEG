@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from src.estimators.agm_bound import estimate_agm as estimate_agm_true
-from src.estimators.lpbound_baseline import estimate_lpbound
+from src.estimators.lpbound_baseline import estimate_cover_bs1
 from src.estimators.pessimistic import estimate_pessimistic
 from src.utils.query import cycle_query, star_query
 
@@ -246,7 +246,7 @@ def run_multi_seed(
         q, data = make_cycle_data(k, n_v, n_e, alpha=alpha, seed=seed)
 
         ceg = estimate_pessimistic(q, data, max_block_size=1).estimate
-        lpb = estimate_lpbound(q, data, p_values=P_VALUES).estimate
+        lpb = estimate_cover_bs1(q, data, p_values=P_VALUES).estimate
 
         result.add("CEG_M", ceg)
         result.add(COVER_LP_LABEL, lpb)
@@ -371,7 +371,7 @@ def exp4_acyclic_control() -> list[MultiSeedResult]:
                     seed=seed + i * 7,
                 )
             ceg = estimate_pessimistic(q, data, max_block_size=1).estimate
-            lpb = estimate_lpbound(q, data, p_values=P_VALUES).estimate
+            lpb = estimate_cover_bs1(q, data, p_values=P_VALUES).estimate
             result.add("CEG_M", ceg)
             result.add(COVER_LP_LABEL, lpb)
 
@@ -396,7 +396,7 @@ def exp5_fair_comparison() -> list[MultiSeedResult]:
 
             agm = estimate_agm(q, data)
             ceg = estimate_pessimistic(q, data, max_block_size=1).estimate
-            lpb = estimate_lpbound(q, data, p_values=P_VALUES).estimate
+            lpb = estimate_cover_bs1(q, data, p_values=P_VALUES).estimate
 
             result.add("AGM", agm)
             result.add("CEG_M", ceg)
@@ -467,6 +467,42 @@ def export_csv(all_results: list[MultiSeedResult], path: Path) -> None:
     print(f"\nResults exported to {path}")
 
 
+def export_seed_csv(all_results: list[MultiSeedResult], path: Path) -> None:
+    """Per-seed values behind :func:`export_csv` (one row per run and method)."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(
+            ["experiment", "query", "n_vertices", "n_edges", "run", "method", "value"]
+        )
+        for r in all_results:
+            for method, values in sorted(r.methods.items()):
+                for i, v in enumerate(values):
+                    writer.writerow(
+                        [
+                            r.experiment,
+                            r.query,
+                            r.n_vertices,
+                            r.n_edges,
+                            i,
+                            method,
+                            f"{v:.6e}",
+                        ]
+                    )
+            for i, t in enumerate(r.true_counts):
+                writer.writerow(
+                    [
+                        r.experiment,
+                        r.query,
+                        r.n_vertices,
+                        r.n_edges,
+                        i,
+                        "true_count",
+                        "" if t is None else t,
+                    ]
+                )
+
+
 # ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
@@ -486,7 +522,10 @@ def main() -> None:
     all_results.extend(exp4_acyclic_control())
     all_results.extend(exp5_fair_comparison())
 
-    export_csv(all_results, Path("results/revision/multi_seed.csv"))
+    # multi_seed.csv (kept, never overwritten) predates the true AGM: its
+    # agm_mean column is the product of cardinalities.  v2 is the current code.
+    export_csv(all_results, Path("results/revision/multi_seed_v2.csv"))
+    export_seed_csv(all_results, Path("results/revision/multi_seed_v2_seeds.csv"))
 
     # Summary
     print("\n" + "=" * 70)

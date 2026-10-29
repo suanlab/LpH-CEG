@@ -147,6 +147,18 @@ def estimate_lph_ceg(
         )
         raise ValueError(msg)
 
+    # An empty relation empties the join: return the exact count, 0, as the
+    # max-degree path (estimate_pessimistic) does.
+    if any(not relation_data[rel.name][1] for rel in query.relations):
+        from src.utils.types import Hyperpath
+
+        return EstimationResult(
+            estimate=0.0,
+            hyperpath=Hyperpath(states=(), blocks=(), weights=()),
+            method="lph_ceg",
+            metadata={"empty_relation": True, "max_block_size": max_block_size},
+        )
+
     # Step 1: Enumerate blocks and compute all Lp stats (or take them as given)
     blocks = enumerate_blocks(query, max_block_size=max_block_size)
     all_lp_stats = (
@@ -223,10 +235,13 @@ def estimate_lph_ceg(
         "lp_feasible": best_lp_result.feasible,
         "lp_p_values_used": list(best_lp_result.p_values_used),
         "lp_weights_per_step": list(best_lp_result.weights_per_step),
-        "improvement_ratio": standard_bound / max(best_lp_result.bound, 1e-10),
+        # ratio of the max-degree bound to the bound actually returned (1.0
+        # when the standard bound is returned)
+        "improvement_ratio": standard_bound / max(best_bound, 1e-10),
         "selectivity_factor": selectivity_factor,
         "num_blocks": len(blocks),
         "num_states": len(dag.vertices),
+        "pruned_states": getattr(dag, "pruned_count", 0),
         "paths_explored": paths_explored,
         "explore_k": explore_k,
     }

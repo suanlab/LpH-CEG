@@ -29,7 +29,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from scripts.revision_experiments import P_VALUES, make_cycle_data
-from src.estimators.lpbound_baseline import estimate_lpbound
+from src.estimators.lpbound_baseline import estimate_cover_bs1
 from src.estimators.pessimistic import estimate_pessimistic
 
 if TYPE_CHECKING:
@@ -90,7 +90,7 @@ def main() -> None:
         for seed in SEEDS:
             q, data = make_cycle_data(k, 200, 800, alpha=1.0, seed=seed)
             chain = estimate_pessimistic(q, data, max_block_size=1).estimate
-            cover = estimate_lpbound(q, data, p_values=P_VALUES).estimate
+            cover = estimate_cover_bs1(q, data, p_values=P_VALUES).estimate
             molp = 2.0 ** full_molp(q, data)
             rows.append(
                 {

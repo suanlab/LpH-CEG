@@ -94,3 +94,34 @@ def test_full_molp_matches_the_shared_molp_module() -> None:
         query, data = make_cycle_data(k, 60, 200, alpha=1.0, seed=1000)
         ours = full_molp(query, data)
         assert ours == pytest.approx(math.log2(estimate_molp(data).bound), abs=1e-9)
+
+
+def test_empty_relation_gives_zero_everywhere() -> None:
+    """An empty relation: every estimator returns the exact count, 0."""
+    from src.estimators.lpbound_entropic import estimate_lpbound_entropic
+    from src.utils.query import triangle_query
+
+    query = triangle_query()
+    data = {
+        rel.name: (
+            tuple(sorted(rel.attributes)),
+            [] if rel.name == "R" else [("1", "2")],
+        )
+        for rel in query.relations
+    }
+    assert estimate_pessimistic(query, data, max_block_size=1).estimate == 0.0
+    assert estimate_lph_ceg(query, data, max_block_size=1).estimate == 0.0
+    assert estimate_lpbound_entropic(query, data) == 0.0
+
+
+def test_exact_count_uses_set_semantics() -> None:
+    """Duplicate input rows do not inflate the SQL truth (estimators use sets)."""
+    from scripts.evaluate_long_suite import exact_count
+    from src.utils.query import cycle_query
+
+    query = cycle_query(3)
+    data = {}
+    for i, rel in enumerate(query.relations):
+        cols = (f"v{i}", f"v{(i + 1) % 3}")
+        data[rel.name] = (cols, [("1", "1"), ("1", "1")])
+    assert exact_count(query, data, timeout_s=30) == 1

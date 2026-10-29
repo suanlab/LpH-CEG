@@ -96,6 +96,10 @@ def estimate_lpbound_entropic(
     n = len(attributes)
     if n == 0:
         return 1.0
+    # An empty relation empties the join; its norms (all 0) give no finite
+    # log constraint, so answer exactly instead of solving an unbounded LP.
+    if any(not relation_data[rel.name][1] for rel in query.relations):
+        return 0.0
     if n > MAX_ATTRIBUTES:
         msg = (
             f"Entropic LpBound is intractable for {n} attributes "

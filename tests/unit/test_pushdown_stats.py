@@ -182,3 +182,34 @@ class TestBoundRecovery:
         ].log_bound
         assert only_free > full + 0.3
         assert free_l2 == pytest.approx(full, abs=1e-6)
+
+
+@pytest.mark.parametrize(
+    "schemas",
+    [
+        (("R", "ab"), ("S", "ab")),
+        (("R", "abc"), ("S", "bcd")),
+        (("R", "ab"), ("S", "ba")),
+    ],
+)
+def test_sparse_path_equals_materialized_for_other_pair_shapes(schemas) -> None:  # type: ignore[no-untyped-def]
+    """Parallel pairs and pairs sharing two attributes fall back correctly."""
+    rng = random.Random(11)
+    q = _query(*schemas)
+    data = {}
+    for name, attrs in schemas:
+        data[name] = (
+            tuple(attrs),
+            _rows(rng, 120, *([5] * len(attrs))) + [tuple("0" * len(attrs))] * 2,
+        )
+    block = Block(frozenset(n for n, _ in schemas))
+    ps = (1.0, 2.0, 3.0, math.inf)
+    full = compute_all_lp_block_extensions(q, [block], data, p_values=ps)
+    sparse = compute_sparse_block_extensions(q, block, data, p_values=ps)
+    assert sparse.keys() == full.keys()
+    for key, st in sparse.items():
+        for p in ps:
+            assert st.norm(p) == pytest.approx(full[key].norm(p), rel=1e-12), (
+                sorted(key[1]),
+                p,
+            )
