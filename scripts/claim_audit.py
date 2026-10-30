@@ -185,6 +185,10 @@ def main() -> None:
     rrs = load("results/e2e/robustness_repeat_summary.csv")
     apx = load("results/pushdown/ablation_p11_poly_summary.csv")
     loo = load("results/pushdown/ablation_loo_summary.csv")
+    sli = load("results/suite/slice_independent_summary.csv")
+    ipf = load("results/imdb/imdb_plan_final_summary.csv")
+    gsv = load("results/gcare/semantics/variant_search.csv")
+    gsa = load("results/gcare/semantics/alt_semantics.csv")
     cac = load("results/cost/cost_accuracy_summary.csv")
     cai = load("results/cost/cost_accuracy_indep_summary.csv")
     crp = load("results/cost/cost_repeat_summary.csv")
@@ -3490,6 +3494,384 @@ def main() -> None:
             pick(crp, "median_load1", suite="hetionet", catalogue="sparse_full"),
             21,
             1.0 / 21,
+        ),
+        (
+            "independent slices: Hetionet |V|=6 low (233x)",
+            min(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "hetionet"
+                and r["n_vars"] == "6"
+                and r["condition"]
+                in (
+                    "seed1",
+                    "seed2",
+                    "seed3",
+                    "seed4",
+                    "seed5",
+                    "seed6",
+                    "seed7",
+                    "seed8",
+                    "seed9",
+                    "seed10",
+                )
+            ),
+            233.0,
+            0.0027459227467811157,
+        ),
+        (
+            "independent slices: Hetionet |V|=6 high (244x)",
+            max(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "hetionet"
+                and r["n_vars"] == "6"
+                and r["condition"]
+                in (
+                    "seed1",
+                    "seed2",
+                    "seed3",
+                    "seed4",
+                    "seed5",
+                    "seed6",
+                    "seed7",
+                    "seed8",
+                    "seed9",
+                    "seed10",
+                )
+            ),
+            244.0,
+            0.0026491803278688524,
+        ),
+        (
+            "independent slices: Hetionet |V|=8 low (1,702x)",
+            min(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "hetionet"
+                and r["n_vars"] == "8"
+                and r["condition"]
+                in (
+                    "seed1",
+                    "seed2",
+                    "seed3",
+                    "seed4",
+                    "seed5",
+                    "seed6",
+                    "seed7",
+                    "seed8",
+                    "seed9",
+                    "seed10",
+                )
+            ),
+            1702.0,
+            0.0008937720329024676,
+        ),
+        (
+            "independent slices: Hetionet |V|=8 high (1,811x)",
+            max(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "hetionet"
+                and r["n_vars"] == "8"
+                and r["condition"]
+                in (
+                    "seed1",
+                    "seed2",
+                    "seed3",
+                    "seed4",
+                    "seed5",
+                    "seed6",
+                    "seed7",
+                    "seed8",
+                    "seed9",
+                    "seed10",
+                )
+            ),
+            1811.0,
+            0.0008760905577029265,
+        ),
+        (
+            "independent slices: Hetionet |V|=10 low (10,040x)",
+            min(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "hetionet"
+                and r["n_vars"] == "10"
+                and r["condition"]
+                in (
+                    "seed1",
+                    "seed2",
+                    "seed3",
+                    "seed4",
+                    "seed5",
+                    "seed6",
+                    "seed7",
+                    "seed8",
+                    "seed9",
+                    "seed10",
+                )
+            ),
+            10040.0,
+            0.000649800796812749,
+        ),
+        (
+            "independent slices: Hetionet |V|=10 high (10,930x)",
+            max(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "hetionet"
+                and r["n_vars"] == "10"
+                and r["condition"]
+                in (
+                    "seed1",
+                    "seed2",
+                    "seed3",
+                    "seed4",
+                    "seed5",
+                    "seed6",
+                    "seed7",
+                    "seed8",
+                    "seed9",
+                    "seed10",
+                )
+            ),
+            10930.0,
+            0.0006457456541628545,
+        ),
+        (
+            "independent slices: IMDb strata low (26.7x)",
+            min(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "imdb"
+                and r["n_vars"] == "all"
+                and r["condition"]
+                in (
+                    "rank201",
+                    "rank401",
+                    "rank801",
+                    "rank1601",
+                    "random5000_s1",
+                    "random5000_s2",
+                )
+            ),
+            26.7,
+            0.019326591760299626,
+        ),
+        (
+            "independent slices: IMDb strata high (32.7x)",
+            max(
+                float(r["median_gain_over_lpbound"])
+                for r in sli
+                if r["suite"] == "imdb"
+                and r["n_vars"] == "all"
+                and r["condition"]
+                in (
+                    "rank201",
+                    "rank401",
+                    "rank801",
+                    "rank1601",
+                    "random5000_s1",
+                    "random5000_s2",
+                )
+            ),
+            32.7,
+            0.01589051987767584,
+        ),
+        (
+            "internal: independent slices: every query below LpBound on every slice (2160)",
+            sum(int(r["n_below_lpbound"]) for r in sli if r["n_vars"] == "all"),
+            2160,
+        ),
+        (
+            "independent slices: invalid bounds (0)",
+            sum(int(r["n_invalid"]) for r in sli if r["n_vars"] == "all"),
+            0,
+        ),
+        (
+            "independent slices: fewest checked per Hetionet slice (114)",
+            min(
+                int(r["n_checked"])
+                for r in sli
+                if r["n_vars"] == "all" and r["suite"] == "hetionet"
+            ),
+            114,
+        ),
+        (
+            "independent slices: most checked per IMDb slice (117)",
+            max(
+                int(r["n_checked"])
+                for r in sli
+                if r["n_vars"] == "all" and r["suite"] == "imdb"
+            ),
+            117,
+        ),
+        (
+            "independent slices: prefix reproduces the headline (1,724x)",
+            pick(
+                sli,
+                "median_gain_over_lpbound",
+                suite="hetionet",
+                condition="prefix",
+                n_vars="all",
+            ),
+            1724,
+            0.5 / 1724,
+        ),
+        (
+            "IMDb final-estimator plans: block median slowdown (1.05x)",
+            pick(ipf, "median_slowdown", strategy="block_p11"),
+            1.05,
+            0.005361904761904761,
+        ),
+        (
+            "IMDb final-estimator plans: LpBound median slowdown (1.08x)",
+            pick(ipf, "median_slowdown", strategy="lpbound_p11"),
+            1.08,
+            0.005229629629629629,
+        ),
+        (
+            "IMDb final-estimator plans: oracle median slowdown (1.06x)",
+            pick(ipf, "median_slowdown", strategy="oracle"),
+            1.06,
+            0.005316981132075471,
+        ),
+        (
+            "IMDb final-estimator plans: DuckDB median slowdown (0.26x)",
+            pick(ipf, "median_slowdown", strategy="duckdb"),
+            0.26,
+            0.01983076923076923,
+        ),
+        (
+            "IMDb final-estimator plans: DuckDB max slowdown (1.20x)",
+            pick(ipf, "max_slowdown", strategy="duckdb"),
+            1.20,
+            0.0047666666666666664,
+        ),
+        (
+            "IMDb final-estimator plans: block P95 (2.08x)",
+            pick(ipf, "p95_slowdown", strategy="block_p11"),
+            2.08,
+            0.003003846153846154,
+        ),
+        (
+            "IMDb final-estimator plans: LpBound P95 (2.26x)",
+            pick(ipf, "p95_slowdown", strategy="lpbound_p11"),
+            2.26,
+            0.0028123893805309737,
+        ),
+        (
+            "IMDb final-estimator plans: oracle P95 (1.34x)",
+            pick(ipf, "p95_slowdown", strategy="oracle"),
+            1.34,
+            0.00433134328358209,
+        ),
+        (
+            "IMDb final-estimator plans: DuckDB P95 (1.16x)",
+            pick(ipf, "p95_slowdown", strategy="duckdb"),
+            1.16,
+            0.0049103448275862075,
+        ),
+        (
+            "IMDb final-estimator plans: block planning s (12.5x)",
+            pick(ipf, "median_plan_s", strategy="block_p11"),
+            12.5,
+            0.0046,
+        ),
+        (
+            "IMDb final-estimator plans: LpBound planning s (2.2x)",
+            pick(ipf, "median_plan_s", strategy="lpbound_p11"),
+            2.2,
+            0.023327272727272728,
+        ),
+        (
+            "IMDb final-estimator plans: block total over DuckDB (824x)",
+            pick(ipf, "median_total_over_duckdb", strategy="block_p11"),
+            824,
+            0.0012067961165048544,
+        ),
+        (
+            "IMDb final-estimator plans: LpBound total over DuckDB (161x)",
+            pick(ipf, "median_total_over_duckdb", strategy="lpbound_p11"),
+            161,
+            0.003705590062111801,
+        ),
+        (
+            "IMDb final-estimator plans: block picks the exact-count order (19)",
+            pick(ipf, "n_eq_oracle_order", strategy="block_p11"),
+            19,
+        ),
+        (
+            "IMDb final-estimator plans: block picks LpBound's order (16)",
+            pick(ipf, "n_eq_lpbound_order", strategy="block_p11"),
+            16,
+        ),
+        (
+            "IMDb final-estimator plans: block faster than LpBound's pick (6)",
+            pick(ipf, "n_block_faster_than_lpbound", strategy="block_p11"),
+            6,
+        ),
+        (
+            "IMDb final-estimator plans: block slower than LpBound's pick (3)",
+            pick(ipf, "n_block_slower_than_lpbound", strategy="block_p11"),
+            3,
+        ),
+        (
+            "IMDb final-estimator plans: complete queries (33)",
+            pick(ipf, "n_complete", strategy="block_p11"),
+            33,
+        ),
+        (
+            "YAGO semantics: edge-reversal variants per query (512)",
+            max(
+                int(r["variants"]) for r in gsv if r["check"] == "edge_reversal_subsets"
+            ),
+            512,
+        ),
+        (
+            "YAGO semantics: edge-label substitution variants per query (810)",
+            max(
+                int(r["variants"])
+                for r in gsv
+                if r["check"] == "single_edge_label_substitution"
+            ),
+            810,
+        ),
+        (
+            "internal: YAGO semantics: variants reproducing G-CARE's count (0)",
+            sum(int(r["hits"]) for r in gsv),
+            0,
+        ),
+        (
+            "internal: YAGO semantics: disputed queries reproduced by undirected or injective matching (0)",
+            sum(
+                1
+                for r in gsa
+                if r["base"] != "timeout"
+                and r["base"] != r["gcare_true"]
+                and r["gcare_true"] in (r["injective"], r["undirected"], r["undir_inj"])
+            ),
+            0,
+        ),
+        (
+            "IMDb final-estimator plans: block within 5% of LpBound's pick (24)",
+            pick(ipf, "n", strategy="block_p11")
+            - pick(ipf, "n_block_faster_than_lpbound", strategy="block_p11")
+            - pick(ipf, "n_block_slower_than_lpbound", strategy="block_p11"),
+            24,
+        ),
+        (
+            "IMDb final-estimator plans: smallest median timing CV (6.5%)",
+            100 * min(float(r["median_cv"]) for r in ipf if r["median_cv"]),
+            6.5,
+            0.05 / 6.5,
+        ),
+        (
+            "IMDb final-estimator plans: largest median timing CV (7.4%)",
+            100 * max(float(r["median_cv"]) for r in ipf if r["median_cv"]),
+            7.4,
+            0.05 / 7.4,
         ),
         (
             "chain over full MOLP, cycle-8 (237x)",

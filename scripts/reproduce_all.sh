@@ -184,6 +184,7 @@ run_experiments() {
         --tag imdb_scale_n1000 --no-exact --lengths 6
     python scripts/imdb_scale_sparse.py       # the same 40 queries at 200 and 1,000 films through the sparse-product path (~5 min)
     python scripts/imdb_plan_injection.py     # bound-guided join order in DuckDB (~2 h)
+    python scripts/imdb_plan_final.py         # the same with the headline estimator (P11 guaranteed bs<=2), 5 repeats, one query at a time (~8 h, run alone)
 
     section "20l. External Benchmark: G-CARE Cyclic Queries (needs G-CARE data; ~2 h)"
     python scripts/gcare_prepare.py           # AIDS + YAGO into data/gcare/gcare.duckdb
@@ -203,6 +204,10 @@ run_experiments() {
     python scripts/poly_certify.py            # flow >= polymatroid on every long-suite query (P11; ~5 h)
     python scripts/poly_certify.py --short    # ... and on the 109-query short suite
     python scripts/slice_robustness.py        # |V|=6 long suite on two random 20K samples (~3 h)
+    # independent slices: ten Hetionet row samples and six IMDb popularity strata (fixed before any result)
+    for off in 200 400 800 1600; do python scripts/prepare_imdb_cycles.py --rank-offset $off --out data/imdb_strata/rank$((off+1)); done
+    for seed in 1 2; do python scripts/prepare_imdb_cycles.py --random-from 5000 --seed $seed --out data/imdb_strata/random5000_s$seed; done
+    python scripts/slice_independent.py       # headline comparison on every slice, with exact counts (~4 h); stratum hashes: results/suite/imdb_strata_manifest.csv
     python scripts/slice_poly_certify.py      # ... and certify those flow bounds by the polymatroid bound
     python scripts/spectral_bound.py          # trace-Holder spectral bounds on the long suites
     python scripts/opt_stats_gap.py           # program vs information gap on small cycles (OPT_S lower bounds)

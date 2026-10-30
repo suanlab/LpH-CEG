@@ -94,7 +94,8 @@ _edge_cache: dict[str, list[tuple[str, str]]] = {}
 def load_edges(
     fname: str, base: Path, has_header: bool = True
 ) -> list[tuple[str, str]]:
-    key = str(base / fname)
+    # the row cap is part of the identity: a changed MAX_ROWS must not reuse rows
+    key = f"{base / fname}|{MAX_ROWS}"
     if key in _edge_cache:
         return _edge_cache[key]
     edges: list[tuple[str, str]] = []

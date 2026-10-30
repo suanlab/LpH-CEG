@@ -106,6 +106,16 @@ def _write(name: str, rows: list[dict[str, object]]) -> None:
 def main() -> None:
     path = OUT / "slice_robustness.csv"
     rows: list[dict[str, object]] = []
+    if "--summary-only" not in sys.argv:
+        from scripts.run_fingerprint import guard, module_params
+
+        guard(
+            path,
+            __file__,
+            sorted((ROOT / "benchmarks").glob("*.json")),
+            module_params(globals()),
+            resume="--resume" in sys.argv,
+        )
     if "--resume" in sys.argv and path.exists():
         rows = list(csv.DictReader(path.read_text().splitlines()))
     if "--summary-only" not in sys.argv:

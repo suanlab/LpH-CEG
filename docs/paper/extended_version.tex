@@ -284,6 +284,8 @@ shared-attribute products & $\sum_b\deg_R(b)^{p}\deg_S(b)^{q}$ & no & CorrBound'
  & & & inner products (Lemma 3.1) \\
 one-side interface norms & $\big\|\big(\sum_{b\in N_R(a)}\deg_S(b)\big)_a\big\|_p$ & no & this paper (join-free) \\
 common-neighbour norms & $\big\|\big(|N_R(a)\cap N_S(c)|\big)_{a,c}\big\|_p$ & yes & this paper \\
+claw pairs (bi-stars) & $\sum_{(a,b)\in R}\deg_R(a)^{p}\deg_R(b)^{q}$ & no & Lin--Wang (arXiv:2510.04249) \\
+caterpillars & tree homomorphisms into one $R$ & no & Lin--Wang (arXiv:2604.14647) \\
 \bottomrule
 \end{tabular}
 \end{center}
@@ -310,6 +312,15 @@ $R(a,b)\bowtie S(b,c)\bowtie R'(c,d)\bowtie S'(d,a)$ with $R'=R$, $S'=S$
 as separate atoms, the count is $\mathrm{tr}((MM^{\top})^2)=\|MM^{\top}\|_F^2$,
 again $32$ against $24$.
 \end{proof}
+
+The two databases also agree on the single-relation statistics of Lin and
+Wang: every relation is $2$-regular on $4+4$ vertices, so the number of
+homomorphisms of any tree with $m$ edges into it (a star, a claw pair, a
+caterpillar), with its root on either side, is $4\cdot2^{m}$ in both.
+Richer single-relation statistics therefore cannot recover the
+common-neighbour norm either; the two families are complementary, and we
+have not evaluated their bounds (their inference differs from the
+programs here).
 
 The separation is limited to the statistics listed: it does not claim that
 no multi-relation term of CorrBound, or any other statistic, determines the
@@ -378,6 +389,20 @@ second implementation of the same semantics that reads G-CARE's raw files
 without DuckDB reproduces our count on all $49$ of them, and $45$ of them lie in
 G-CARE's Petal families ($45$ of $100$ Petal queries, against $4$ of $92$
 others), so the gap is in semantics or preprocessing we could not reconstruct, not settled either way.
+We then tested the semantic choices one at a time (\texttt{scripts/gcare\_semantics/},
+outputs in \texttt{results/gcare/semantics/}). G-CARE defines the count as a
+directed homomorphism with label-subset vertex matching, and its loader reads
+one label per query vertex and all labels per data vertex, which is our rule.
+The YAGO file has G-CARE's published statistics ($12.8$M vertices, $15.8$M
+edges, $91$ edge labels). Vertex labels cannot matter: every disputed query has
+only wildcard vertices. Neither undirected nor injective matching reproduces
+any disputed count, and both break agreeing controls (G-CARE's counts on queries
+where the two semantics differ are homomorphism counts); counting duplicate
+edges changes nothing; no reversal of any subset of query edges ($512$
+variants) and no single edge-label substitution ($810$ variants) reproduces
+the four and two Petal queries tried. The cause therefore lies outside the
+stated semantics (how the published Petal counts were computed is not
+documented), and we keep the $49$ queries separate rather than resolve them.
 
 \section{Degree sequences from catalog histograms}
 Degree sequences can come from catalog histograms at \texttt{ANALYZE} time: over buckets $(d_i, c_i)$ (degree $d_i$ held by $c_i$ values), $\|\mathbf{d}\|_p = (\sum_i c_i d_i^p)^{1/p}$. We have not evaluated this.
@@ -490,6 +515,58 @@ estimator returns, and LpBound's entropic bound on the same statistics
 equals them. Our experiments do not measure how often this happens on
 acyclic workloads, and the stars we ran gain nothing (each leaf is covered
 by one step only).
+
+\section{Independent data slices}
+Every query of a suite reads the same slice, so the query counts are not
+independent data conditions. \texttt{scripts/slice\_independent.py} reruns the
+headline comparison (LpBound's entropic bound against the $bs{\le}2$
+polymatroid bound, eleven norms on both sides, pair statistics from the sparse
+collector) on slices fixed before any result was seen: for Hetionet, ten
+uniform $20$K-row samples of every full file (seeds $1$--$10$, one per slice,
+the same sample of a relation in every query), and for IMDb six further
+$200$-film sets (\texttt{prepare\_imdb\_cycles.py --rank-offset} and
+\texttt{--random-from}): four lower popularity strata and two uniform draws
+from the $5{,}000$ most-voted films. All $120$ registered queries of a suite
+run on each of its slices, with exact counts under set semantics where DuckDB
+finishes in $60$\,s. The registered slices reproduce the stored headline
+exactly. On every slice every query's block bound lies below LpBound's
+($120/120$), and no bound falls below an exact count ($114$--$115$ checked
+queries per Hetionet slice, $105$--$117$ per IMDb slice).
+
+\begin{table}[h]
+\centering
+\caption{Median polymatroid bound on block statistics below LpBound, by slice
+(eleven norms on both sides; last column: queries with an exact count).}
+\label{tab:slices}
+\small\setlength{\tabcolsep}{3pt}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Slice & $|V|{=}6$ & $8$ & $10$ & all & exact \\
+\midrule
+Hetionet prefix (registered) & $236\times$ & $1{,}724\times$ & $10{,}160\times$ & $1{,}724\times$ & $115$ \\
+Hetionet, $10$ samples (range) & $233$--$244\times$ & $1{,}702$--$1{,}811\times$ & $10{,}040$--$10{,}930\times$ & $1{,}702$--$1{,}811\times$ & $114$--$115$ \\
+\midrule
+IMDb top 200 (registered) & $9.74\times$ & $29.9\times$ & $86.8\times$ & $29.4\times$ & $105$ \\
+ranks 201--400 & $8.05\times$ & $27.7\times$ & $91.8\times$ & $27.7\times$ & $107$ \\
+ranks 401--600 & $8.34\times$ & $31.8\times$ & $90.2\times$ & $30.3\times$ & $109$ \\
+ranks 801--1{,}000 & $9.59\times$ & $33.4\times$ & $125\times$ & $32.7\times$ & $113$ \\
+ranks 1{,}601--1{,}800 & $7.83\times$ & $34.8\times$ & $102\times$ & $32.7\times$ & $117$ \\
+random of top 5{,}000, s1 & $9.64\times$ & $33.8\times$ & $113\times$ & $32.3\times$ & $117$ \\
+random of top 5{,}000, s2 & $8.07\times$ & $25.9\times$ & $87.9\times$ & $26.7\times$ & $117$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The margins move little across slices of the same source: within
+$0.99$--$1.05\times$ of the registered prefix on Hetionet and
+$0.91$--$1.11\times$ of the registered film set on IMDb, overall. This
+bounds the dependence on the row-order prefix and on film popularity; it
+does not make the slices independent databases from other sources (the
+samples share their source files), and other graphs or schemas may behave
+differently. An earlier check, on the $|V|{=}6$ queries only and with each relation
+replaced by a uniform $20$K-row sample of the full file (two fixed seeds)
+the $|V|{=}6$ medians are $46$/$46$/$49\times$ (cover) and
+$236$/$233$/$244\times$ (polymatroid) for prefix/seed\,1/seed\,2, all $40$ below LpBound in each. A $30$K-row prefix (a larger relation in $39$ of the $40$ queries) keeps the cover margin at $46\times$ ($40/40$).
 
 \section{G-CARE YAGO by topology}
 The YAGO set we evaluate is the part of G-CARE's cyclic queries that fits
@@ -642,6 +719,45 @@ LpBound's statistics, recovers a median $90\%$ of the log-gain on Hetionet but
 $35\%$ on IMDb. The statement that the common-neighbour $\ell_2$ carries the
 gain therefore holds for the three-norm flow-LP ablation and for Hetionet; at
 eleven norms on IMDb the join-free one-side interfaces carry most of it.
+
+\section{Join ordering on IMDb with the headline estimator}
+\texttt{scripts/imdb\_plan\_final.py} chooses, for each of the $40$ IMDb
+cycles at $|V|{=}6$, the connected left-deep order minimising
+$C_{\mathrm{out}}$ under LpBound's bound (eleven norms, its flow LP), the
+released guarantee \texttt{guaranteed\_block\_bound} over the $bs{\le}2$
+catalog (eleven norms, sparse collector; the polymatroid optimum at these
+sizes) and exact prefix counts, and times the chosen orders, $16$ sampled
+ones and DuckDB's own plan five times each, one query at a time, each
+repetition in a shuffled order; an order that exceeds $60$\,s in the first
+repetition is kept at the budget and not repeated (the server was shared
+with other users, median $1$-minute load $12.8$). On the $33$ queries whose
+forced orders all finish, the median slowdowns over the best timed order are
+$1.05\times$ (block bound), $1.08\times$ (LpBound) and $1.06\times$ (exact
+counts), P95 $2.08$, $2.26$ and $1.34\times$, and DuckDB's plan $0.26\times$
+(P95 $1.16\times$); paired, the block bound's pick is faster than LpBound's on $6$ queries, slower on $3$ and within $5\%$ on $24$, and the per-order timing CV is a median $6.5$--$7.4\%$. On the other $7$ queries every strategy's pick, or nearly every sampled order, exceeds $60$\,s while DuckDB finishes, so excluding them favors the forced orders. Planning time, the statistics and solves for every prefix a
+strategy needs, is a median $12.5$\,s for the block bound and $2.2$\,s for
+LpBound; with it, the block bound's plan-plus-execution time is a median
+$824\times$ DuckDB's ($161\times$ for LpBound). The block statistics thus make
+the left-deep choice slightly better on this workload but do not pay for
+themselves here; a workload-level catalog collected once (as in the paper's
+catalog experiment) would remove most of the planning time but not DuckDB's
+advantage from bushy plans.
+
+\emph{The earlier protocol.} \texttt{scripts/imdb\_plan\_injection.py} ran the same protocol on the $40$
+IMDb cycles at $|V|{=}6$, with four estimators behind $C_{\mathrm{out}}$,
+tests the thesis rather than the $bs{=}1$ bound. Block statistics move the
+choice toward the true-cardinality order: the flow LP on $bs{=}2$ (three norms, an uncertified candidate, not the headline's eleven-norm polymatroid estimator) picks
+the order exact counts would pick on $24/40$ queries, and on the $33$
+whose forced orders all finish within $60$\,s its median slowdown over the
+best timed order (the strategies' picks plus $16$ sampled, of the $96$
+connected left-deep orders) is $1.19\times$, against $1.41\times$ for the
+$bs{=}1$ cover LP, $1.23\times$ for LpBound (three norms) and $1.21\times$ for exact
+counts---differences among the last three lack a repeat-based uncertainty estimate. None competes with DuckDB's optimizer here ($0.43\times$
+median, at most $2.0\times$), and
+on the other $7$ queries nearly every forced order exceeds
+$60$\,s while DuckDB finishes, so excluding them favors the forced
+orders. Each order was timed once, $10$ queries concurrently, so equivalence is not established either. A better bound improves
+\emph{which} left-deep plan is chosen, not whether one should be.
 
 \section{Tail robustness by shape, with every timing kept}
 \texttt{scripts/robustness\_repeat\_raw.py} repeats the paper's

@@ -370,6 +370,16 @@ def main() -> None:
         return
     qs = registry()
     rows: list[dict[str, object]] = []
+    if "--summary-only" not in sys.argv:
+        from scripts.run_fingerprint import guard, module_params
+
+        guard(
+            OUT / "gcare_eval.csv",
+            __file__,
+            [],
+            {**module_params(globals()), "registry": [q["path"] for q in registry()]},
+            resume="--resume" in sys.argv,
+        )
     if "--resume" in sys.argv and (OUT / "gcare_eval.csv").exists():
         with open(OUT / "gcare_eval.csv") as fh:
             rows = list(csv.DictReader(fh))

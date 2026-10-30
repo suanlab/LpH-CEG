@@ -806,10 +806,7 @@ $2.7$--$3.1\times$, while $bs{=}2$ statistics are $46$/$270$/$920\times$
 tighter than the entropic bound at the median under the cover LP and
 $236$/$1{,}720$/$10{,}200\times$ under the polymatroid program, on
 $120/120$ queries.
-With exact counts of $10^{4}$--$10^{9}$, this is not a small-count artifact. Nor is it a prefix artifact: with each relation
-replaced by a uniform $20$K-row sample of the full file (two fixed seeds)
-the $|V|{=}6$ medians are $46$/$46$/$49\times$ (cover) and
-$236$/$233$/$244\times$ (polymatroid) for prefix/seed\,1/seed\,2, all $40$ below LpBound in each. A $30$K-row prefix (a larger relation in $39$ of the $40$ queries) keeps the cover margin at $46\times$ ($40/40$). Query-level bootstrap $95\%$ intervals (over the registered queries of these fixed databases; $10{,}000$
+With exact counts of $10^{4}$--$10^{9}$, this is not a small-count artifact. Nor is it a slice artifact: on ten random $20$K-row samples of every file the polymatroid medians are $233$--$244$, $1{,}702$--$1{,}811$ and $10{,}040$--$10{,}930\times$, and on six other IMDb film sets (lower popularity ranks, random draws) $26.7$--$32.7\times$, every query below LpBound and none below an exact count (extended version). Query-level bootstrap $95\%$ intervals (over the registered queries of these fixed databases; $10{,}000$
 resamples: sensitivity to the query sample, not variability over databases) keep every median ratio to LpBound in this table and in
 Table~\ref{tab:gcare} on one side of $1$, except the cover LP on block
 statistics on AIDS ($[0.42, 1.00]$); for the polymatroid program on block statistics that side is automatic (its constraints contain LpBound's), and the intervals of its gains are in the extended version. None of the $864$ bounds with an exact count
@@ -875,7 +872,7 @@ vertex labels, homomorphism counts, and eleven norms on both sides
 (Table~\ref{tab:gcare}). Our exact counts equal G-CARE's on $241/241$ AIDS
 queries; on YAGO they differ on $49$ of the $192$ we evaluate, in both
 directions and under every semantics we tried (directed or not, injective
-or not; over all $364$ cyclic YAGO queries with a count, $80$ differ). A DuckDB-free reimplementation reproduces our count on all $49$, so the gap is in semantics or preprocessing we could not reconstruct and is unsettled (extended version). We check validity against our counts (one YAGO bound, $26$, lies
+or not; over all $364$ cyclic YAGO queries with a count, $80$ differ). A DuckDB-free reimplementation reproduces our count on all $49$, so the gap lies outside G-CARE's stated semantics, which we follow, and is unresolved (extended version). We check validity against our counts (one YAGO bound, $26$, lies
 below G-CARE's $33$ but above our $17$). $174$ YAGO queries exceed the
 prototype (a relation over $300$K rows or a pair join over $20$M) and are
 reported, not run. Under the polymatroid program, block statistics are
@@ -1222,20 +1219,19 @@ value). The reference is the best \emph{forced left-deep} order, so
 bound-guided is ${\ge}1$ by construction while DuckDB, free to go bushy, scores below $1$ on median in this initial timing protocol: a bound-guided choice avoids a plan space's tail; it does not beat the engine. Five shuffled repetitions per plan keep the tail (P95/max $1.18$/$1.21\times$ against $5.51$/$6.77\times$; per repetition P95 ${\le}1.65\times$ against ${\ge}5.07\times$; medians $1.03$ and $1.18\times$), and so does a raw-logged replication that picks the reference on two runs and measures on four (P95 $1.11$ against $5.26\times$). The tail is shape-dependent: DuckDB's plan is faster than the bound-guided one on triangles and 4-cycles (median ratio $1.13$, $1.78$) and slower on diamonds and $K_4$ ($0.53$, $0.25$; extended version).
 
 \paragraph{Real data, block statistics} The same protocol on the $40$
-IMDb cycles at $|V|{=}6$, with four estimators behind $C_{\mathrm{out}}$,
-tests the thesis rather than the $bs{=}1$ bound. Block statistics move the
-choice toward the true-cardinality order: the flow LP on $bs{=}2$ (three norms, an uncertified candidate, not the headline's eleven-norm polymatroid estimator) picks
-the order exact counts would pick on $24/40$ queries, and on the $33$
-whose forced orders all finish within $60$\,s its median slowdown over the
-best timed order (the strategies' picks plus $16$ sampled, of the $96$
-connected left-deep orders) is $1.19\times$, against $1.41\times$ for the
-$bs{=}1$ cover LP, $1.23\times$ for LpBound (three norms) and $1.21\times$ for exact
-counts---differences among the last three lack a repeat-based uncertainty estimate. None competes with DuckDB's optimizer here ($0.43\times$
-median, at most $2.0\times$), and
-on the other $7$ queries nearly every forced order exceeds
-$60$\,s while DuckDB finishes, so excluding them favors the forced
-orders. Each order was timed once, $10$ queries concurrently, so equivalence is not established either. A better bound improves
-\emph{which} left-deep plan is chosen, not whether one should be.
+IMDb cycles at $|V|{=}6$ tests the thesis with the headline estimators
+behind $C_{\mathrm{out}}$ (eleven norms: LpBound's bound, the guaranteed
+$bs{\le}2$ bound, exact counts), the chosen and $16$ sampled left-deep orders
+timed five times each, one query at a time. The block bound picks the
+exact-count order on $19/40$ queries (LpBound's bound on $16$), and on the
+$33$ whose forced orders all finish within $60$\,s its median slowdown over
+the best timed order is $1.05\times$, against $1.08\times$ for LpBound and
+$1.06\times$ for exact counts (faster than LpBound's pick on $6$, slower on
+$3$, within $5\%$ on $24$). None competes with DuckDB's optimizer
+($0.26\times$ median, at most $1.20\times$; on the other $7$ nearly every forced order times out, so excluding them favors the forced orders), and the block statistics of every
+prefix take a median $12.5$\,s to collect against $2.2$\,s, far more than any
+execution they save. A better bound improves \emph{which} left-deep plan is
+chosen, not whether one should be.
 
 LpH-CEG is thus not a replacement for a
 well-tuned optimizer, but a guide that limits the worst case on the
@@ -1284,7 +1280,7 @@ $\ell_1$-norm of a $bs{=}2$ block sequence \emph{is} CorrBound's inner
 product (the join size).  The shared-interface block norms
 $\sum_b \deg_R(b)^p\deg_S(b)^p$ are $\ell_p$-weighted inner products.
 The one-side and common-neighbour statistics add information beyond the listed pairwise proxy: the extended version separates the common-neighbour $\ell_2$ from those statistics, not from CorrBound's general Lemma~3.1. Its sparse product also has a different collection cost from CorrBound's sketches (Section~\ref{sec:stats-vs-inference}).
-Lin and Wang count bi-star~\cite{lin2025ambidextrous} and caterpillar~\cite{lin2026sidorenko} homomorphisms into each relation: richer single-relation statistics, complementary to blocks.
+Lin and Wang count bi-star~\cite{lin2025ambidextrous} and caterpillar~\cite{lin2026sidorenko} homomorphisms into each relation: richer single-relation statistics, complementary to blocks (the extended version's separation fixes them too).
 SafeBound~\cite{deeds2023safebound} deploys degree-sequence
 bounds~\cite{deeds2023dsb} with
 predicates on relational workloads, following pessimistic

@@ -1,0 +1,73 @@
+stratum,scope,n_movies,relation,rows,sha256
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_actor,7670,f37d348f2c14a9528b76782f6f6a55c5ff7ed466e57bb843a3e99ed5992cd2a6
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_actress,3274,ba67d4d06be0f343e0310dd015884e8d8a4bba24a54b9acf59a42a6dba706175
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_producer,1460,13a610ed893b13148da54a2be98e46632255970716f3a9fd3eba123318682fb9
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_writer,510,a57ff2ee4a29c45a7d2db0ea83fcf5f7557162ed09a73452c724f7039379d714
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_cinematog,209,c475fa414e5fcd0cc67dfc55e71bc6634751fea986c31869bdef9e5cf8339dfe
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_composer,228,ccbc56f62950e7319a77fd2bfcaa3a30fa4adbb6801ef3581f41624674fb5f1e
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_director,218,15f2a6dc41342384dc5b59d21004d35571b4d3a07970ce7715b4e0a4b19b9da6
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_editor,252,60abc23fa40c78939e39cc43f3fa49b56eff5585f02bbdc905d264a274d3aee1
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,ci_misccrew,9745,f1382162021270def774a3cd2675bca8e898f3b329f58d093ab29f2044e1d5a4
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,mc_distrib,3574,04160b3135a9949d96009876c287f41213bf6761ac19a2e1e0e298b21ffb212f
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,mc_produc,720,c61b43bc40f296fc17a9ffcec3eab4a79283a57c76002411c0c137474ca7c610
+random5000_s1,random sample (seed 1) of the top 5000 voted films,200,mk,21354,77591a2dc071da8d6c9d80eb6b6ff835636cc4616a0f80e925b498c8bd7401ff
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_actor,7664,c1e7f7c5dfc48b86e348c7ce39fbfadae29d1f789fee072607a6e134e6a8ec47
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_actress,3553,abe7e25c8ef4f2d475ab2ff4a0926476d01a1bbc3ac16c108ea5ca93ab95ebd4
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_producer,1282,a1c84d563ef5eea16eb11f33f8b850993208b2addf481d5a13633847e1a0f586
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_writer,514,c16c421381a1bd9c52ca82bf1bece61bee98ded0993fb3e8003c05b572f6d086
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_cinematog,229,054aa5086733b4c1ff3923293507e75b7e35965b139a4a1679e38e789f6c4729
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_composer,229,33688f60a339fcce71909fb6ba0c0c012715b779cbe3540d14c11591b23b089f
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_director,255,9d1a9bb30dcdf8f6aa851b8f903eee5e97fb4de13fbca23e006c17456562e98a
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_editor,288,0e1cdf8b787f523187681566820f483e4f9fd7f041bf727195113da4b5bc97da
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,ci_misccrew,9836,77953e03b093f0e1121ed15fe27a27496bcc07e1578df0ca5b4371232f956ad6
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,mc_distrib,3693,a89710c1b8463b6975958eb056fb1eeb139be559b2111706df1dca3bbb30d7d2
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,mc_produc,701,29c2f7e80b10dc86e840b8632fc54c0dc1b70f5cd85426756a84db5f964991dd
+random5000_s2,random sample (seed 2) of the top 5000 voted films,200,mk,23597,d5c30493ebfb5dc38f1de733ce5be234f1244a823f45fa75fcd65e3be9d2a91e
+rank1601,top-voted feature films after rank 1600,200,ci_actor,7803,9d2e8364100ca90c580b1d1f901cbf131c026ec1edd19778cf79488362e7b047
+rank1601,top-voted feature films after rank 1600,200,ci_actress,3758,6f202453452c939033f3275ddd134e688efcbd50b22b4731b54bb2e179e32d25
+rank1601,top-voted feature films after rank 1600,200,ci_producer,1402,dfe5bbf3973cc32fd4229ac4d13669c317774e4886b875317b703ed1c9328935
+rank1601,top-voted feature films after rank 1600,200,ci_writer,477,a2809e172e1bcdd1b923805abf52282f749e2b49db72a6b6197faea03f42d6ba
+rank1601,top-voted feature films after rank 1600,200,ci_cinematog,198,7c7eb5c0ab2227e448625bd0a2042ed6f125d012e44d46480e16ad9335c68614
+rank1601,top-voted feature films after rank 1600,200,ci_composer,218,ffd903da16b002e88b7e4baa35d4f539e96eb42b9cb2f39fe2b75817f6e18bd8
+rank1601,top-voted feature films after rank 1600,200,ci_director,226,201491f79bec19a4d74a97701986e1b8b34850975d32270b38f6114ebb2a41b7
+rank1601,top-voted feature films after rank 1600,200,ci_editor,262,78cee0852703e6e212cd05e3b3d05a276ac23b081cdfdddba9a80e7ec9c25199
+rank1601,top-voted feature films after rank 1600,200,ci_misccrew,11118,8f42152f3e1d3e696f57b653ed647b2db01a74a3e73bf50253bad70c61c1d5ff
+rank1601,top-voted feature films after rank 1600,200,mc_distrib,3853,f39fd39c152005e64de7c0bc68f86407de51910ca52c3668f5e6416be5ca9659
+rank1601,top-voted feature films after rank 1600,200,mc_produc,763,c2eb9231c964b0708e8302ecc3207ff04c1085607867c5b8d149a233d506e3e5
+rank1601,top-voted feature films after rank 1600,200,mk,21794,1083f64cad1d543d1381d1dcadaa4f69e2402c48d66b81865b5be8c1ef1a9b86
+rank201,top-voted feature films after rank 200,200,ci_actor,10561,2a34209003cfe191d689b37c7d44668b80eec158e14106192317541b16f9c84d
+rank201,top-voted feature films after rank 200,200,ci_actress,4108,6aa8b01b4a7840c46678eea176ce4ceb9fb57c3e151f2d2b428171dd17efd22d
+rank201,top-voted feature films after rank 200,200,ci_producer,1550,90018176f2bfbf6e770c13d06fcb1abe03542b4838e794ce88a14d24a46d515d
+rank201,top-voted feature films after rank 200,200,ci_writer,569,08f81b2ca8a62613d224d0aaae3657ec87006df77539c093528516fa294769fe
+rank201,top-voted feature films after rank 200,200,ci_cinematog,197,ab823168ddfca0c736d79e3d70f656ee15ff0977a5e1e3bdfff6f01183b56a98
+rank201,top-voted feature films after rank 200,200,ci_composer,209,748822f2510b4ca81417147010fa0688541486d48eadc1499d22bd831b319a53
+rank201,top-voted feature films after rank 200,200,ci_director,221,cb94e425137668bd123b905b6b930e32f83c5435650bab58fd3a9fb854116289
+rank201,top-voted feature films after rank 200,200,ci_editor,291,8259e7a03fc5b6ec04ae2a3d1f5fa41ad0fb46887fc29b06f7ce3f53aed13701
+rank201,top-voted feature films after rank 200,200,ci_misccrew,18956,19a2d35d52eec59a6237415329cbdd515a98bcd23d1d54d6bdc0620dddb2b995
+rank201,top-voted feature films after rank 200,200,mc_distrib,4966,d9ef76c9a0779b6a882a1233fa337a80aa084bb2e9126c6229c077d2ae491846
+rank201,top-voted feature films after rank 200,200,mc_produc,735,75eb8671306e61cf72ea5e40a5fe90fc8fca515c0e6ba844e2a4756eb9337a29
+rank201,top-voted feature films after rank 200,200,mk,32694,adc05810866cd6c97ac1c69c1eca731a67e812821bb962134a1ef0d30095d735
+rank401,top-voted feature films after rank 400,200,ci_actor,9784,a862a144aa9225005b453fa5e60b69d6994c1faf927b085dfd2fc5ccf29a92db
+rank401,top-voted feature films after rank 400,200,ci_actress,4124,6fa86cedbc2470aba0e7b1e71177f97d221b0aa3face5d27c7ddf7cefff62654
+rank401,top-voted feature films after rank 400,200,ci_producer,1519,89bfd31e47e56154025212af3cea1749130db3368be1b454c728238e9daf5016
+rank401,top-voted feature films after rank 400,200,ci_writer,549,4edb86b84907fec921ceb1911d610afa06d8188405e57ed44ca9740fadf0ed50
+rank401,top-voted feature films after rank 400,200,ci_cinematog,205,ef15f8c8909464c052aae788bfd78410da9ccedc86c0f75f4fc7e6b7ae479401
+rank401,top-voted feature films after rank 400,200,ci_composer,211,193da1a8633a624c91edcd926005eeada1146aa59936899b58e671bcee88ea72
+rank401,top-voted feature films after rank 400,200,ci_director,220,a4f20d524618fa789cb4439d571929ebaf4c7afd037404e08f936e464320c5cf
+rank401,top-voted feature films after rank 400,200,ci_editor,276,42d964ee745dcfeb5622311a990a24491d9670fc1200938a15de148ab3ca8166
+rank401,top-voted feature films after rank 400,200,ci_misccrew,16464,7a53f5166b4a8a1d154797fda6485fda59d6e0c3dd63deca033c64f4e8261a7f
+rank401,top-voted feature films after rank 400,200,mc_distrib,4536,bb6a0ea9165c44a84c772602f867175280f3ba75ed3fa3d31d5c0d4ce53bb9e4
+rank401,top-voted feature films after rank 400,200,mc_produc,765,9ae7a50078f90aaef644f9f013385928e175c2c811c250760dbb1da0877d3eb8
+rank401,top-voted feature films after rank 400,200,mk,31366,4d18f14302013ae9d324412f5bead1a317ea31c9b09c769227d401f33e9b9384
+rank801,top-voted feature films after rank 800,200,ci_actor,8706,2e45dfc0214566afdf7dc9f25ac9fdb5b18ab7a66971c0e5cd9fc138e0e6ead7
+rank801,top-voted feature films after rank 800,200,ci_actress,3844,012b6d0f10665968317a68da97c7aa96028250613781005b6f53392405cb700c
+rank801,top-voted feature films after rank 800,200,ci_producer,1479,d36373f7259d9a0f0ff342657a3152f7e51ba56f2eeb26b2ec0f6549a8125e06
+rank801,top-voted feature films after rank 800,200,ci_writer,579,127ed05ddf00b6f69108a66dcda737c3fd7f8fb0f7e9d031b539d25a73b934a2
+rank801,top-voted feature films after rank 800,200,ci_cinematog,196,a5c2090b7a79c0f6b4fcb57fb7fb004bdb0f6b0f39d984319fd7a2ad36b35f0c
+rank801,top-voted feature films after rank 800,200,ci_composer,216,4a4048c7ea9ae0448cfb519e934b684e35f37ace81bdb55de4324d8a03679855
+rank801,top-voted feature films after rank 800,200,ci_director,226,bfed00c96f15c6a0e8afcc15487daf838b067203bb38f788c5ef742d14d60f5a
+rank801,top-voted feature films after rank 800,200,ci_editor,274,92806fddec2aaca4da5143a468edce8308ffa3ebc677f9157ed738f0ce48aa64
+rank801,top-voted feature films after rank 800,200,ci_misccrew,13544,ac7adb4de58f319d555522eee4d6812858946bf914b5e869b501f2308ebd5a9f
+rank801,top-voted feature films after rank 800,200,mc_distrib,4303,83e91ba9cb8caab3cf2d4fee55342f2e97299a2db7ab97a6f008979365090021
+rank801,top-voted feature films after rank 800,200,mc_produc,784,4f72637d65fe5190f3e3702893eb8944e68e4e6f46b92f124d206b3e6fd26a28
+rank801,top-voted feature films after rank 800,200,mk,26519,3d5dc9ffc04a275104cd2840b7050fed508c3b449ad4b6ffc5b0832bfb6f36d9

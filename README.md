@@ -75,6 +75,8 @@ The **real-data half**:
 | `tests/unit/test_shannon_wide.py` | hyperpath-structure enumeration behind the every-hyperpath Step-5 certificate (`scripts/shannon_check_wide.py`) |
 | `tests/unit/test_validity.py` | the bound must never fall below a true count |
 | `tests/unit/test_pushdown_stats.py` | join-free block statistics (`src/statistics/pushdown_stats.py`) equal the materialized ones; the codegree triangle bound is an upper bound; the l2 codegree alone recovers the bs=2 bound on the test instance (three norms, flow LP; at eleven norms the one-side interfaces matter too, `scripts/ablation_loo.py`) |
+| `tests/unit/test_edge_matrix.py` | bag inputs give the set bounds; parallel atoms stay valid; `guaranteed_block_bound` falls back to the cover LP on size and on solver failure; eleven norms on degree-400 hubs stay finite and valid |
+| `tests/unit/test_separation.py` | the extended version's separation example: every listed pairwise statistic and every tree-homomorphism count into one relation agree, the common-neighbour l2 (32 vs 24) does not |
 | `tests/unit/test_flow_bound.py` | the flow LP (`src/estimators/flow_bound.py`): analytic path bound, ℓp bundle = polymatroid, bs=1 == entropic, every order valid and the best cyclic order tight |
 | build gate in `reproduce_all.sh paper` | fails on any LaTeX error or unbalanced theorem env |
 | `MANIFEST.sha256` | source-file integrity (`scripts/gen_manifest.sh` regenerates) |
@@ -119,6 +121,7 @@ both are reported as skipped or reused in the log.
 - `src/core/`, `src/utils/`, `src/statistics/block_stats.py` — shared H-CEG
   machinery; edit these in the sibling `H-CEG` project, not here
 - `scripts/` — one script per experiment; each writes a CSV under `results/`
+- `scripts/gcare_semantics/` — one-off diagnostics of the G-CARE YAGO count gap (alternative matching rules, edge reversals, label substitutions; outputs in `results/gcare/semantics/`), kept as run; not part of the paper pipeline
 - `benchmarks/query_suite_v1.json` — the pre-registered evaluation suite (|V| ≤ 5)
 - `benchmarks/query_suite_v2_long.json` — the pre-registered long-cycle suite (|V| = 6, 8, 10; 40 per length by hash order)
 - `docs/paper/` — the manuscript (`main.tex`); `docs/step5_lemma.md` — the historical proof-obligation note (the current proof is in the extended version)

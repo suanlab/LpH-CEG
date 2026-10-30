@@ -119,6 +119,16 @@ def main() -> None:
     name = "poly_certify_short.csv" if short else "poly_certify.csv"
     path = OUT / name
     rows: list[dict[str, object]] = []
+    if "--summary-only" not in sys.argv:
+        from scripts.run_fingerprint import guard, module_params
+
+        guard(
+            path,
+            __file__,
+            sorted((ROOT / "benchmarks").glob("*.json")),
+            module_params(globals()),
+            resume="--resume" in sys.argv,
+        )
     if "--resume" in sys.argv and path.exists():
         rows = list(csv.DictReader(path.read_text().splitlines()))
     if "--summary-only" not in sys.argv:

@@ -38,6 +38,7 @@ import argparse
 import hashlib
 import json
 import os
+import random
 from pathlib import Path
 
 import duckdb
@@ -91,21 +92,51 @@ def main() -> None:
     ap.add_argument("--n-movies", type=int, default=N_MOVIES)
     ap.add_argument("--out", type=Path, default=OUT)
     ap.add_argument(
+        "--rank-offset",
+        type=int,
+        default=0,
+        help="skip this many top-voted films (popularity strata, slice_independent.py)",
+    )
+    ap.add_argument(
+        "--random-from",
+        type=int,
+        default=None,
+        help="draw n_movies at random from the top RANDOM_FROM films (with --seed)",
+    )
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument(
         "--pilot-year",
         type=int,
         default=None,
         help="pilot scope: the first n_movies feature films of this year by id",
     )
     args = ap.parse_args()
-    prepare(args.n_movies, args.out, pilot_year=args.pilot_year)
+    prepare(
+        args.n_movies,
+        args.out,
+        pilot_year=args.pilot_year,
+        rank_offset=args.rank_offset,
+        random_from=args.random_from,
+        seed=args.seed,
+    )
 
 
-def prepare(n_movies: int, out_dir: Path, *, pilot_year: int | None = None) -> None:
+def prepare(
+    n_movies: int,
+    out_dir: Path,
+    *,
+    pilot_year: int | None = None,
+    rank_offset: int = 0,
+    random_from: int | None = None,
+    seed: int = 0,
+) -> None:
     """Write the typed relations of the chosen movie set to out_dir.
 
     By default the n_movies most-voted feature films; with ``pilot_year``,
     the first n_movies feature films of that year by ``title.id`` (the
-    superseded pilot scope).
+    superseded pilot scope).  ``rank_offset`` skips that many top-voted
+    films; ``random_from`` draws the n_movies uniformly (seeded) from the
+    top ``random_from`` films instead.
     """
     con = duckdb.connect()
     _csv(
@@ -166,11 +197,22 @@ def prepare(n_movies: int, out_dir: Path, *, pilot_year: int | None = None) -> N
             ("note", "VARCHAR"),
         ],
     )
-    if pilot_year is None:
+    if pilot_year is None and random_from is not None:
+        con.execute(
+            "CREATE TABLE ranked AS SELECT t.id FROM title t JOIN movie_info_idx v "
+            "ON v.movie_id = t.id AND v.info_type_id = 100 WHERE t.kind_id = 1 "
+            f"ORDER BY CAST(v.info AS BIGINT) DESC, t.id LIMIT {int(random_from)}"
+        )
+        ids = sorted(r[0] for r in con.execute("SELECT id FROM ranked").fetchall())
+        pick = sorted(random.Random(seed).sample(ids, n_movies))
+        con.execute("CREATE TABLE m (id BIGINT)")
+        con.executemany("INSERT INTO m VALUES (?)", [(i,) for i in pick])
+    elif pilot_year is None:
         con.execute(
             "CREATE TABLE m AS SELECT t.id FROM title t JOIN movie_info_idx v "
             "ON v.movie_id = t.id AND v.info_type_id = 100 WHERE t.kind_id = 1 "
-            f"ORDER BY CAST(v.info AS BIGINT) DESC, t.id LIMIT {n_movies}"
+            f"ORDER BY CAST(v.info AS BIGINT) DESC, t.id LIMIT {n_movies} "
+            f"OFFSET {int(rank_offset)}"
         )
     else:
         con.execute(
@@ -196,9 +238,13 @@ def prepare(n_movies: int, out_dir: Path, *, pilot_year: int | None = None) -> N
     manifest: dict[str, object] = {
         "source": "LPH_JOB_DIR (JOB's IMDb CSVs)",
         "scope": (
-            "top-voted feature films"
-            if pilot_year is None
-            else f"first feature films of {pilot_year} by title.id"
+            f"first feature films of {pilot_year} by title.id"
+            if pilot_year is not None
+            else f"random sample (seed {seed}) of the top {random_from} voted films"
+            if random_from is not None
+            else f"top-voted feature films after rank {rank_offset}"
+            if rank_offset
+            else "top-voted feature films"
         ),
         "n_movies": con.execute("SELECT count(*) FROM m").fetchone()[0],  # type: ignore[index]
         "relations": {},

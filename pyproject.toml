@@ -39,6 +39,9 @@ ignore = ["RUF001", "RUF002", "RUF003"]
 # Experiment harness scripts have long table-formatting print/data lines;
 # line length is not enforced there (the library/src surface still is).
 "scripts/*" = ["E501"]
+# One-off diagnostics of the G-CARE YAGO count gap (extended version), kept
+# as run for provenance; not part of the paper pipeline.
+"scripts/gcare_semantics/*" = ["E402", "E501", "E731", "E741", "B007", "F811", "N818", "SIM115", "SIM222"]
 
 [tool.ruff.lint.flake8-builtins]
 allowed-modules = ["statistics"]

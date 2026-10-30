@@ -1,0 +1,7 @@
+check,path,gcare_true,ours,variants,hits,seconds
+edge_reversal_subsets,yago/Petal_9/f_Q_3_4.txt,1481,1444,512,0,238
+edge_reversal_subsets,yago/Petal_9/f_Q_4_4.txt,16318,22597,512,0,197
+edge_reversal_subsets,yago/Petal_9/f_Q_2_2.txt,432,358,512,0,449
+edge_reversal_subsets,yago/Petal_9/f_Q_0_12.txt,6,1301,512,0,1053
+single_edge_label_substitution,yago/Petal_9/f_Q_4_4.txt,16318,,810,0,249
+single_edge_label_substitution,yago/Petal_9/f_Q_3_4.txt,1481,,810,0,311

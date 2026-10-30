@@ -125,3 +125,26 @@ def test_exact_count_uses_set_semantics() -> None:
         cols = (f"v{i}", f"v{(i + 1) % 3}")
         data[rel.name] = (cols, [("1", "1"), ("1", "1")])
     assert exact_count(query, data, timeout_s=30) == 1
+
+
+def test_resume_refuses_a_changed_fingerprint(tmp_path) -> None:  # type: ignore[no-untyped-def]
+    """F15: a resumed run must use the same code, inputs and parameters."""
+    import pytest as _pytest
+
+    from scripts.run_fingerprint import guard
+
+    out = tmp_path / "rows.csv"
+    inp = tmp_path / "registry.json"
+    inp.write_text("{}")
+    script = "scripts/run_fingerprint.py"
+    guard(out, script, [inp], {"P": [1, 2]}, resume=False)
+    out.write_text("a\n1\n")
+    guard(out, script, [inp], {"P": [1, 2]}, resume=True)  # unchanged: ok
+    with _pytest.raises(SystemExit, match="params"):
+        guard(out, script, [inp], {"P": [1, 2, 3]}, resume=True)
+    inp.write_text('{"q": 1}')
+    with _pytest.raises(SystemExit, match=r"registry\.json"):
+        guard(out, script, [inp], {"P": [1, 2]}, resume=True)
+    (tmp_path / "rows.csv.fingerprint.json").unlink()
+    with _pytest.raises(SystemExit, match="no fingerprint"):
+        guard(out, script, [inp], {"P": [1, 2]}, resume=True)

@@ -1,0 +1,5 @@
+strategy,n,median_slowdown,p95_slowdown,max_slowdown,n_within_1_5x,n_over_2x,n_timeouts,n_queries,n_complete,median_plan_s,median_total_over_duckdb,median_cv,n_eq_oracle_order,n_eq_lpbound_order,n_block_faster_than_lpbound,n_block_slower_than_lpbound
+lpbound_p11,33,1.0765,2.2638,2.9352,29,3,6,40,33,2.19,160.7,0.074,,,,
+block_p11,33,1.0492,2.0832,2.7988,31,2,6,40,33,12.54,824,0.065,19,16,6,3
+oracle,33,1.0558,1.3383,2.1261,32,1,6,40,33,0.177,19.23,0.066,,,,
+duckdb,33,0.2611,1.1582,1.1972,33,0,0,40,33,,,,,,,
