@@ -671,7 +671,7 @@ def plot_positioning() -> None:
         f"$k{{=}}{_last_k}$: {_lab}",
         (ent_ms[-1], 1.0),
         textcoords="offset points",
-        xytext=(-6, 7),
+        xytext=(-6, 3),
         fontsize=7,
         ha="right",
         color=COLORS["lpbound"],
@@ -698,7 +698,7 @@ def plot_positioning() -> None:
         f"$k{{=}}{ks[-1]}$",
         (cover_ms[-1], gap[-1]),
         textcoords="offset points",
-        xytext=(4, 0),
+        xytext=(6, -2),
         fontsize=7,
         color=COLORS["lph"],
     )
