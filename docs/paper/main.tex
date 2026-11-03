@@ -81,7 +81,7 @@ constraints; and most recently,
 \textbf{LpBound}~\cite{zhang2025lpbound} generalizes to all
 $\ell_p$-norms of degree sequences, achieving orders-of-magnitude
 improvements on skewed data via an LP over entropy inequalities.
-Independently, statistics over small multi-relation joins~\cite{chen2022ceg,salihoglu2026ceg} and multi-way \emph{block extensions}~\cite{hceg2027} capture joint constraints across relations.
+Independently, statistics over small multi-relation joins~\cite{chen2022ceg,salihoglu2026ceg} capture joint constraints across relations, and \emph{block extensions} (Section~\ref{sec:blocks}) group several relations into one extension step.
 
 The two lines improve the bound from different sides. LpBound strengthens
 the \emph{program} over single-relation statistics; CEG$_M$, block
@@ -186,11 +186,11 @@ $\muFactor{\rel}{\interface} = \max_{a_\interface}
 |\ext{\rel}{a_\interface}|$.
 The MOLP bound~\cite{joglekar2016molp} equals the minimum-weight path in the full attribute-subset CEG$_M$~\cite{chen2022ceg}. Our experimental CEG$_M$ label denotes its restriction to whole-relation steps with nonempty interfaces after the first step (the \emph{chain} baseline); it can be looser than MOLP even for binary queries (extended version).
 
-\subsection{Block Extensions and Hyperpaths}
+\subsection{Block Extensions and Hyperpaths}\label{sec:blocks}
 
 A \emph{block} $\block \subseteq \mathcal{E}$ is a connected subset
 of relations.
-The \emph{block extension factor}~\cite{hceg2027} is
+The \emph{block extension factor} is
 $\muFactor{\block}{\interface} = \max_{a_\interface}
 |\ext{\block}{a_\interface}|$,
 where $\interface = \attr{\joinstate} \cap \attr{\block}$ is the
@@ -199,7 +199,7 @@ A \emph{hyperpath} $P = (\joinstate_0{=}\emptyset, \block_1,
 \joinstate_1, \ldots, \block_m, \joinstate_m{=}\mathcal{E})$
 decomposes the query into sequential block extensions.
 The product $\prod_{j=1}^{m} \muFactor{\block_j}{\interface_j}$ is
-a valid cardinality upper bound (the unit-weight $\ell_\infty$ case of Theorem~\ref{thm:composition}, so every result we use from~\cite{hceg2027} is restated and proved here).
+a valid cardinality upper bound (the unit-weight $\ell_\infty$ case of Theorem~\ref{thm:composition}, proved here).
 Our framework generalizes this product by replacing $\ell_\infty$
 norms with LP-optimized $\ell_p$-norms.
 
@@ -378,8 +378,8 @@ sizes $1$--$3$ ($1.73$M vertices; every hyperpath on $19$ of the $33$
 \label{thm:subsumption}
 LpH-CEG subsumes:
 \begin{enumerate}
-\item Max-degree block bounds~\cite{hceg2027}: setting $p = \infty$,
-  $w_j = 1$ recovers H-CEG's Composition Lemma.
+\item Max-degree block bounds: setting $p = \infty$,
+  $w_j = 1$ recovers the product of block extension factors of Section~\ref{sec:blocks}.
 \item Binary $\ell_p$-cover bounds: setting $|\block_j| = 1$ gives
   LP~\eqref{eq:lp}--\eqref{eq:cover} at $bs{=}1$---a polynomial-size
   relaxation of LpBound's~\cite{zhang2025lpbound} entropic LP
@@ -568,16 +568,16 @@ Block size is a trade-off: binary extensions keep simple
 interfaces; multi-way blocks capture block-level correlation at the cost
 of non-simple ones. Results use $bs{=}1$ unless marked $bs{=}2$.
 
-\subsection{Delta over the Block Framework}
+\subsection{Delta over Max-Degree Block Bounds}
 
-We inherit the block-extension DAG and hyperpath machinery from
-H-CEG~\cite{hceg2027}, which uses only $\ell_\infty$ weights with no
-optimization layer. What this paper adds is the $\ell_p$ fractional cover
+With $\ell_\infty$ weights and no optimization layer, the block extensions
+and hyperpaths of Section~\ref{sec:blocks} give the max-degree block bound.
+What this paper adds is the $\ell_p$ fractional cover
 LP that replaces those fixed scalars, the separation of the statistics and
 inference axes (Section~\ref{sec:stats-vs-inference}), the flow-LP
 inference over block statistics (Section~\ref{sec:scalability}), and
-the per-step residual signal; none exists in H-CEG. Theorem~\ref{thm:cyclic}
-additionally supplies a structural test neither predecessor provides,
+the per-step residual signal; none exists in the max-degree bound. Theorem~\ref{thm:cyclic}
+additionally supplies a structural test that neither it nor LpBound provides,
 lower-bounding the magnitude by a product of $k-2$ per-edge factors
 $M_j / \mu_p(\rel_j)^{p/(p+1)}$ at a common $p$.
 
@@ -1260,7 +1260,7 @@ on IMDb): every synthetic relation is drawn with one shared Zipf exponent ($\alp
 \label{sec:related}
 
 \paragraph{Block decomposition methods}
-CEG's pessimistic variant CEG$_M$~\cite{chen2022ceg,salihoglu2026ceg} models estimation as a shortest path over max-degree weights of base relations and small joins (its optimistic CEG$_O$, like Graphflow's catalog~\cite{mhedhbi2019graphflow}, uses average degrees of such joins); multi-way block extensions~\cite{hceg2027} generalize this to groups of relations via hyperpaths. These pessimistic block bounds use $\ell_\infty$ statistics. LpH-CEG replaces these scalar weights with LP-optimized, interface-conditioned $\ell_p$-norm products and
+CEG's pessimistic variant CEG$_M$~\cite{chen2022ceg,salihoglu2026ceg} models estimation as a shortest path over max-degree weights of base relations and small joins (its optimistic CEG$_O$, like Graphflow's catalog~\cite{mhedhbi2019graphflow}, uses average degrees of such joins); the block extensions of Section~\ref{sec:blocks} generalize this to groups of relations via hyperpaths. With max-degree weights, these pessimistic block bounds use $\ell_\infty$ statistics. LpH-CEG replaces these scalar weights with LP-optimized, interface-conditioned $\ell_p$-norm products and
 gives a sufficient condition for the LP to improve: cyclic queries with
 redundant coverage (Theorem~\ref{thm:cyclic}).
 
