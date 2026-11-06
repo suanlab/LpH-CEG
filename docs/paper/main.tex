@@ -55,8 +55,8 @@ the \emph{program} combining degree statistics, from fractional edge covers to L
 sequences of multi-way blocks, and find substantial headroom in block statistics. On single-relation statistics little is left: on a fixed hyperpath the cover LP is provably optimal among weightings valid on every self-join-free database, and LpBound's flow LP
 reaches the polymatroid optimum. Block statistics, degree sequences of
 two-relation joins conditioned on their interfaces, enter that program unchanged. With eleven norms on both sides they tighten LpBound by a median
-$236$--$10{,}200\times$ on $120$ rule-selected Hetionet cycles ($|V|{=}6$--$10$) and $9.7$--$87\times$ on $120$ IMDb cycles, below LpBound on all $349$
-Hetionet and IMDb queries, $15\times$ on G-CARE's AIDS ($241$ queries) and
+$236$--$10{,}200\times$ on $120$ rule-selected Hetionet cycles ($|V|{=}6$--$10$) and $9.7$--$87\times$ on $120$ IMDb cycles, below LpBound on every
+Hetionet and IMDb query, $15\times$ on G-CARE's AIDS ($241$ queries) and
 $12\times$ on YAGO ($143$ with agreeing counts). On CorrBound's $400$ subgraph-matching queries they are a median $3.0\times$ below its published estimates. A median $48\%$ (Hetionet) and $79\%$ (IMDb) of the log-gain lies outside a pairwise inner-product proxy for CorrBound's statistics, and all statistics but one avoid the join: with one sparse product per block the full catalog costs about $8\times$ LpBound's collection, against $25$--$54\times$ with materialized joins. We prove validity via an $\ell_p$ Composition (Shannon-flow) Inequality; an $\ell_p$ flow LP gives a polynomial-time candidate, checked per query. Limits:
 statistics come from data slices, guaranteed polymatroid bounds stop at $|V|{=}12$,
 and bound-guided join orders lose to DuckDB on IMDb.
@@ -112,7 +112,7 @@ is block statistics with polymatroid inference.
 \includegraphics[width=\columnwidth]{positioning.pdf}
 \caption{Bound tightness and recorded runtimes (synthetic
 cycle-$k$ queries; $y$ relative to the entropic optimum on single-relation
-statistics). Timings have different scopes: $bs{=}1$ cover and Shannon-cone runs include collection; flow and $bs{=}2$ cover runs exclude it. The chain max-degree baseline is up to $45\times$ loose (not plotted: its time was not recorded); the cover LP is within $1.43\times$, and the optimum is reached by LpBound's flow LP in $3$--$18$\,ms. Below $y{=}1$, the
+statistics). Timings have different scopes: $bs{=}1$ cover and Shannon-cone runs include collection; flow and $bs{=}2$ cover runs exclude it. The chain max-degree baseline is $2.3$--$971\times$ looser than the cover LP ($k{\le}10$; not plotted: its time was not recorded); the cover LP is within $1.43\times$, and the optimum is reached by LpBound's flow LP in $3$--$18$\,ms. Below $y{=}1$, the
 statistics axis: the same programs on $bs{=}2$ block statistics (three
 norms), the flow LP $2$--$800\times$ below.}
 \label{fig:positioning}
@@ -130,7 +130,7 @@ rule-selected Hetionet cycles ($|V|{=}6$--$10$), $9.7$--$87\times$ on
 $120$ IMDb cycles, $15\times$ on G-CARE's AIDS and $12\times$ on the YAGO
 queries whose counts agree with G-CARE's, and a median $3.0\times$
 below CorrBound-e's published estimates on CorrBound's own $400$
-subgraph-matching queries, never below an available exact count. On these
+subgraph-matching queries, never below our exact counts. On Hetionet and IMDb block
 statistics a stronger program pays off again ($5.0$--$11.6\times$ over the
 cover LP, against $2.7$--$6.8\times$ on single-relation statistics).
 
@@ -362,8 +362,8 @@ family. The redundant coverage that lets per-step
 weights fall below $1$ (the source of every cyclic improvement, and the
 reason the elementary per-step argument ($w_j\ge1$) does not apply) enters
 exactly as the fractional cover in~(ii). The theorem assumes exact
-statistics of the database being bounded; the sketched $\ell_2$ of
-Section~\ref{sec:stats-vs-inference} is outside it.
+statistics of the database being bounded; the sketched $\ell_2$ of the
+extended version is outside it.
 
 \paragraph{Independent checks} Two checks that do not rely on the proof
 agree with it. Over $207{,}000$ checks (every database with nonempty relations over a two-value domain for the triangle and $4$-cycle, plus $15{,}000$ random ones across six shapes, each at block sizes $1$--$3$) the estimate never fell
@@ -449,7 +449,7 @@ extends.
 The Shannon-cone \emph{formulation} of that optimum has $2^{|V|}$
 variables and $O(2^{|V|}|V|^2)$ constraints and degrades accordingly:
 $81$\,ms at $|V|{=}8$, $25$\,s at $|V|{=}12$, $41$\,min at $|V|{=}14$,
-unsolvable beyond (Figure~\ref{fig:crossover}; the same curve on real Hetionet degree sequences: $22$\,s and $27$\,min). But that is not what
+not run beyond (Figure~\ref{fig:crossover}; the same curve on real Hetionet degree sequences: $22$\,s and $27$\,min). But that is not what
 LpBound solves. Its LPflow~\cite[Thm.~4.5]{zhang2025lpbound} rewrites
 every simple $\ell_p$ constraint (one conditioning attribute) as a flow
 bundle after Im et al.~\cite{im2025simple} and is polynomial; our
@@ -521,7 +521,7 @@ for a \emph{uniform} cycle ($N_j \equiv N$) it equals $1$, and in the
 general case it is $\ge 1$ for a hyperpath entering the cycle at the
 largest relation ($N_1 \ge N_k$). If every middle factor is at least
 $c > 1$, the ratio is at least $c^{\,k-2}(N_1/N_k)^{1/(p+1)}$: it grows
-geometrically in the number of middle edges. Since LpH-CEG returns
+geometrically in the number of middle edges. Since the cover branch returns
 $\min(B_{\max}, B_{\mathrm{LP}})$, the realized ratio is always
 $\ge 1$.
 \end{enumerate}
@@ -575,8 +575,8 @@ and hyperpaths of Section~\ref{sec:blocks} give the max-degree block bound.
 What this paper adds is the $\ell_p$ fractional cover
 LP that replaces those fixed scalars, the separation of the statistics and
 inference axes (Section~\ref{sec:stats-vs-inference}), the flow-LP
-inference over block statistics (Section~\ref{sec:scalability}), and
-the per-step residual signal; none exists in the max-degree bound. Theorem~\ref{thm:cyclic}
+inference over block statistics (Section~\ref{sec:scalability});
+none exists in the max-degree bound. Theorem~\ref{thm:cyclic}
 additionally supplies a structural test that neither it nor LpBound provides,
 lower-bounding the magnitude by a product of $k-2$ per-edge factors
 $M_j / \mu_p(\rel_j)^{p/(p+1)}$ at a common $p$.
@@ -614,10 +614,10 @@ $\mathcal{P} = \{1,2,\infty\}$). Every program in a comparison gets the
 same $\mathcal{P}$, including our entropic LpBound. Because the entropic
 bound gains more from extra norms than the cover LP does, the comparisons
 against LpBound (the abstract, Table~\ref{tab:long-suite}'s
-upper block, the short suite, Tables~\ref{tab:stats-vs-inf} and~\ref{tab:gcare}) use
-the eleven norms $\mathcal{P}=\{1,\ldots,10,\infty\}$ on both sides; every other comparison
+upper block, the short suite, Tables~\ref{tab:stats-vs-inf}, \ref{tab:gcare} and~\ref{tab:cost}, the pairwise CorrBound proxy, predicates, IMDb ordering) use
+the eleven norms $\mathcal{P}=\{1,\ldots,10,\infty\}$ on both sides (CorrBound's workload: its $31$ norms); every other comparison
 with the entropic bound (the other synthetic tables and figures, the six
-hand-picked cycles, the CorrBound proxy, the $370$-query suite) uses three
+hand-picked cycles, the pair-size comparison, the $370$-query suite) uses three
 norms, $\{1,2,\infty\}$.
 The ``LpH-CEG'' column throughout denotes our
 \emph{cover}-LP at $bs{=}1$ (Section~\ref{sec:vs-lpbound}); it is
@@ -720,7 +720,7 @@ Two scoping points keep this from being overstated, both measured on the
 headline cycle protocol ($200$V/$800$E, 10 seeds; ratios of
 seed means over a different seed set from
 Table~\ref{tab:synthetic}'s, one of ten shared, so cycle-8 reads
-$654\times$ here and $614\times$ there) so the axes are in the same units:
+$654\times$ here and $614\times$ there; the inference row is Figure~\ref{fig:positioning}'s $100$V/$400$E sweep):
 
 \begin{center}\small
 \begin{tabular}{@{}lrrr@{}}
@@ -739,7 +739,7 @@ place}. The first step, from the chain's max-degree product to the cover LP, dwa
 Second, the separation between the two remaining axes is
 regime-dependent: on these homogeneous synthetic cycles they are
 comparable ($1.2$--$2.7\times$ against $1.25$--$1.43\times$), and it is
-heterogeneous real data that separates them, where on the $109$-query
+heterogeneous real data that can separate them: on the $109$-query
 short suite the statistics step (cover $bs{=}1\to bs{=}2$) is
 $30\times$ against an inference gap of $2.8\times$ with eleven norms ($56\times$ against
 $2.6\times$ with three).
@@ -817,7 +817,7 @@ fails ($216$ checked queries over both suites ${\times}$ four bounds), nor
 the $345$ three-norm ones ($115$ Hetionet queries ${\times}$ three). With
 three norms the entropic baseline is a median $1.9$--$3.2\times$ looser
 and the margins correspondingly larger ($80$/$630$/$2{,}500\times$, lower
-block). Two more rows, with three norms, locate \emph{which} statistic
+block). Two more comparisons (three norms, not tabulated) locate \emph{which} statistic
 carries the gain. Keeping only the \emph{sizes} of the same
 pair joins, $|R\bowtie S| = \sum_b \deg_R(b)\deg_S(b)$---the
 two-relation statistic CorrBound~\cite{mayer2026corrbound} adds to the
@@ -936,7 +936,7 @@ products $\sum_b \deg_R(b)^q\deg_S(b)^r$ of interfaces $\emptyset$, $\{b\}$,
 $\{a,b\}$, $\{b,c\}$, $\{a,b,c\}$ ($(q,r)\in\{(1,1),(p,p),(1,p),(p,1)\}$: an exact proxy for CorrBound's inner products, not its full vocabulary)
 gain a median $42\times$ (Hetionet) and $2.0\times$ (IMDb) over LpBound; the
 one-side and common-neighbour statistics add a further $34\times$ and
-$14\times$ on $120/120$ queries, and alone reach $1{,}674\times$ and
+$14\times$ ($48\%$ and $79\%$ of the log-gain) on $120/120$ queries, and alone reach $1{,}674\times$ and
 $28.7\times$ (full: $1{,}724\times$, $29.4\times$). The join-free seven
 carry $88\%$ and $86\%$ of the log-gain and the common-neighbour $\ell_2$
 leaves $1.47\times$ and $1.39\times$. Left out of the full catalog one
@@ -950,7 +950,7 @@ $120$ (extended version).
 \caption{Five catalogs, one setting (eleven norms, polymatroid; medians,
 $120$ queries per suite; each catalog in its own process, shuffled, $8$
 workers, one run; three thread-pinned repeats give $7.8$--$8.5\times$
-sparse and $23$--$52\times$ materialized): cold collection relative to LpBound's
+sparse and $23$--$52\times$ materialized): cold collection (data load excluded) relative to LpBound's
 ($0.89$/$0.52$\,s; median of per-query ratios), gain over LpBound, bound over exact count ($115$ and
 $101$ queries with one; none below it).}
 \label{tab:cost}
@@ -1054,7 +1054,7 @@ On power-law cycles ($100$V/$400$E, median of 7 runs) the
 LP adds under $4.7$\,ms to the max-degree bound ($1.17$--$1.34\times$
 overhead, $8$--$24$\,ms in total for $k{=}3$--$10$) while the
 improvement over the chain grows exponentially with $k$, reaching $971\times$ at
-cycle-10 (at most $5.1\times$ against full MOLP).
+cycle-10 (full MOLP, run only on Table~\ref{tab:synthetic}'s cycle-$3$--$8$ instances, is $1.4$--$5.1\times$ above the cover LP).
 
 \paragraph{Polynomial inference on block statistics}
 The Shannon-cone formulation of the entropic bound has $2^{|V|}$
@@ -1119,8 +1119,8 @@ Figure~\ref{fig:positioning}). On real data the $2^{|V|}$ program over
 the same catalog is cheap enough to solve directly (eleven norms: median
 $0.02$/$0.18$/$2.4$\,s at $|V|{=}6$/$8$/$10$ on Hetionet, and $63$\,s for the slowest, a $|V|{=}12$ G-CARE query), so the eleven-norm real-data bounds we
 report are its optimum. The flow LP equals it on $633$ of the $862$ reported
-queries and is within $2.41\times$ on all; it is the route beyond
-$|V|{\approx}12$. On the $120$-query Hetionet long suite the median gain
+queries and is within $2.41\times$ on all; beyond
+$|V|{\approx}12$ it stays a candidate and the cover LP is the guarantee. On the $120$-query Hetionet long suite the median gain
 of the polymatroid program over the cover LP on the same statistics is
 $5.0/6.7/11.1\times$ at $|V|{=}6/8/10$; no bound falls below the exact
 count.
@@ -1139,7 +1139,7 @@ polymatroid bound at every even $k \le 14$.}
 \end{figure}
 
 \paragraph{Choice of $p$-values}
-On that suite's cycle-6, $\mathcal{P} = \{1,\infty\}$ (2 values) already
+On the synthetic cycle-6 ($100$V/$400$E), $\mathcal{P} = \{1,\infty\}$ (2 values) already
 achieves $17.6\times$ improvement; adding $\ell_2$ ($\mathcal{P} =
 \{1,2,\infty\}$) reaches $35.7\times$; further values ($\ell_3$,
 $\ell_5$) yield no additional gain.
@@ -1182,7 +1182,7 @@ excellent on average (often faster than any forced left-deep order
 because it builds bushy plans), but on dense $4$-cliques its
 statistics-based estimates badly underestimate the cyclic intermediate
 blow-up, and it runs $7$--$21\times$ slower than the best evaluated plan across every clique density we tried. Bound-guided ordering, whose estimates never fall below that blow-up, stays within $3.6\times$ of the best evaluated plan (${\le}25$ sampled orders) on
-\emph{every} query in the suite. The worst-case (tail) slowdown is
+\emph{every} query in the suite (DuckDB is faster on every non-clique row, the real triangle included). The worst-case (tail) slowdown is
 $3.6\times$ for bound-guided versus $21\times$ for the engine---a
 $5.9\times$ heavier tail for the engine's optimizer.
 
@@ -1226,7 +1226,7 @@ IMDb cycles at $|V|{=}6$ tests the thesis with the headline estimators
 behind $C_{\mathrm{out}}$ (eleven norms: LpBound's bound, the guaranteed
 $bs{\le}2$ bound, exact counts), the chosen and $16$ sampled left-deep orders
 timed five times each, one query at a time. The block bound picks the
-exact-count order on $19/40$ queries (LpBound's bound on $16$), and on the
+exact-count order on $19/40$ queries (the same order as LpBound's on $16$), and on the
 $33$ whose forced orders all finish within $60$\,s its median slowdown over
 the best timed order is $1.05\times$, against $1.08\times$ for LpBound and
 $1.06\times$ for exact counts (faster than LpBound's pick on $6$, slower on
@@ -1253,7 +1253,7 @@ edges of the same graph give $2.06\times$ on cycle-4
 (Section~\ref{sec:suite}). On our data the gains came from \emph{asymmetric degree structure in cyclic joins} (JOB-medium and TPC-H-like cases in the extended version). Synthetic power-law graphs improve more over the chain (up to
 $614\times$ at cycle-8; $2.6\times$ over full MOLP) than real data, where the median over the long
 suites is $1.8$--$8.9\times$ ($1.4$--$3.6\times$ over full MOLP) (tails $157\times$ on Hetionet, $34\times$
-on IMDb): every synthetic relation is drawn with one shared Zipf exponent ($\alpha{=}1$ in the headline sweep), so every middle factor of Theorem~\ref{thm:cyclic} exceeds $1$ at once, whereas real relations differ in skew.
+on IMDb): every synthetic relation is drawn with one shared Zipf exponent (e.g.\ $\alpha{=}1$), so every middle factor of Theorem~\ref{thm:cyclic} exceeds $1$ at once, whereas real relations differ in skew.
 
 %% ===================================================================
 \section{Related Work}
@@ -1261,7 +1261,7 @@ on IMDb): every synthetic relation is drawn with one shared Zipf exponent ($\alp
 
 \paragraph{Block decomposition methods}
 CEG's pessimistic variant CEG$_M$~\cite{chen2022ceg,salihoglu2026ceg} models estimation as a shortest path over max-degree weights of base relations and small joins (its optimistic CEG$_O$, like Graphflow's catalog~\cite{mhedhbi2019graphflow}, uses average degrees of such joins); the block extensions of Section~\ref{sec:blocks} generalize this to groups of relations via hyperpaths. With max-degree weights, these pessimistic block bounds use $\ell_\infty$ statistics. LpH-CEG replaces these scalar weights with LP-optimized, interface-conditioned $\ell_p$-norm products and
-gives a sufficient condition for the LP to improve: cyclic queries with
+gives a sufficient condition on the data for the LP to improve on cyclic queries with
 redundant coverage (Theorem~\ref{thm:cyclic}).
 
 \paragraph{Information-theoretic bounds}
@@ -1277,8 +1277,8 @@ constraints by a polynomial flow LP and show the non-simple case
 ($|X|{\le}2$, $|Y|{\le}3$, the shape of a $bs{=}2$ block constraint)
 as hard as the general polymatroid bound, which is why our flow bound over blocks fixes an attribute order;
 CorrBound~\cite{mayer2026corrbound} adds inner products of degree
-vectors across join columns (a two-relation statistic in our
-terms) to the entropic program and reports $6.7$--$16.3\times$ lower error than LpBound on cyclic subgraph-matching queries; there, block statistics are a median $3.0\times$ tighter than its published estimates, and on our suites they add $63\times$ over a proxy with exact pair-join sizes (three norms, flow LP) (Section~\ref{sec:stats-vs-inference}).  The
+vectors across join columns (two-relation statistics in our
+terms, plus $k$-way products) to the entropic program and reports $6.7$--$16.3\times$ lower error than LpBound on cyclic subgraph-matching queries; there, block statistics are a median $3.0\times$ tighter than its published estimates, and on our suites they add a median $34\times$ (Hetionet) and $14\times$ (IMDb) beyond an exact pairwise inner-product proxy (eleven norms; Section~\ref{sec:stats-vs-inference}).  The
 $\ell_1$-norm of a $bs{=}2$ block sequence \emph{is} CorrBound's inner
 product (the join size).  The shared-interface block norms
 $\sum_b \deg_R(b)^p\deg_S(b)^p$ are $\ell_p$-weighted inner products.
@@ -1316,7 +1316,7 @@ statistics tighten it by a median $236$--$10{,}200\times$ on our Hetionet
 slice and $9.7$--$87\times$ on IMDb, $15\times$ on G-CARE's AIDS and
 $12\times$ on the YAGO queries whose counts agree with G-CARE's, and are
 a median $3.0\times$ below CorrBound-e on its own workload; no
-bound fell below an available exact count. Single-relation statistics
+bound fell below our exact counts. Single-relation statistics
 leave less: the cover LP is optimal among fixed-hyperpath weightings valid
 on every database without self-joins (Proposition~\ref{prop:necessity})
 yet sits $1.25$--$1.43\times$ (synthetic) and a median
@@ -1328,9 +1328,9 @@ product per block the full catalog costs about $8\times$ LpBound's
 collection. Our $\ell_p$ flow LP is a polynomial-time candidate (optimal on $633$ of $862$ queries), checked per query, not proved valid; past $|V|{\approx}12$ the cover LP is the guarantee.
 
 \emph{Limits.} Our evidence is binary graph patterns: Hetionet and IMDb
-slices ($3$--$20$K rows, $200$--$1{,}000$ films), G-CARE's AIDS and YAGO
+slices (${\le}30$K rows per Hetionet relation, $200$--$1{,}000$ films), G-CARE's AIDS and YAGO
 ($174$ YAGO queries exceed our prototype) and
-CorrBound's DBLP queries. Neither side supports general predicates (Section~\ref{sec:practical}), so
+CorrBound's DBLP queries. Our implementations support no general predicates (Section~\ref{sec:practical}), so
 STATS-CEB~\cite{han2021stats} and JOB's queries are out of scope.
 Full-catalog collection grows faster than the data ($5.1\times$ the time for $4.4\times$ the rows). Bound-guided join orders lose to DuckDB on IMDb: this maps headroom; it is not an optimizer.
 
@@ -1351,7 +1351,7 @@ automated audit that checks registered numerical claims against the result CSVs 
 drafts. The level of assistance was substantial: the model generated, and
 did not merely edit, much of the text, code and proofs, under the authors'
 direction. The authors directed the work, reviewed the content and take
-full responsibility for it. OpenAI Codex was also used in a later revision to audit claims, references and code, recompute recorded results, and edit the manuscript, plotting code and API checks.
+full responsibility for it. OpenAI Codex, another large language model, was also used in a later revision, at a lower level of assistance, to audit claims, references and code, recompute recorded results, and edit text in Sections~\ref{sec:intro}--\ref{sec:conclusion}, the plotting code and the API checks.
 
 %% ===================================================================
 \bibliographystyle{IEEEtran}

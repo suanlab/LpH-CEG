@@ -1332,7 +1332,7 @@ def main() -> None:
             82,
         ),
         (
-            "real queries below entropic at bs=2 (349)",
+            "internal: real queries below entropic at bs=2 (349)",
             pick(ims, "n_bs2_beats_entropic", n_vars="all") + 229,
             349,
         ),

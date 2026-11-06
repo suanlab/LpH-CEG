@@ -27,6 +27,7 @@ internal=(
     docs/BREAKTHROUGH_STRATEGY_2026Q3.md docs/PORTFOLIO_STRATEGY_2026Q2.md
     docs/archive
     docs/paper/korean.tex docs/paper/korean.pdf docs/paper/korean.xdv
+    docs/paper/main_ko.tex docs/paper/main_ko.pdf
 )
 for f in "${internal[@]}"; do rm -rf "${out:?}/$f"; done
 
