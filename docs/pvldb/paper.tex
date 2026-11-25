@@ -168,6 +168,7 @@ is block statistics with polymatroid inference.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{positioning.pdf}
+\Description{Log-log scatter of bound relative to the entropic optimum against runtime for synthetic cycle queries: single-relation programs sit at or above 1, block-statistics programs fall up to three orders of magnitude below.}
 \caption{Bound tightness and recorded runtimes (synthetic
 cycle-$k$ queries; $y$ relative to the entropic optimum on single-relation
 statistics). Timings have different scopes: $bs{=}1$ cover and Shannon-cone runs include collection; flow and $bs{=}2$ cover runs exclude it. The chain max-degree baseline is $2.3$--$971\times$ looser than the cover LP ($k{\le}10$; not plotted: its time was not recorded); the cover LP is within $1.43\times$, and the optimum is reached by LpBound's flow LP in $3$--$18$\,ms. Below $y{=}1$, the
@@ -261,7 +262,7 @@ a valid cardinality upper bound (the unit-weight $\ell_\infty$ case of Theorem~\
 Our framework generalizes this product by replacing $\ell_\infty$
 norms with LP-optimized $\ell_p$-norms.
 
-\subsection{LpBound: $\ell_p$-Norm Degree Sequences}
+\subsection{\texorpdfstring{LpBound: $\ell_p$-Norm Degree Sequences}{LpBound: lp-Norm Degree Sequences}}
 
 LpBound~\cite{zhang2025lpbound} uses $\ell_p$-norms of degree
 sequences as tighter statistics.
@@ -281,7 +282,7 @@ orders of magnitude tighter than a product of maximum degrees.
 \section{LpH-CEG Framework}
 \label{sec:framework}
 
-\subsection{$\ell_p$-Norm Block Extension Factor}
+\subsection{\texorpdfstring{$\ell_p$-Norm Block Extension Factor}{lp-Norm Block Extension Factor}}
 
 \begin{definition}[$\ell_p$ Block Extension Factor]
 \label{def:lp-mu}
@@ -375,11 +376,11 @@ The cover LP has $O(m|\mathcal{P}|)$ variables and $|V|$ constraints ($m\le|\mat
 \label{sec:theory}
 Proofs not given in full here are in the extended version shipped with
 the artifact (code, data pipeline, results:
-\texttt{github.com/suanlab/LpH-CEG}).
+\url{https://github.com/suanlab/LpH-CEG}).
 
 \begin{theorem}[$\ell_p$ Composition Inequality]
 \label{thm:composition}
-Let $P = (\joinstate_0{=}\emptyset, \ldots, \joinstate_m{=}\mathcal{E})$
+Let $P = (\joinstate_0{=}\emptyset,$ $\ldots,$ $\joinstate_m{=}\mathcal{E})$
 be a hyperpath, $\mathcal{P}\subseteq[1,\infty]$ (with $1/\infty{=}0$), and
 let $(w_{j,p})$ satisfy the cover constraint~\eqref{eq:cover}, with the
 statistics computed exactly on the database $D$. Then
@@ -1186,6 +1187,7 @@ count.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{crossover_entropic.pdf}
+\Description{Runtime against cycle size: the Shannon-cone LP grows exponentially and is intractable at k=16, while the cover LP and both flow LPs stay polynomial.}
 \caption{Recorded runtime on cycle-$k$ queries (log scale): $bs{=}1$ cover and Shannon-cone runs include collection, whereas flow runs exclude it. The
 Shannon-cone formulation of the $bs{=}1$ entropic bound grows
 rapidly in this measured range ($25$\,s at $k{=}12$, $2{,}480$\,s at $k{=}14$), but
@@ -1360,16 +1362,12 @@ product (the join size).  The shared-interface block norms
 $\sum_b \deg_R(b)^p\deg_S(b)^p$ are $\ell_p$-weighted inner products.
 The one-side and common-neighbour statistics add information beyond the listed pairwise proxy: the extended version separates the common-neighbour $\ell_2$ from those statistics, not from CorrBound's general Lemma~3.1. Its sparse product also has a different collection cost from CorrBound's sketches (Section~\ref{sec:stats-vs-inference}).
 Lin and Wang count bi-star~\cite{lin2025ambidextrous} and caterpillar~\cite{lin2026sidorenko} homomorphisms into each relation: richer single-relation statistics, complementary to blocks (the extended version's separation fixes them too).
-SafeBound~\cite{deeds2023safebound} deploys degree-sequence
-bounds~\cite{deeds2023dsb} with
-predicates on relational workloads, following pessimistic
-CE~\cite{cai2019pessimistic}; we target graph patterns and a per-step
-decomposition.
-
-Theorem~\ref{thm:composition} applies Abo Khamis et al.'s entropy framework~\cite{abokhamis2024lpnorm} to block joins.
+SafeBound's degree-sequence bounds~\cite{deeds2023dsb} serve relational
+workloads with predicates; we target graph patterns. Theorem~\ref{thm:composition}
+applies Abo Khamis et al.'s entropy framework~\cite{abokhamis2024lpnorm} to block joins.
 
 \paragraph{Block decomposition methods}
-CEG's pessimistic variant CEG$_M$~\cite{chen2022ceg,salihoglu2026ceg} models estimation as a shortest path over max-degree weights of base relations and small joins (its optimistic CEG$_O$, like Graphflow's catalog~\cite{mhedhbi2019graphflow}, uses average degrees of such joins); the block extensions of Section~\ref{sec:blocks} generalize this to groups of relations via hyperpaths. With max-degree weights, these pessimistic block bounds use $\ell_\infty$ statistics. LpH-CEG replaces these scalar weights with LP-optimized, interface-conditioned $\ell_p$-norm products and
+The pessimistic variant CEG$_M$ of CEG~\cite{chen2022ceg,salihoglu2026ceg} models estimation as a shortest path over max-degree weights of base relations and small joins (its optimistic CEG$_O$, like Graphflow's catalog~\cite{mhedhbi2019graphflow}, uses average degrees of such joins); the block extensions of Section~\ref{sec:blocks} generalize this to groups of relations via hyperpaths. With max-degree weights, these pessimistic block bounds use $\ell_\infty$ statistics. LpH-CEG replaces these scalar weights with LP-optimized, interface-conditioned $\ell_p$-norm products and
 gives a sufficient condition on the data for the LP to improve on cyclic queries with
 redundant coverage (Theorem~\ref{thm:cyclic}).
 
@@ -1446,6 +1444,8 @@ results and edit text. The authors directed the work, reviewed the content
 and take full responsibility for it.
 \end{acks}
 
+% references start on page 13: pages 1-12 are the body only
+\clearpage
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 

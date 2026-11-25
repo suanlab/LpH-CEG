@@ -367,6 +367,11 @@ run_paper_pvldb() {
     if grep -Eq "(Citation|Reference) .* undefined|There were undefined" paper.log; then
         echo "FAIL: undefined citation/reference in paper.log"; exit 1
     fi
+    # A line running into the margin or the gutter. -a: the log can carry
+    # non-UTF-8 bytes, and plain grep then finds nothing.
+    if grep -aq 'Overfull \\hbox' paper.log; then
+        echo "FAIL: overfull line(s) in paper.log:"; grep -an 'Overfull \\hbox' paper.log | head; exit 1
+    fi
     # PVLDB limit: 12 pages excluding references (appendices and the
     # acknowledgments count), so the REFERENCES heading must start by page 12
     # or be the first text on page 13.
@@ -378,7 +383,7 @@ run_paper_pvldb() {
         echo "FAIL: PVLDB body exceeds 12 pages (references start on page ${refs:-?})"
         exit 1
     fi
-    echo "PVLDB build clean: 0 LaTeX errors, no undefined citations or references, body <= 12 pages (references from page $refs)."
+    echo "PVLDB build clean: 0 LaTeX errors, no undefined citations or references, no overfull lines, body <= 12 pages (references from page $refs)."
     cd ../..
 }
 
