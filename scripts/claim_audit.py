@@ -82,7 +82,10 @@ def _tex_forms(claim: str, printed: float) -> list[str]:
     return forms
 
 
-def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-arg]
+def missing_from_paper(
+    checks: list[tuple],  # type: ignore[type-arg]
+    main_tex: Path,
+) -> list[str]:
     """Pinned values whose printed number does not occur in main.tex.
 
     Non-fatal: a number can legitimately appear only in a figure or in a
@@ -92,11 +95,11 @@ def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-a
     """
     import re
 
-    paper = ROOT / "docs" / "paper"
     # numbers moved to the extended version still count as printed
-    tex = (paper / "main.tex").read_text() + (
-        paper / "extended_version.tex"
-    ).read_text()
+    tex = (
+        main_tex.read_text()
+        + (ROOT / "docs" / "paper" / "extended_version.tex").read_text()
+    )
     out = []
     for entry in checks:
         claim, printed = entry[0], float(entry[2])
@@ -109,6 +112,16 @@ def missing_from_paper(checks: list[tuple]) -> list[str]:  # type: ignore[type-a
 
 
 def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--tex",
+        default="docs/paper/main.tex",
+        help="paper source whose text must print the pinned values "
+        "(docs/pvldb/paper.tex for the PVLDB submission)",
+    )
+    main_tex = ROOT / parser.parse_args().tex
     failures: list[str] = []
     lines: list[str] = []
 
@@ -4861,10 +4874,10 @@ def main() -> None:
         f"  {len(checks) - len(failures)}/{len(checks)} claims match their source CSV"
     )
 
-    absent = missing_from_paper(checks)
+    absent = missing_from_paper(checks, main_tex)
     print(
-        f"  {len(checks) - len(absent)}/{len(checks)} pinned values occur in main.tex"
-        " or the extended version"
+        f"  {len(checks) - len(absent)}/{len(checks)} pinned values occur in"
+        f" {main_tex.relative_to(ROOT)} or the extended version"
     )
     for m in absent:
         print(f"    not in the paper: {m}")

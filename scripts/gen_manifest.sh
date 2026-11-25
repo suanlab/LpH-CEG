@@ -23,6 +23,7 @@ mapfile -t files < <(
       ! -path '*__pycache__*'
     printf '%s\n' \
       docs/paper/main.tex docs/paper/references.bib docs/paper/extended_version.tex \
+      docs/pvldb/paper.tex docs/pvldb/references.bib \
       pyproject.toml requirements.txt requirements.lock Dockerfile
   } | sort -u
 )

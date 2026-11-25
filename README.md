@@ -1,19 +1,23 @@
-# LpH-CEG — block ℓp-norm statistics for cyclic join bounds
+# LpH-CEG — block statistics for pessimistic cardinality bounds on cyclic joins
 
 LpH-CEG computes **guaranteed upper bounds** on the cardinality of cyclic
-joins from ℓp-norms of degree sequences, and asks where the remaining
-headroom lies: in the *program* that combines the statistics, or in the
-*statistics* themselves. On single-relation statistics LpBound's
-polynomial flow LP already reaches the polymatroid optimum, and our
-fractional block-cover LP is dominated. Block statistics (degree sequences
-of two-relation joins, conditioned on their interfaces) tighten LpBound by
-a median 46–920× on registered Hetionet cycles, much less on IMDb unless the
-polymatroid program uses them. The optional ℓp flow relaxation is a
-candidate, checked against that program rather than generally proved valid.
-On G-CARE's AIDS the program gap dominates. Paper: `docs/paper/main.tex`.
+joins from ℓp-norms of degree sequences, and asks whether the remaining
+gap is better closed by a stronger *program* or by richer *statistics*.
+On single-relation statistics little is left: LpBound's polynomial flow LP
+already reaches the polymatroid optimum. Block statistics (ℓp-norms of the
+degree sequences of two-relation joins, conditioned on their interfaces)
+enter LpBound's program unchanged; with eleven norms on both sides they
+tighten LpBound by a median 236–10,200× on 120 rule-selected Hetionet
+cycles and 9.7–87× on 120 IMDb cycles, 15× on G-CARE's AIDS and 12× on
+YAGO, and are a median 3.0× below CorrBound's published estimates on its
+own workload. The optional ℓp flow relaxation is a candidate, certified per
+query rather than generally proved valid.
 
-**Status: research artifact under submission (ICDE 2027); public copy at
-<https://github.com/suanlab/LpH-CEG>.** The validity
+**Status: code, data pipeline and results for the paper "Block Statistics
+for Pessimistic Cardinality Bounds on Cyclic Joins", under submission to
+PVLDB Vol. 20. Paper: [`docs/pvldb/paper.pdf`](docs/pvldb/paper.pdf)
+(source `docs/pvldb/paper.tex`); an earlier version of the manuscript is
+`docs/paper/main.tex`. Public copy at <https://github.com/suanlab/LpH-CEG>.** The validity
 theorem (the lp Composition Inequality) is proved in
 [`docs/paper/extended_version.pdf`](docs/paper/extended_version.pdf); the
 proof was checked by independent model reviews and by an exhaustive LP
@@ -124,7 +128,7 @@ both are reported as skipped or reused in the log.
 - `scripts/gcare_semantics/` — one-off diagnostics of the G-CARE YAGO count gap (alternative matching rules, edge reversals, label substitutions; outputs in `results/gcare/semantics/`), kept as run; not part of the paper pipeline
 - `benchmarks/query_suite_v1.json` — the pre-registered evaluation suite (|V| ≤ 5)
 - `benchmarks/query_suite_v2_long.json` — the pre-registered long-cycle suite (|V| = 6, 8, 10; 40 per length by hash order)
-- `docs/paper/` — the manuscript (`main.tex`); `docs/step5_lemma.md` — the historical proof-obligation note (the current proof is in the extended version)
+- `docs/pvldb/` — the submitted manuscript (`paper.tex`, PVLDB template); `docs/paper/` — the earlier manuscript (`main.tex`) and the extended version; `docs/step5_lemma.md` — the historical proof-obligation note (the current proof is in the extended version)
 
 ## License
 

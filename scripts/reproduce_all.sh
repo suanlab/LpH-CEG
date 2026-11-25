@@ -349,13 +349,46 @@ run_paper() {
     cd ../..
 }
 
+run_paper_pvldb() {
+    section "23. Build PVLDB Submission (docs/pvldb, acmart + pvldb.sty)"
+    cd docs/pvldb
+    pdflatex -interaction=nonstopmode paper > /dev/null 2>&1 || true
+    if ! bibtex paper > bibtex.out 2>&1; then
+        echo "FAIL: bibtex exited non-zero:"; tail -5 bibtex.out; exit 1
+    fi
+    pdflatex -interaction=nonstopmode paper > /dev/null 2>&1 || true
+    pdflatex -interaction=nonstopmode paper > /dev/null 2>&1 || true
+    if [ ! -f paper.log ] || [ paper.tex -nt paper.log ]; then
+        echo "FAIL: paper.log missing or older than paper.tex"; exit 1
+    fi
+    if grep -q '^! ' paper.log; then
+        echo "FAIL: LaTeX error(s) in paper.log:"; grep -n '^! ' paper.log | head; exit 1
+    fi
+    if grep -Eq "(Citation|Reference) .* undefined|There were undefined" paper.log; then
+        echo "FAIL: undefined citation/reference in paper.log"; exit 1
+    fi
+    # PVLDB limit: 12 pages excluding references (appendices and the
+    # acknowledgments count), so the REFERENCES heading must start by page 12
+    # or be the first text on page 13.
+    command -v pdftotext > /dev/null || { echo "FAIL: pdftotext not found -- page limit NOT checked"; exit 1; }
+    refs=$(pdftotext paper.pdf - | awk 'BEGIN{p=1} /\f/{p++} /^\f?REFERENCES$/ && !f {print p; f=1}')
+    first13=$(pdftotext paper.pdf - | awk 'BEGIN{p=1} /\f/{p++} p==13 && NF && !f {print; f=1}')
+    if [ -z "$refs" ] || [ "$refs" -gt 13 ] || \
+       { [ "$refs" -eq 13 ] && [[ "$first13" != *REFERENCES* ]]; }; then
+        echo "FAIL: PVLDB body exceeds 12 pages (references start on page ${refs:-?})"
+        exit 1
+    fi
+    echo "PVLDB build clean: 0 LaTeX errors, no undefined citations or references, body <= 12 pages (references from page $refs)."
+    cd ../..
+}
+
 # ---------------------------------------------------------------------------
 case "${1:-all}" in
     tests)      run_tests ;;
     lint)       run_lint ;;
     experiments) run_experiments ;;
     figures)    run_figures ;;
-    paper)      run_paper ;;
+    paper)      run_paper; run_paper_pvldb ;;
     quick)
         run_tests
         run_lint
@@ -367,6 +400,7 @@ case "${1:-all}" in
         run_lint
         run_figures
         run_paper
+        run_paper_pvldb
         section "SMOKE DONE — tests, lint, figures, paper (no long experiments)."
         ;;
     all)
@@ -375,6 +409,7 @@ case "${1:-all}" in
         run_experiments
         run_figures
         run_paper
+        run_paper_pvldb
         section "DONE — All experiments, figures, and paper reproduced."
         ;;
     *)

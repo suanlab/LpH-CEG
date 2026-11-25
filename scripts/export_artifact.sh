@@ -42,11 +42,13 @@ s = s.replace(
 open(p, "w").write(s)
 PY
 
-# Leak checks: absolute machine paths and e-mail addresses.
+# Leak checks: absolute machine paths and e-mail addresses (the PVLDB/ACM
+# template files carry their maintainers' addresses and are skipped).
 leaks=$(grep -rIlE "/projects/|/home/[a-z]|/Users/[A-Za-z]" "$out" \
         --exclude=export_artifact.sh || true)
 mails=$(grep -rIhoE "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[a-z]{2,}" "$out" \
-        --exclude="*.bib" --exclude=export_artifact.sh | grep -v -e "noreply@anthropic.com" -e "suanlee@semyung.ac.kr" -e "jhkim@kangwon.ac.kr" -e "ehwang04@korea.ac.kr" | sort -u || true)
+        --exclude="*.bib" --exclude="*.cls" --exclude="*.sty" --exclude="*.bst" \
+        --exclude=export_artifact.sh | grep -v -e "noreply@anthropic.com" -e "suanlee@semyung.ac.kr" -e "jhkim@kangwon.ac.kr" -e "ehwang04@korea.ac.kr" | sort -u || true)
 if [ -n "$leaks$mails" ]; then
     echo "REFUSING: possible leaks in the snapshot:" >&2
     [ -n "$leaks" ] && echo "$leaks" >&2
