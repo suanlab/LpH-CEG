@@ -451,7 +451,9 @@ def plot_crossover() -> None:
                 flow1_ms.append(float(r["flow_bs1_ms"]))
                 flow2_ms.append(float(r["flow_bs2_ms_total"]))
 
-    fig, ax = plt.subplots(figsize=(3.5, 2.6))
+    # 3.92 in wide keeps the saved aspect (and so the printed height) of the
+    # earlier layout, whose label stuck out past the axes
+    fig, ax = plt.subplots(figsize=(3.92, 2.6))
     ax.semilogy(ks, cover_ms, "o-", color=COLORS["lph"], label="Cover LP ($3k$ vars)")
     if flow_k:
         ax.semilogy(
@@ -484,13 +486,17 @@ def plot_crossover() -> None:
             color=COLORS["hceg"],
             alpha=0.08,
         )
+        # vertical, inside the shaded band, so it stays within the axes
         ax.text(
-            min(intractable_ks) + 0.1,
-            ax.get_ylim()[1] * 0.3,
+            (min(intractable_ks) + max(ks)) / 2,
+            ax.get_ylim()[1] * 0.6,
             "$2^k$ LP\nintractable",
             fontsize=7,
             color=COLORS["hceg"],
+            rotation=90,
+            ha="center",
             va="top",
+            multialignment="center",
         )
 
     # Annotate the bound-tightness gap at a couple of representative k's.
