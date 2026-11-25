@@ -6,7 +6,8 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # pinned: ubuntu-latest moved to 26.04, which has no Python 3.10.12
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -24,5 +25,7 @@ jobs:
         run: PYTHONPATH=. python scripts/generate_plots.py
       - name: Paper claims match source CSVs
         run: PYTHONPATH=. python scripts/claim_audit.py
+      - name: Paper claims match source CSVs (PVLDB paper)
+        run: PYTHONPATH=. python scripts/claim_audit.py --tex docs/pvldb/paper.tex
       - name: Source manifest integrity
         run: sha256sum -c MANIFEST.sha256
